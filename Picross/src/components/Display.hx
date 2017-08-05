@@ -5,19 +5,39 @@ import luxe.Rectangle;
 import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
-import phoenix.RenderTexture;
-import phoenix.Batcher;
+import phoenix.geometry.QuadPackGeometry;
 
 import components.Dimensions;
 import components.Puzzle;
-import data.PuzzleDisplay;
 import data.IPuzzle;
 import game.PuzzleState;
 
 class Display extends Component
 {
-    public var data : PuzzleDisplay;
+    /**
+     *  This components entity cast to a visual type.
+     */
     private var visual : Visual;
+
+    /**
+     *  The quad pack geometry to hold all of the cell quads.
+     */
+    private var brushedGeom : QuadPackGeometry;
+
+    /**
+     *  The quad pack geometry to hold all of the pencil quads.
+     */
+    private var penciledGeom : QuadPackGeometry;
+
+    /**
+     *  2D array holding all of the UUIDs for the cell packed quads in the grid.
+     */
+    private var brushedQuadUUIDs : Array<Array<Int>>;
+
+    /**
+     *  2D array holding all of the UUIDs for the pencil packed quads in the grid.
+     */
+    private var penciledQuadUUIDs : Array<Array<Int>>;
 
     override public function onadded()
     {
@@ -34,9 +54,47 @@ class Display extends Component
             var size   : Dimensions = cast get('dimensions');
             var puzzle : IPuzzle    = cast get('puzzle');
 
-            // Will hold all information on the puzzle display.
-            data = new PuzzleDisplay();
+            // Get the actual width and height of this puzzle as well as the cell size.
+            var baseWidth  = 128 * puzzle.columns();
+            var baseHeight = 128 * puzzle.rows();
+            var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, Luxe.screen.width * 0.6, Luxe.screen.height * 0.6);
+            size.cellSize = scaledSize.x / puzzle.columns();
 
+            // Create two quad pack geometries for the brushed and penciled cells and fill them with default quads.
+            brushedGeom = new QuadPackGeometry({
+                texture : Luxe.resources.texture('assets/images/cell.png'),
+                batcher : Luxe.renderer.batcher
+            });
+            penciledGeom = new QuadPackGeometry({
+                texture : Luxe.resources.texture('assets/images/pencil.png'),
+                batcher : Luxe.renderer.batcher
+            });
+
+            brushedQuadUUIDs = [ for (row in 0...puzzle.rows()) [ for (col in 0...puzzle.columns()) brushedGeom.quad_add({
+                        x : col * size.cellSize,
+                        y : row * size.cellSize,
+                        w : size.cellSize,
+                        h : size.cellSize,
+                        color : new Color().rgb(0x666666),
+                        uv    : new Rectangle(0, 0, 128, 128)
+                    }) ] ];
+            penciledQuadUUIDs = [ for (row in 0...puzzle.rows()) [ for (col in 0...puzzle.columns()) penciledGeom.quad_add({
+                        x : col * size.cellSize,
+                        y : row * size.cellSize,
+                        w : size.cellSize,
+                        h : size.cellSize,
+                        color : new Color(0, 0, 0, 0),
+                        uv    : new Rectangle(0, 0, 128, 128)
+                    }) ] ];
+
+            // Set our visual entity to have the brushed quad pack geom.
+            // Both brush and pencil quad packs should probably go into an RTT then set that to the visual instead.
+            visual.pos      = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
+            visual.origin   = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
+            visual.size     = scaledSize;
+            visual.geometry = brushedGeom;
+
+            /*
             // Find the initial width and height of the render texture before scaling.
             var cell : phoenix.Texture = Luxe.resources.texture('assets/images/cell.png');
             var baseWidth  = cell.width  * puzzle.columns();
@@ -81,6 +139,7 @@ class Display extends Component
                 h : scaledSize.y,
                 texture : data.targetTexture
             });
+            */
         }
     }
 
@@ -89,25 +148,6 @@ class Display extends Component
         entity.events.unlisten('cell.brushed');
         entity.events.unlisten('cell.penciled');
         entity.events.unlisten('cell.removed');
-
-        for (row in data.brushedCells)
-        {
-            for (geom in row)
-            {
-                geom.drop();
-            }
-        }
-
-        for (row in data.penciledCells)
-        {
-            for (geom in row)
-            {
-                geom.drop();
-            }
-        }
-
-        data.batcher.destroy();
-        data.targetTexture.destroy();
     }
 
     private function aspectRationFit(_srcWidth : Float, _srcHeight : Float, _maxWidth : Float, _maxHeight : Float) : Vector
@@ -116,51 +156,39 @@ class Display extends Component
         return new Vector(_srcWidth * ratio, _srcHeight * ratio);
     }
 
-    /**
-     *  Changes the luxe renderers target to the provided render texture before the cell batcher is rendered.
-     *  
-     *  @param _batcher The batcher about to be rendered.
-     *  @param _texture The texture to render all geometry in the batcher to.
-     */
-    private function beforeRender(_batcher : Batcher, _texture : RenderTexture)
-    {
-        Luxe.renderer.target = _texture;
-        Luxe.renderer.clear(new Color(0, 0, 0, 0));
-    }
-
-    /**
-     *  Changes the luxe renderer's target back to default after the cell batcher has been rendered.
-     *  
-     *  @param _batcher The batcher which has just been rendered.
-     */
-    private function afterRender(_batcher : Batcher)
-    {
-        Luxe.renderer.target = null;
-    }
-
     // Entity event functions
 
     private function onCellBrushed(_position : data.events.CellPosition)
     {
-        data.brushedCells [_position.row][_position.column].color = PuzzleState.color.getLuxeColor();
-        data.penciledCells[_position.row][_position.column].color.a = 0;
+        var brushUUID  = brushedQuadUUIDs[_position.row][_position.column];
+        var pencilUUID = penciledQuadUUIDs[_position.row][_position.column];
+
+        brushedGeom.quad_color(brushUUID, PuzzleState.color.getLuxeColor());
+        penciledGeom.quad_alpha(pencilUUID, 0);
     }
 
     private function onCellPenciled(_position : data.events.CellPosition)
     {
-        data.penciledCells[_position.row][_position.column].color = PuzzleState.color.getLuxeColor();
+        var pencilUUID = penciledQuadUUIDs[_position.row][_position.column];
+        penciledGeom.quad_color(pencilUUID, PuzzleState.color.getLuxeColor());
     }
 
     private function onCellRemoved(_position : data.events.CellPosition)
     {
-        data.brushedCells [_position.row][_position.column].color.set(1, 1, 1, 0);
-        data.penciledCells[_position.row][_position.column].color.set(1, 1, 1, 0);
+        var brushUUID  = brushedQuadUUIDs[_position.row][_position.column];
+        var pencilUUID = penciledQuadUUIDs[_position.row][_position.column];
+
+        brushedGeom.quad_alpha(brushUUID, 0);
+        penciledGeom.quad_alpha(pencilUUID, 0);
     }
 
     private function onCellCleaned(_position : data.events.CellPosition)
     {
-        data.brushedCells [_position.row][_position.column].color.rgb(0x666666);
-        data.penciledCells[_position.row][_position.column].color.set(1, 1, 1, 0);
+        var brushUUID  = brushedQuadUUIDs[_position.row][_position.column];
+        var pencilUUID = penciledQuadUUIDs[_position.row][_position.column];
+
+        brushedGeom.quad_color(brushUUID, new Color().rgb(0x666666));
+        penciledGeom.quad_color(pencilUUID, new Color(1, 1, 1, 0));
     }
 
     /**
