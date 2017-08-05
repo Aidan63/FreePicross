@@ -6,6 +6,8 @@ import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
 import phoenix.geometry.QuadPackGeometry;
+import phoenix.RenderTexture;
+import phoenix.Batcher;
 
 import components.Dimensions;
 import components.Puzzle;
@@ -39,6 +41,10 @@ class Display extends Component
      */
     private var penciledQuadUUIDs : Array<Array<Int>>;
 
+    private var targetTexture : RenderTexture;
+
+    private var cellBatcher : Batcher;
+
     override public function onadded()
     {
         // Connect entity events
@@ -60,14 +66,22 @@ class Display extends Component
             var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, Luxe.screen.width * 0.6, Luxe.screen.height * 0.6);
             size.cellSize = scaledSize.x / puzzle.columns();
 
+            // Creates the render texture and batcher for the quad pack geometries.
+            targetTexture = new RenderTexture({ id : 'rtt_cells', width : Math.round(scaledSize.x), height : Math.round(scaledSize.y) });
+
+            cellBatcher = Luxe.renderer.create_batcher({ name : 'cell_batcher' });
+            cellBatcher.view.viewport = new Rectangle(0, 0, baseWidth, baseHeight);
+            cellBatcher.on(BatcherEventType.prerender , beforeRender.bind(_, targetTexture));
+            cellBatcher.on(BatcherEventType.postrender, afterRender);
+
             // Create two quad pack geometries for the brushed and penciled cells and fill them with default quads.
             brushedGeom = new QuadPackGeometry({
                 texture : Luxe.resources.texture('assets/images/cell.png'),
-                batcher : Luxe.renderer.batcher
+                batcher : cellBatcher
             });
             penciledGeom = new QuadPackGeometry({
                 texture : Luxe.resources.texture('assets/images/pencil.png'),
-                batcher : Luxe.renderer.batcher
+                batcher : cellBatcher
             });
 
             brushedQuadUUIDs = [ for (row in 0...puzzle.rows()) [ for (col in 0...puzzle.columns()) brushedGeom.quad_add({
@@ -75,7 +89,7 @@ class Display extends Component
                         y : row * size.cellSize,
                         w : size.cellSize,
                         h : size.cellSize,
-                        color : new Color().rgb(0x666666),
+                        color : new Color(0.4, 0.4, 0.4, 1),
                         uv    : new Rectangle(0, 0, 128, 128)
                     }) ] ];
             penciledQuadUUIDs = [ for (row in 0...puzzle.rows()) [ for (col in 0...puzzle.columns()) penciledGeom.quad_add({
@@ -87,59 +101,18 @@ class Display extends Component
                         uv    : new Rectangle(0, 0, 128, 128)
                     }) ] ];
 
-            // Set our visual entity to have the brushed quad pack geom.
-            // Both brush and pencil quad packs should probably go into an RTT then set that to the visual instead.
-            visual.pos      = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
-            visual.origin   = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
-            visual.size     = scaledSize;
-            visual.geometry = brushedGeom;
-
-            /*
-            // Find the initial width and height of the render texture before scaling.
-            var cell : phoenix.Texture = Luxe.resources.texture('assets/images/cell.png');
-            var baseWidth  = cell.width  * puzzle.columns();
-            var baseHeight = cell.height * puzzle.rows();
-
-            // Create a new render texture which all of the cell geometries will appear on.
-            data.targetTexture = new RenderTexture({ id : 'rtt_brush', width : baseWidth, height : baseHeight });
-
-            // Create a batcher, set it's viewport to the size of the puzzle, and set up events to change the renderers target.
-            data.batcher = Luxe.renderer.create_batcher({ name : 'batcher_brush' });
-            data.batcher.view.viewport = new Rectangle(0, 0, baseWidth, baseHeight);
-            data.batcher.on(BatcherEventType.prerender , beforeRender.bind(_, data.targetTexture));
-            data.batcher.on(BatcherEventType.postrender, afterRender);
-
-            // Create brush and pencil geometries and add them to the batcher.
-            data.brushedCells = [ for (row in 0...puzzle.rows()) [ for (col in 0...puzzle.columns()) Luxe.draw.texture({
-                        x : col * cell.width,
-                        y : row * cell.height,
-                        color   : new Color().rgb(0x666666),
-                        texture : Luxe.resources.texture('assets/images/cell.png'),
-                        batcher : data.batcher
-                    }) ] ];
-			data.penciledCells = [ for (row in 0...puzzle.rows()) [ for (col in 0...puzzle.columns()) Luxe.draw.texture({
-                        x : col * cell.width,
-                        y : row * cell.height,
-                        color   : new Color(0, 0, 0, 0),
-                        texture : Luxe.resources.texture('assets/images/pencil.png'),
-                        batcher : data.batcher
-                    }) ] ];
-
-            // Determine the scaled size of the puzzle display and cell size.
-            var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, Luxe.screen.width * 0.6, Luxe.screen.height * 0.6);
-            size.cellSize = scaledSize.x / puzzle.columns();
-
-            visual.pos    = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
-            visual.origin = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
-            visual.size   = scaledSize;
+            // Set our visual entity to have the rtt as a texture.
+            visual.pos     = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
+            visual.origin  = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
+            visual.size    = scaledSize;
+            
+            targetTexture.filter_mag = targetTexture.filter_min = nearest;
 
             visual.geometry = Luxe.draw.texture({
-                flipy : true,
-                w : scaledSize.x,
-                h : scaledSize.y,
-                texture : data.targetTexture
+                texture : targetTexture,
+                size    : visual.size,
+                flipy   : true
             });
-            */
         }
     }
 
@@ -148,12 +121,45 @@ class Display extends Component
         entity.events.unlisten('cell.brushed');
         entity.events.unlisten('cell.penciled');
         entity.events.unlisten('cell.removed');
+
+        // Set the visual geometry to a white box of the same size.
+        visual.geometry = Luxe.draw.box({
+            x : visual.pos.x,
+            y : visual.pos.y,
+            w : visual.size.x,
+            h : visual.size.y
+        });
+
+        targetTexture.destroy();
+        cellBatcher.destroy(true);
     }
 
     private function aspectRationFit(_srcWidth : Float, _srcHeight : Float, _maxWidth : Float, _maxHeight : Float) : Vector
     {
         var ratio = Math.min(_maxWidth / _srcWidth, _maxHeight / _srcHeight);
         return new Vector(_srcWidth * ratio, _srcHeight * ratio);
+    }
+
+    /**
+     *  Changes the luxe renderers target to the provided render texture before the cell batcher is rendered.
+     *  
+     *  @param _batcher The batcher about to be rendered.
+     *  @param _texture The texture to render all geometry in the batcher to.
+     */
+    private function beforeRender(_batcher : Batcher, _texture : RenderTexture)
+    {
+        Luxe.renderer.target = _texture;
+        Luxe.renderer.clear(new Color(0, 0, 0, 0));
+    }
+
+    /**
+     *  Resets the luxe renderer back to default after the cell batcher has been rendered.
+     *  
+     *  @param _batcher The batcher which was just rendered.
+     */
+    private function afterRender(_batcher : Batcher)
+    {
+        Luxe.renderer.target = null;
     }
 
     // Entity event functions
