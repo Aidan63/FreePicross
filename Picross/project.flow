@@ -1,0 +1,35 @@
+{
+  project : {
+
+      //These first two are required
+    name : 'FreePicross',
+    version : '0.0.1',
+    author : 'Aidan Lee',
+
+      //This configures your app.
+      //The package is important, it's used 
+      //for save locations, initializing mobile project files etc
+    app : {
+      name : 'FreePicross',
+      package : 'uk.aidanlee.freepicross'
+    },
+
+      //This configures the build process
+    build : {
+      dependencies : {
+        luxe : '*',
+        hxInflate : '*',
+        haxelow : '*',
+        mint : '*',
+        linc_dialogs : '*'
+      }
+    },
+
+      //Copies over all the assets to the output
+    files : {
+      assets : 'assets/'
+    }
+
+  } //project
+
+}

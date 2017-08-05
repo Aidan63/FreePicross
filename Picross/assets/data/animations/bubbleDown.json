@@ -1,0 +1,8 @@
+{
+    "loop" : {
+        "frame_size" : { "x" : "32", "y" : "256" },
+        "frameset" : ["32-1"],
+        "loop" : "true",
+        "speed" : "48"
+    }
+}
