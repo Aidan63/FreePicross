@@ -31,10 +31,9 @@ class DesignerState extends State
 
         var parcel = new Parcel({
             textures : [
-                { id : 'assets/images/cell.png' },
+                { id : 'assets/images/cells.png' },
                 { id : 'assets/images/cellFragment.png' },
                 { id : 'assets/images/fault.png' },
-                { id : 'assets/images/pencil.png' },
                 { id : 'assets/images/RuleCircle.png' },
                 { id : 'assets/images/RuleSquare.png' },
                 { id : 'assets/images/ui/paintSelector.png' }

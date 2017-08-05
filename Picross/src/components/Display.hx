@@ -76,11 +76,11 @@ class Display extends Component
 
             // Create two quad pack geometries for the brushed and penciled cells and fill them with default quads.
             brushedGeom = new QuadPackGeometry({
-                texture : Luxe.resources.texture('assets/images/cell.png'),
+                texture : Luxe.resources.texture('assets/images/cells.png'),
                 batcher : cellBatcher
             });
             penciledGeom = new QuadPackGeometry({
-                texture : Luxe.resources.texture('assets/images/pencil.png'),
+                texture : Luxe.resources.texture('assets/images/cells.png'),
                 batcher : cellBatcher
             });
 
@@ -98,7 +98,7 @@ class Display extends Component
                         w : size.cellSize,
                         h : size.cellSize,
                         color : new Color(0, 0, 0, 0),
-                        uv    : new Rectangle(0, 0, 128, 128)
+                        uv    : new Rectangle(128, 0, 128, 128)
                     }) ] ];
 
             // Set our visual entity to have the rtt as a texture.
