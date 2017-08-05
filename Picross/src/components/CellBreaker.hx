@@ -2,16 +2,19 @@ package components;
 
 import luxe.Component;
 import luxe.Vector;
+import luxe.Visual;
 import luxe.Color;
 import components.Dimensions;
-import components.Display;
 import data.events.CellPosition;
 
 class CellBreaker extends Component
 {
+    private var visual : Visual;
+
     override public function onadded()
     {
         entity.events.listen('cell.removed', onCellRemoved);
+        visual = cast entity;
     }
 
     override public function onremoved()
@@ -21,14 +24,13 @@ class CellBreaker extends Component
 
     private function onCellRemoved(_position : CellPosition)
     {
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
             var size : Dimensions = cast get('dimensions');
-            var display : Display = cast get('display');
 
-            var cellPos : Vector = display.data.display.pos.clone()
-                                                           .subtract(display.data.display.origin)
-                                                           .add_xyz(_position.column * size.cellSize, _position.row * size.cellSize);
+            var cellPos : Vector = visual.pos.clone()
+                                             .subtract(visual.origin)
+                                             .add_xyz(_position.column * size.cellSize, _position.row * size.cellSize);
             var quarterSize : Float = size.cellSize / 4;
 
             var fragTL = new luxe.Visual({

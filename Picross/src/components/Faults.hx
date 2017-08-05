@@ -2,13 +2,18 @@ package components;
 
 import luxe.Component;
 import luxe.Vector;
+import luxe.Visual;
 import data.events.CellPosition;
 
 class Faults extends Component
 {
+    private var visual : Visual;
+
     override public function onadded()
     {
         entity.events.listen('cell.fault', onCellFault);
+
+        visual = cast entity;
     }
 
     override public function onremoved()
@@ -22,14 +27,13 @@ class Faults extends Component
      */
     private function onCellFault(_position : CellPosition)
     {
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
             var size : Dimensions = cast get('dimensions');
-            var display : Display = cast get('display');
 
-            var cellPos : Vector = display.data.display.pos.clone()
-                                                           .subtract(display.data.display.origin)
-                                                           .add_xyz(_position.column * size.cellSize, _position.row * size.cellSize);
+            var cellPos : Vector = visual.pos.clone()
+                                             .subtract(visual.origin)
+                                             .add_xyz(_position.column * size.cellSize, _position.row * size.cellSize);
             createFaultCross(cellPos, size.cellSize);
             createCellFlicker(cellPos, size.cellSize);            
         }

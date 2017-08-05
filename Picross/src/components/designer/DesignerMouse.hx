@@ -1,6 +1,7 @@
 package components.designer;
 
 import luxe.Component;
+import luxe.Visual;
 import luxe.Input;
 import luxe.Vector;
 import game.PuzzleState;
@@ -17,6 +18,16 @@ class DesignerMouse extends Component
      */
     private var lastColumn : Int;
 
+    /**
+     *  This components entity cast to a visual.
+     */
+    private var visual : Visual;
+
+    override public function onadded()
+    {
+        visual = cast entity;
+    }
+
     override public function onmousedown(_event : MouseEvent)
     {
         switch (_event.button)
@@ -31,11 +42,10 @@ class DesignerMouse extends Component
         {
             var parent     : luxe.Visual = cast entity;
             var dimensions : Dimensions  = cast get('dimensions');
-            var display    : Display     = cast get('display');
 
             // Convert the mouse screen press to world coordinates then get the top left position of the puzzle display.
             var mouse      : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-            var displayPos : Vector = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var displayPos : Vector = visual.pos.clone().subtract(visual.origin);
             
             if (mouse.x > displayPos.x && mouse.y > displayPos.y && mouse.x < (displayPos.x + parent.size.x) && mouse.y < (displayPos.y + parent.size.y))
             {
@@ -60,11 +70,10 @@ class DesignerMouse extends Component
         {
             var parent     : luxe.Visual = cast entity;
             var dimensions : Dimensions  = cast get('dimensions');
-            var display    : Display     = cast get('display');
 
             // Convert the mouse screen press to world coordinates then get the top left position of the puzzle display.
             var mouse      : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-            var displayPos : Vector = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var displayPos : Vector = visual.pos.clone().subtract(visual.origin);
 
             if (mouse.x > displayPos.x && mouse.y > displayPos.y && mouse.x < (displayPos.x + parent.size.x) && mouse.y < (displayPos.y + parent.size.y))
             {

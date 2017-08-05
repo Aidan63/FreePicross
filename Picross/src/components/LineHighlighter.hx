@@ -2,6 +2,7 @@ package components;
 
 import luxe.Component;
 import luxe.Vector;
+import luxe.Visual;
 import entities.FxLineHighlighter;
 import components.Dimensions;
 import components.Display;
@@ -10,10 +11,14 @@ import utils.PuzzleHelper;
 
 class LineHighlighter extends Component
 {
+    private var visual : Visual;
+
     override public function onadded()
     {
         entity.events.listen('cell.brushed', onCellChanged);
         entity.events.listen('cell.removed', onCellChanged);
+
+        visual = cast entity;
     }
 
     override public function onremoved()
@@ -49,12 +54,11 @@ class LineHighlighter extends Component
 
     private function createRowHighlighter(_position : CellPosition)
     {
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
             var parent     : luxe.Visual = cast entity;
             var dimensions : Dimensions  = cast get('dimensions');
-            var display    : Display     = cast get('display');
-            var displayPos : Vector      = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var displayPos : Vector      = visual.pos.clone().subtract(visual.origin);
 
             new FxLineHighlighter(Horizontal, displayPos.x, displayPos.y + (dimensions.cellSize * _position.row), parent.size.x, dimensions.cellSize);
 
@@ -106,12 +110,11 @@ class LineHighlighter extends Component
 
     private function createColumnHighlighter(_position : CellPosition)
     {
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
             var parent     : luxe.Visual = cast entity;
             var dimensions : Dimensions  = cast get('dimensions');
-            var display    : Display     = cast get('display');
-            var displayPos : Vector      = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var displayPos : Vector      = visual.pos.clone().subtract(visual.origin);
 
             new FxLineHighlighter(Vertical, displayPos.x + (dimensions.cellSize * _position.column), displayPos.y, dimensions.cellSize, parent.size.y);
         }

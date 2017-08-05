@@ -2,9 +2,9 @@ package components;
 
 import luxe.Component;
 import luxe.Vector;
+import luxe.Visual;
 import phoenix.geometry.Geometry;
 import components.Dimensions;
-import components.Display;
 import components.Rules;
 import game.PuzzleState;
 import data.events.LineColor;
@@ -17,26 +17,28 @@ class RuleDisplay extends Component
     private var columnRules : Array<Array<Geometry>>;
     private var columnRulesBkgs : Array<Array<Geometry>>;
 
+    private var visual : Visual;
+
     override public function onadded()
     {
         entity.events.listen('row.completed'   , onRowCompleted);
         entity.events.listen('column.completed', onColumnCompleted);
         Luxe.events.listen('puzzle.completed', onPuzzleCompleted);
 
+        visual = cast entity;
+
         rowRules    = new Array<Array<Geometry>>();
         rowRuleBkgs = new Array<Array<Geometry>>();
         columnRules     = new Array<Array<Geometry>>();
         columnRulesBkgs = new Array<Array<Geometry>>();
 
-        if (has('dimensions') && has('display') && has('rules'))
+        if (has('dimensions') && has('rules'))
         {
-            var parent  : luxe.Visual = cast entity;
             var size    : Dimensions  = cast get('dimensions');
-            var display : Display     = cast get('display');
             var rules   : Rules       = cast get('rules');
 
             // Calculate the top left position of the puzzle display.
-            var cellPos : Vector = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var cellPos : Vector = visual.pos.clone().subtract(visual.origin);
 
             // Create visuals for row rules.
             for (rowRuleGroup in 0...rules.rowRules.length)
@@ -46,7 +48,7 @@ class RuleDisplay extends Component
 
                 for (rule in 0...rules.rowRules[rowRuleGroup].length)
                 {
-                    var textPos = cellPos.clone().add_xyz(parent.size.x + (rule * size.cellSize), (rowRuleGroup * size.cellSize));
+                    var textPos = cellPos.clone().add_xyz(visual.size.x + (rule * size.cellSize), (rowRuleGroup * size.cellSize));
                     var curRule = rules.rowRules[rowRuleGroup][rule];
 
                     ruleGroup.push(Luxe.draw.text({

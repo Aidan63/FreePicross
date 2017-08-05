@@ -3,14 +3,19 @@ package components;
 import luxe.Component;
 import luxe.Vector;
 import luxe.Color;
+import luxe.Visual;
 import data.events.CellPosition;
 
 class CellHighlighter extends Component
 {
+    private var visual : Visual;
+
     override public function onadded()
     {
         entity.events.listen('cell.brushed', onCellBrushed);
         entity.events.listen('cell.removed', onCellBrushed);
+
+        visual = cast entity;
     }
 
     override public function onremoved()
@@ -21,15 +26,13 @@ class CellHighlighter extends Component
 
     private function onCellBrushed(_position : CellPosition)
     {
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
             var size : Dimensions = cast get('dimensions');
-            var display : Display = cast get('display');
-
-            var cellPos : Vector = display.data.display.pos.clone()
-                                                           .subtract(display.data.display.origin)
-                                                           .add_xyz(_position.column * size.cellSize, _position.row * size.cellSize)
-                                                           .add_xyz(size.cellSize / 2, size.cellSize / 2);
+            var cellPos : Vector = visual.pos.clone()
+                                             .subtract(visual.origin)
+                                             .add_xyz(_position.column * size.cellSize, _position.row * size.cellSize)
+                                             .add_xyz(size.cellSize / 2, size.cellSize / 2);
             
             var ent = new luxe.Visual({
                 pos     : cellPos,

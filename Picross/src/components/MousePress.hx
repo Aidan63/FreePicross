@@ -3,8 +3,8 @@ package components;
 import luxe.Component;
 import luxe.Input;
 import luxe.Vector;
+import luxe.Visual;
 import components.Dimensions;
-import components.Display;
 import game.PuzzleState;
 
 class MousePress extends Component
@@ -19,23 +19,28 @@ class MousePress extends Component
      */
     private var lastColumn : Int;
 
+    /**
+     *  This components entity cast as a visual.
+     */
+    private var visual : Visual;
+
     override public function onmousedown(_event : MouseEvent)
     {
+        visual = cast entity;
+
         // Update the current mouse cursor state.
         PuzzleState.cursor.setMouseCursorFromButton(_event.button);
 
         // Check to see if the mouse has been pressed on the grid.
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
-            var parent : luxe.Visual = cast entity;
             var dimensions : Dimensions = cast get('dimensions');
-            var display : Display = cast get('display');
 
             // Convert the mouse screen press to world coordinates then get the top left position of the puzzle display.
             var mouse      : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-            var displayPos : Vector = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var displayPos : Vector = visual.pos.clone().subtract(visual.origin);
             
-            if (mouse.x > displayPos.x && mouse.y > displayPos.y && mouse.x < (displayPos.x + parent.size.x) && mouse.y < (displayPos.y + parent.size.y))
+            if (mouse.x > displayPos.x && mouse.y > displayPos.y && mouse.x < (displayPos.x + visual.size.x) && mouse.y < (displayPos.y + visual.size.y))
             {
                 var mouseDisplayPos : Vector = mouse.clone().subtract(displayPos);
 
@@ -54,17 +59,15 @@ class MousePress extends Component
             return;
         }
 
-        if (has('dimensions') && has('display'))
+        if (has('dimensions'))
         {
-            var parent : luxe.Visual = cast entity;
             var dimensions : Dimensions = cast get('dimensions');
-            var display : Display = cast get('display');
 
             // Convert the mouse screen press to world coordinates then get the top left position of the puzzle display.
             var mouse      : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-            var displayPos : Vector = display.data.display.pos.clone().subtract(display.data.display.origin);
+            var displayPos : Vector = visual.pos.clone().subtract(visual.origin);
 
-            if (mouse.x > displayPos.x && mouse.y > displayPos.y && mouse.x < (displayPos.x + parent.size.x) && mouse.y < (displayPos.y + parent.size.y))
+            if (mouse.x > displayPos.x && mouse.y > displayPos.y && mouse.x < (displayPos.x + visual.size.x) && mouse.y < (displayPos.y + visual.size.y))
             {
                 var mouseDisplayPos : Vector = mouse.clone().subtract(displayPos);
 

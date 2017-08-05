@@ -3,6 +3,7 @@ package components;
 import luxe.Component;
 import luxe.Rectangle;
 import luxe.Vector;
+import luxe.Visual;
 import luxe.Color;
 import phoenix.RenderTexture;
 import phoenix.Batcher;
@@ -16,6 +17,7 @@ import game.PuzzleState;
 class Display extends Component
 {
     public var data : PuzzleDisplay;
+    private var visual : Visual;
 
     override public function onadded()
     {
@@ -24,6 +26,8 @@ class Display extends Component
         entity.events.listen('cell.penciled', onCellPenciled);
         entity.events.listen('cell.removed' , onCellRemoved);
         entity.events.listen('cell.clean'   , onCellCleaned);
+
+        visual = cast entity;
 
         if (has('dimensions') && has('puzzle'))
         {
@@ -67,14 +71,11 @@ class Display extends Component
             var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, Luxe.screen.width * 0.6, Luxe.screen.height * 0.6);
             size.cellSize = scaledSize.x / puzzle.columns();
 
-            // Create a visual class to hold the scaled geometry with the render texture.
-            data.display = cast entity;
+            visual.pos    = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
+            visual.origin = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
+            visual.size   = scaledSize;
 
-            pos    = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
-            origin = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
-            data.display.size = scaledSize;
-
-            data.display.geometry = Luxe.draw.texture({
+            visual.geometry = Luxe.draw.texture({
                 flipy : true,
                 w : scaledSize.x,
                 h : scaledSize.y,
@@ -107,7 +108,6 @@ class Display extends Component
 
         data.batcher.destroy();
         data.targetTexture.destroy();
-        data.display.geometry.drop();
     }
 
     private function aspectRationFit(_srcWidth : Float, _srcHeight : Float, _maxWidth : Float, _maxHeight : Float) : Vector
