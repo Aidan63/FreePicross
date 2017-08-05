@@ -41,8 +41,15 @@ class Display extends Component
      */
     private var penciledQuadUUIDs : Array<Array<Int>>;
 
+    /**
+     *  The texture the brush and pencil quad packs will be drawn to.
+     *  This texture will then be used for this components entity's texture.
+     */
     private var targetTexture : RenderTexture;
 
+    /**
+     *  The batcher for the two quad pack geometries.
+     */
     private var cellBatcher : Batcher;
 
     override public function onadded()
