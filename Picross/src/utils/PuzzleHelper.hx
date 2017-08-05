@@ -147,12 +147,17 @@ class PuzzleHelper
      *  
      *  @param _asset - The texture assets path.
      */
-    public static function setImage(_puzzleEntity : Visual, _asset : String)
+    public static function imageFromPixels(_puzzleEntity : Visual, _pixels : snow.api.buffers.Uint8Array)
     {
-        // Set the texture of the puzzle to that of the completed puzzle.
-        var text = Luxe.resources.texture(_asset);
-        text.filter_min = text.filter_mag = nearest;
-        _puzzleEntity.texture = text;
+        var puzzle : data.IPuzzle = cast _puzzleEntity.get('puzzle');
+        var tex = new phoenix.Texture({
+            id     : 'finalImage',
+            pixels : _pixels,
+            width  : puzzle.columns(),
+            height : puzzle.rows()
+        });
+        tex.filter_min = tex.filter_mag = nearest;
+        _puzzleEntity.texture = tex;
 
         // Unflip the geometry now that we're not using the render texture.
         var quadGeom : phoenix.geometry.QuadGeometry = cast _puzzleEntity.geometry;

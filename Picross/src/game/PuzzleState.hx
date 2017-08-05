@@ -5,12 +5,14 @@ import game.Timer;
 import game.Cursor;
 import game.ColorSelector;
 import game.UI;
+import data.PuzzleInfo;
 import utils.storage.PuzzleLoader;
 import ui.game.GameUI;
 import ui.game.PuzzleResults;
 
 class PuzzleState
 {
+    public static var info : PuzzleInfo;
     /**
      *  The puzzle entity.
      */
@@ -55,8 +57,15 @@ class PuzzleState
             puzzle.destroy();
         }
 
+        info = utils.storage.PuzzleLoader.load('testPuzzle');
+        if (info == null)
+        {
+            trace('NULL');
+            return;
+        }
+
         puzzle = new Visual({ name : 'puzzle' });
-        puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : PuzzleLoader.load(_puzzleLocation) }));
+        puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : info.grid }));
         puzzle.add(new components.Rules      ({ name : 'rules'        }));
         puzzle.add(new components.Dimensions ({ name : 'dimensions'   }));
         puzzle.add(new components.Display    ({ name : 'display'      }));
@@ -65,6 +74,8 @@ class PuzzleState
         puzzle.add(new components.CellHighlighter({ name : 'cell_highlighter' }));
         puzzle.add(new components.LineHighlighter({ name : 'line_highlighter' }));
         puzzle.add(new components.CellBreaker    ({ name : 'remove_effect'    }));
+
+        //utils.PuzzleHelper.imageFromPixels(puzzle, info.pixels);
 
         startCountdown();
     }
@@ -87,7 +98,7 @@ class PuzzleState
         Luxe.timer.schedule(2.5, function() {
             Luxe.camera.add(new components.Flash({ name : 'flash', time : 1 }));
 
-            utils.PuzzleHelper.setImage(puzzle, 'assets/puzzles/pie.png');
+            utils.PuzzleHelper.imageFromPixels(puzzle, info.pixels);
             utils.Banner.create('Complete!', 1);
         });
 

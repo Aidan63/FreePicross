@@ -5,6 +5,7 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 import luxe.Color;
 import luxe.Visual;
+import luxe.Input;
 import game.PuzzleState;
 
 import mint.focus.Focus;

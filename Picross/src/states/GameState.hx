@@ -12,15 +12,13 @@ class GameState extends State
     {
         var parcel = new Parcel({
             textures : [
-                { id : 'assets/images/cell.png' },
+                { id : 'assets/images/cells.png' },
                 { id : 'assets/images/cellFragment.png' },
                 { id : 'assets/images/fault.png' },
-                { id : 'assets/images/pencil.png' },
                 { id : 'assets/images/RuleCircle.png' },
                 { id : 'assets/images/RuleSquare.png' },
                 { id : 'assets/images/bubblesUp.png' },
                 { id : 'assets/images/bubblesDown.png' },
-                { id : 'assets/puzzles/pie.png' },
                 { id : 'assets/images/ui/buttonPause.png' },
                 { id : 'assets/images/ui/paintSelector.png' }
             ],
@@ -49,7 +47,7 @@ class GameState extends State
     private function assets_loaded(_parcel : Parcel)
     {
         PuzzleState.init();
-        PuzzleState.loadPuzzle('/media/aidan/archive/projects/FreePicross/Picross/assets/puzzles/ics.puzzle');
+        PuzzleState.loadPuzzle('');
     }
 
     override public function update(_dt : Float)

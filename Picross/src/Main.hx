@@ -28,7 +28,7 @@ class Main extends luxe.Game
         gameState.add(new states.DesignerPuzzleList({ name : 'designer_list' }));
         gameState.add(new states.DesignerState({ name : 'designer' }));
 
-        gameState.set('designer_list');
+        gameState.set('game');
     }
 
     override function onkeyup(_event : KeyEvent)

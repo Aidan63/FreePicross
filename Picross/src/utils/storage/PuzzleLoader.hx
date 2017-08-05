@@ -1,6 +1,9 @@
 package utils.storage;
 
+import haxe.io.Bytes;
+import data.PuzzleInfo;
 import data.PuzzleGrid;
+import snow.api.buffers.Uint8Array;
 import HaxeLow;
 
 class PuzzleLoader
@@ -12,15 +15,29 @@ class PuzzleLoader
      *  @param _path The path to the serialized puzzle grid.
      *  @return PuzzleGrid object of the provided path or an empty 8x8 grid if the path was empty.
      */
-    public static function load(_path : String) : PuzzleGrid
+    public static function load(_name : String) : PuzzleInfo
     {
-        if (_path == "") return new PuzzleGrid(8, 8);
+        if (_name == "") return null;
 
-        var strm = new serialization.stream.StringInflateStream(decompress(_path));
-        var infl = new serialization.Inflater(strm);
+        checkDB();
 
-        var grid : PuzzleGrid = infl.unserialize();
-        return grid;
+        var puzzles = db.col(utils.storage.DBPuzzleInfo);
+        trace(puzzles.length);
+        for (puzzle in puzzles)
+        {
+            trace(puzzle.name);
+            if (puzzle.name != _name) continue;
+
+            return new PuzzleInfo(
+                puzzle.name,
+                puzzle.author,
+                puzzle.description,
+                decompressGrid(puzzle.grid),
+                decompressPixels(puzzle.pixels)
+            );
+        }
+
+        return null;
     }
 
     public static function listAllPuzzles() : Array<String>
@@ -28,35 +45,35 @@ class PuzzleLoader
         checkDB();
 
         return [];
-
-        /*
-        var puzzleNames = new Array<String>();
-        for (puzzle in db.idCol(PuzzleInfo))
-        {
-            puzzleNames.push(puzzle.name);
-        }
-
-        return puzzleNames;
-        */
     }
 
-    /**
-     *  Decompresses the puzzle found at the provided path.
-     *  @param _path The path to the puzzle on disk.
-     *  @return String of the uncompressed puzzle bytes.
-     */
-    private static function decompress(_path) : String
+    private static function decompressGrid(_data : Bytes) : PuzzleGrid
     {
-        //var bytes = haxe.zip.Uncompress.run(sys.io.File.getBytes(_path));
-        var bytes = haxe.zip.Uncompress.run(Luxe.resources.bytes('assets/puzzles/ics.puzzle').asset.bytes.toBytes());
-        return bytes.toString();
+        var bytes = haxe.zip.Uncompress.run(_data);
+        var strm  = new serialization.stream.StringInflateStream(bytes.toString());
+        var infl  = new serialization.Inflater(strm);
+
+        var data : PuzzleGrid = infl.unserialize();
+        return data;
+    }
+
+    private static function decompressPixels(_data : Bytes) : Uint8Array
+    {
+        var bytes = haxe.zip.Uncompress.run(_data);
+        var strm  = new serialization.stream.StringInflateStream(bytes.toString());
+        var infl  = new serialization.Inflater(strm);
+
+        var data : Uint8Array = infl.unserialize();
+        return data;
     }
 
     private static function checkDB()
     {
         if (db == null)
         {
-            db = new HaxeLow('puzzles.json');
+            var path = haxe.io.Path.join([ Sys.programPath(), 'assets', 'data', 'puzzle.json' ]);
+            trace(path);
+            db = new HaxeLow('/media/aidan/archive/projects/FreePicross/Picross/bin/linux64/assets/data/puzzles.json');
         }
     }
 }

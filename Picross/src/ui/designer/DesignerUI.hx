@@ -141,7 +141,17 @@ class DesignerUI
                 }
             }
         }
-        utils.storage.PuzzleSaver.save(new data.PuzzleInfo('testPuzzle', 'Aidan Lee', 'A test puzzle!', newGrid, []));
+
+        var pixels : snow.api.buffers.Uint8Array = null;
+        if (puzzle.has('overlay'))
+        {
+            var tex = cast(puzzle.get('overlay'), components.designer.Overlay).texture;
+            var arr = new snow.api.buffers.Uint8Array(tex.width * tex.height * 4);
+            tex.fetch(arr, 0, 0, tex.width, tex.height);
+            pixels = arr;
+        }
+
+        utils.storage.PuzzleSaver.save(new data.PuzzleInfo('testPuzzle', 'Aidan Lee', 'A test puzzle!', newGrid, pixels));
 
         // Create an effect similar to the block highlight one.
         var ent = new luxe.Visual({

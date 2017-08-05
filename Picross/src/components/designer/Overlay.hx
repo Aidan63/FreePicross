@@ -2,13 +2,12 @@ package components.designer;
 
 import luxe.Component;
 import luxe.Visual;
-import luxe.Vector;
 import luxe.Color;
 import luxe.options.ComponentOptions;
 
 class Overlay extends Component
 {
-    private var texture : phoenix.Texture;
+    public var texture : phoenix.Texture;
     public var visual : Visual;
 
     public function new(_options : OverlayOptions)
