@@ -19,7 +19,6 @@
       dependencies : {
         luxe : '*',
         hxInflate : '*',
-        haxelow : '*',
         mint : '*',
         linc_dialogs : '*'
       }

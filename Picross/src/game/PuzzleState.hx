@@ -6,7 +6,6 @@ import game.Cursor;
 import game.ColorSelector;
 import game.UI;
 import data.PuzzleInfo;
-import utils.storage.PuzzleLoader;
 import ui.game.GameUI;
 import ui.game.PuzzleResults;
 
