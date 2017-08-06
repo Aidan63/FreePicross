@@ -69,7 +69,11 @@ class Rules extends Component
             for (cell in puzzle.completed.data[row])
             {
                 // Skip loop if the cell is not brushed.
-                if (cell.state != Brushed) continue;
+                if (cell.state != Brushed)
+                {
+                    prevColor = null;
+                    continue;
+                }
 
                 // If the current cell has the same color as the last increment the last temp rules count.
                 // Else create a new temp rule.
@@ -103,7 +107,11 @@ class Rules extends Component
 
             for (cell in PuzzleHelper.columnAsArray(puzzle, col))
             {
-                if (cell.state != Brushed) continue;
+                if (cell.state != Brushed)
+                {
+                    prevColor = null;
+                    continue;
+                }
 
                 if (cell.color != prevColor)
                 {
