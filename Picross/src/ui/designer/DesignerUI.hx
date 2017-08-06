@@ -151,7 +151,8 @@ class DesignerUI
             pixels = arr;
         }
 
-        utils.storage.PuzzleSaver.save(new data.PuzzleInfo('testPuzzle', 'Aidan Lee', 'A test puzzle!', newGrid, pixels));
+        //utils.storage.PuzzleSaver.save(new data.PuzzleInfo('testPuzzle', 'Aidan Lee', 'A test puzzle!', newGrid, pixels));
+        utils.storage.PuzzleStorage.save(new data.PuzzleInfo(Luxe.utils.uniquehash(),'testPuzzle', 'Aidan Lee', 'A test puzzle!', newGrid, pixels));
 
         // Create an effect similar to the block highlight one.
         var ent = new luxe.Visual({

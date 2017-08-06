@@ -57,7 +57,7 @@ class PuzzleState
             puzzle.destroy();
         }
 
-        info = utils.storage.PuzzleLoader.load('testPuzzle');
+        info = utils.storage.PuzzleStorage.load('strawberry');
         if (info == null)
         {
             trace('NULL');

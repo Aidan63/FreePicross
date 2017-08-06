@@ -5,6 +5,11 @@ import data.PuzzleGrid;
 class PuzzleInfo
 {
     /**
+     *  The unique ID for this puzzle.
+     */
+    public var id : Int;
+
+    /**
      *  Name of this puzzle.
      */
     public var name : String;
@@ -29,8 +34,9 @@ class PuzzleInfo
      */
     public var description : String;
 
-    public function new(_name : String, _author : String, _description : String, _grid : PuzzleGrid, _pixels : snow.api.buffers.Uint8Array)
+    public function new(_id : Int, _name : String, _author : String, _description : String, _grid : PuzzleGrid, _pixels : snow.api.buffers.Uint8Array)
     {
+        id          = _id;
         name        = _name;
         author      = _author;
         description = _description;
