@@ -5,6 +5,7 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 import luxe.Color;
 import luxe.Visual;
+import luxe.Vector;
 import game.PuzzleState;
 import ui.designer.DesignerUI;
 
@@ -69,45 +70,57 @@ class DesignerState extends State
         {
             paintsHolder.findChild('ui_paint$i').events.listen('clicked', onPaintClicked.bind(_, i));
         }
-
-        // Create main UI
-        /*
-        new ui.designer.DesignerUI(puzzle);
-
-        // Create some temp mint UI elements
-        alphaScale = new mint.Slider({
-            parent : canvas,
-            name : 'alpha_slider',
-            x : 16, y : 432, w : 96, h : 32,
-            min : 0, max : 100, step : 1, vertical : false, value : 50
-        });
-        alphaScale.onchange.listen(function(_val, _) {
-            if (puzzle != null && puzzle.has('overlay'))
-            {
-                var overlay : components.designer.Overlay = cast puzzle.get('overlay');
-                overlay.visual.color.a = _val / 100;
-            }
-        });
-        */
     }
 
+    /**
+     *  When export is clicked the HUD is disable and a popup is shown with save and export options.
+     */
     private function onExportClicked(_)
     {
         trace('Export Clicked');
+        PuzzleState.ui.disableHud();
     }
 
+    /**
+     *  When the primary paint is selected we set the puzzle state paint to primary and show some click effects.
+     */
     private function onPaintPrimaryClicked(_)
     {
-        trace('primary paint');
+        var button   : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintPrimary');
+        var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_puzzlePaintSelector');
+
+        if (selector.has('slide')) selector.remove('slide');
+        selector.add(new components.Slider({ name : 'slide', time : 0.25, end : button.pos, ease : luxe.tween.easing.Quad.easeInOut }));
+
+        utils.Effect.select(button.pos.clone(), button.size.clone(), new Vector(8, 8), PuzzleState.ui.newHud);
     }
 
+    /**
+     *  When the secondary paint is selected we set the puzzle state paint to secondary and show some click effects.
+     */
     private function onPaintSecondaryClicked(_)
     {
-        trace('secondary paint');
+        var button   : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintSecondary');
+        var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_puzzlePaintSelector');
+
+        if (selector.has('slide')) selector.remove('slide');
+        selector.add(new components.Slider({ name : 'slide', time : 0.25, end : button.pos, ease : luxe.tween.easing.Quad.easeInOut }));
+
+        utils.Effect.select(button.pos.clone(), button.size.clone(), new Vector(8, 8), PuzzleState.ui.newHud);
     }
 
+    /**
+     *  Set the designer paint ID to that of the pressed paint button and show some click effects.
+     *  @param _paintNumber The number ID of the paint clicked.
+     */
     private function onPaintClicked(_, _paintNumber : Int)
     {
-        trace('Paint $_paintNumber');
+        var paint    : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintsHolder').findChild('ui_paint$_paintNumber');
+        var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintsHolder').findChild('ui_designerPaintSelector');
+
+        if (selector.has('slide')) selector.remove('slide');
+        selector.add(new components.Slider({ name : 'slide', time : 0.25, end : paint.pos, ease : luxe.tween.easing.Quad.easeInOut }));
+
+        utils.Effect.select(paint.pos.clone(), paint.size.clone(), new Vector(4, 4), PuzzleState.ui.newHud.findChild('ui_paintsHolder'));
     }
 }

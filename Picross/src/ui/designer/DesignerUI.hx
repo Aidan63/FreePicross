@@ -4,6 +4,7 @@ import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
 import luxe.Sprite;
+import luxe.components.sprite.SpriteAnimation;
 import components.ui.Button;
 import game.PuzzleState;
 
@@ -36,7 +37,7 @@ class DesignerUI
     {
         var panel = new Visual({
             name  : 'ui_panel',
-            pos   : new Vector(0, 598),
+            pos   : new Vector(0, 592),
             size  : new Vector(1280, 128),
             color : new Color(0.2, 0.2, 0.2, 1)
         });
@@ -68,6 +69,19 @@ class DesignerUI
         });
         paintSecondary.add(new components.ui.Button({ name : 'button' }));
 
+        var puzzlePaintSelector = new Sprite({
+            parent  : panel,
+            name    : 'ui_puzzlePaintSelector',
+            texture : Luxe.resources.texture('assets/images/ui/paintSelector.png'),
+            pos     : paintPrimary.pos,
+            size    : new Vector(128, 128),
+            origin  : new Vector(0, 0)
+        });
+        var anim : SpriteAnimation = puzzlePaintSelector.add(new SpriteAnimation({ name : 'animation' }));
+        anim.add_from_json_object(Luxe.resources.json('assets/data/animations/paintSelector.json').asset.json);
+        anim.animation = 'idle';
+        anim.play();
+
         createDesignerPaints(panel);
 
         return panel;
@@ -88,8 +102,6 @@ class DesignerUI
             var x = i % (paints.length / 2);
             var y = i / (paints.length / 2) >= 1 ? 1 : 0;
 
-            trace('creating paint $i at $x : $y');
-
             var paint = new Visual({
                 parent : paintHolder,
                 name   : 'ui_paint$i',
@@ -99,6 +111,19 @@ class DesignerUI
             });
             paint.add(new components.ui.Button({ name : 'button' }));
         }
+
+        var puzzlePaintSelector = new Sprite({
+            parent  : paintHolder,
+            name    : 'ui_designerPaintSelector',
+            texture : Luxe.resources.texture('assets/images/ui/paintSelector.png'),
+            pos     : new Vector(0, 0),
+            size    : new Vector(64, 64),
+            origin  : new Vector(0, 0)
+        });
+        var anim : SpriteAnimation = puzzlePaintSelector.add(new SpriteAnimation({ name : 'animation' }));
+        anim.add_from_json_object(Luxe.resources.json('assets/data/animations/paintSelector.json').asset.json);
+        anim.animation = 'idle';
+        anim.play();
     }
 
     /*
@@ -177,7 +202,7 @@ class DesignerUI
         ent.add(new components.AlphaFade({ name : 'fade_in' , time : 0.1, startAlpha : 0, endAlpha : 1 }));
         ent.add(new components.AlphaFade({ name : 'fade_out', time : 0.2, delay : 0.1, startAlpha : 1, endAlpha : 0 }));
         ent.add(new components.Scale({ name : 'scale', time : 0.1, factor : 1.1 }));
-        ent.add(new components.DestroyTimer({ name : 'destroy', delay : 0.4 }));  
+        ent.add(new components.DestroyTimer({ name : 'destroy', delay : 0.4 }));
     }
 
     private function onSecondaryPressed(_)
