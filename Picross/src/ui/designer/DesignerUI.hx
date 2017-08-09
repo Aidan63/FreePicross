@@ -4,21 +4,104 @@ import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
 import luxe.Sprite;
-import luxe.components.sprite.SpriteAnimation;
 import components.ui.Button;
 import game.PuzzleState;
 
 class DesignerUI
 {
-    private var panel : Visual;
-    private var paintPrimary : Visual;
-    private var paintSecondary : Visual;
-    private var paintSelector : Sprite;
+    public static var paints = [
+        new Color().rgb(0x000000),
+        new Color().rgb(0x1d2b53),
+        new Color().rgb(0x7e2553),
+        new Color().rgb(0x008751),
+        new Color().rgb(0xab5236),
+        new Color().rgb(0x5f574f),
+        new Color().rgb(0xc2c3c7),
+        new Color().rgb(0xfff1e8),
+        new Color().rgb(0xff004d),
+        new Color().rgb(0xffa300),
+        new Color().rgb(0xffec27),
+        new Color().rgb(0x00e436),
+        new Color().rgb(0x29adff),
+        new Color().rgb(0x83769c),
+        new Color().rgb(0xff77a8),
+        new Color().rgb(0xffccaa)
+    ];
 
-    private var export : Visual;
+    /**
+     *  [Description]
+     *  @return Visual
+     */
+    public static function create() : Visual
+    {
+        var panel = new Visual({
+            name  : 'ui_panel',
+            pos   : new Vector(0, 598),
+            size  : new Vector(1280, 128),
+            color : new Color(0.2, 0.2, 0.2, 1)
+        });
 
-    private var puzzle : Visual;
+        var export = new Visual({
+            parent : panel,
+            name   : 'ui_export',
+            pos    : new Vector(0, 0),
+            size   : new Vector(128, 128),
+            color  : new Color(0.16, 0.16, 0.16, 1)
+        });
+        export.add(new components.ui.Button({ name : 'button' }));
 
+        var paintPrimary = new Visual({
+            parent   : panel,
+            name     : 'ui_paintPrimary',
+            pos      : new Vector(128, 0),
+            size     : new Vector(128, 128),
+            color    : PuzzleState.color.colors.get(Primary)
+        });
+        paintPrimary.add(new components.ui.Button({ name : 'button' }));
+
+        var paintSecondary = new Visual({
+            parent   : panel,
+            name     : 'ui_paintSecondary',
+            pos      : new Vector(256, 0),
+            size     : new Vector(128, 128),
+            color    : PuzzleState.color.colors.get(Secondary)
+        });
+        paintSecondary.add(new components.ui.Button({ name : 'button' }));
+
+        createDesignerPaints(panel);
+
+        return panel;
+    }
+
+    private static function createDesignerPaints(_parent : Visual)
+    {
+        var paintHolder = new Visual({
+            parent : _parent,
+            name   : 'ui_paintsHolder',
+            pos    : new Vector(768, 0),
+            size   : new Vector(512, 128),
+            color  : new Color(0.16, 0.16, 0.16, 1)
+        });
+
+        for (i in 0...paints.length)
+        {
+            var x = i % (paints.length / 2);
+            var y = i / (paints.length / 2) >= 1 ? 1 : 0;
+
+            trace('creating paint $i at $x : $y');
+
+            var paint = new Visual({
+                parent : paintHolder,
+                name   : 'ui_paint$i',
+                pos    : new Vector(x * 64, y * 64),
+                size   : new Vector(64, 64),
+                color  : paints[i]
+            });
+            paint.add(new components.ui.Button({ name : 'button' }));
+        }
+    }
+
+    /*
     public function new(_puzzle : Visual)
     {
         puzzle = _puzzle;
@@ -168,4 +251,5 @@ class DesignerUI
         ent.add(new components.Scale({ name : 'scale', time : 0.1, factor : 1.1 }));
         ent.add(new components.DestroyTimer({ name : 'destroy', delay : 0.4 }));    
     }
+    */
 }

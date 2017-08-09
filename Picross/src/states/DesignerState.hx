@@ -5,26 +5,15 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 import luxe.Color;
 import luxe.Visual;
-import luxe.Input;
 import game.PuzzleState;
+import ui.designer.DesignerUI;
 
-import mint.focus.Focus;
-import mint.layout.margins.Margins;
-import mint.render.luxe.LuxeMintRender;
-import ui.AutoCanvas;
+using utils.EntityHelper;
 
 class DesignerState extends State
 {
     private var enterData : data.states.DesignerTextureSize;
     private var puzzle : Visual;
-
-    // Mint stuff
-    private var focus     : Focus;
-    private var layout    : Margins;
-    private var canvas    : AutoCanvas;
-    private var rendering : LuxeMintRender;
-
-    private var alphaScale : mint.Slider;
 
     override public function onenter<T>(_data : T)
     {
@@ -54,29 +43,13 @@ class DesignerState extends State
         });
 
         parcel.load();
-
-        // Setup mint
-        rendering = new LuxeMintRender();
-        layout    = new Margins();
-        canvas    = new AutoCanvas({
-            name : 'canvas',
-            rendering : rendering,
-            x : 0,
-            y : 0,
-            w : Luxe.screen.width  / Luxe.screen.device_pixel_ratio,
-            h : Luxe.screen.height / Luxe.screen.device_pixel_ratio,
-        });
-
-        focus = new Focus(canvas);
-        canvas.auto_listen();
     }
 
     private function assets_loaded(_parcel : Parcel)
     {
         PuzzleState.init();
 
-        trace(enterData.width, enterData.height);
-
+        /**
         puzzle = new Visual({ name : 'design' });
         puzzle.add(new components.designer.PuzzleDesigner({ name : 'puzzle', width : enterData.width, height : enterData.height }));
         puzzle.add(new components.Dimensions({ name : 'dimensions' }));
@@ -84,8 +57,21 @@ class DesignerState extends State
         puzzle.add(new components.designer.DesignerMouse({ name : 'mouse' }));
 
         if (enterData.texture != null) puzzle.add(new components.designer.Overlay({ name : 'overlay', texture : enterData.texture }));
+        */
+
+        PuzzleState.ui.newHud = DesignerUI.create();
+        PuzzleState.ui.newHud.findChild('ui_export').events.listen('clicked', onExportClicked);
+        PuzzleState.ui.newHud.findChild('ui_paintPrimary').events.listen('clicked', onPaintPrimaryClicked);
+        PuzzleState.ui.newHud.findChild('ui_paintSecondary').events.listen('clicked', onPaintSecondaryClicked);
+
+        var paintsHolder = PuzzleState.ui.newHud.findChild('ui_paintsHolder');
+        for (i in 0...DesignerUI.paints.length)
+        {
+            paintsHolder.findChild('ui_paint$i').events.listen('clicked', onPaintClicked.bind(_, i));
+        }
 
         // Create main UI
+        /*
         new ui.designer.DesignerUI(puzzle);
 
         // Create some temp mint UI elements
@@ -102,5 +88,26 @@ class DesignerState extends State
                 overlay.visual.color.a = _val / 100;
             }
         });
+        */
+    }
+
+    private function onExportClicked(_)
+    {
+        trace('Export Clicked');
+    }
+
+    private function onPaintPrimaryClicked(_)
+    {
+        trace('primary paint');
+    }
+
+    private function onPaintSecondaryClicked(_)
+    {
+        trace('secondary paint');
+    }
+
+    private function onPaintClicked(_, _paintNumber : Int)
+    {
+        trace('Paint $_paintNumber');
     }
 }
