@@ -43,11 +43,11 @@ class DesignerUI
         });
 
         var export = new Visual({
-            parent : panel,
-            name   : 'ui_export',
-            pos    : new Vector(0, 0),
-            size   : new Vector(128, 128),
-            color  : new Color(0.16, 0.16, 0.16, 1)
+            parent  : panel,
+            name    : 'ui_export',
+            pos     : new Vector(0, 0),
+            size    : new Vector(128, 128),
+            texture : Luxe.resources.texture('assets/images/ui/buttonExport.png')
         });
         export.add(new components.ui.Button({ name : 'button' }));
 
