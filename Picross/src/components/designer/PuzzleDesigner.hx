@@ -66,7 +66,7 @@ class PuzzleDesigner extends Component implements IPuzzle
         var cell = grid.data[_position.row][_position.column];
         cell.state = Empty;
 
-        entity.events.fire('cell.clean', _position);
+        entity.events.fire('cell.removed', _position);
     }
 }
 

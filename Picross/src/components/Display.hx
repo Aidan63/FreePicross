@@ -5,6 +5,7 @@ import luxe.Rectangle;
 import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
+import luxe.options.ComponentOptions;
 import phoenix.geometry.QuadPackGeometry;
 import phoenix.RenderTexture;
 import phoenix.Batcher;
@@ -52,6 +53,18 @@ class Display extends Component
      */
     private var cellBatcher : Batcher;
 
+    /**
+     *  The size of the box the puzzle display will be restricted to.
+     */
+    private var boundary : Vector;
+
+    public function new(_options : DisplayOptions)
+    {
+        super(_options);
+
+        _options.boundary == null ? boundary = new Vector(Luxe.screen.width * 0.6, Luxe.screen.height * 0.6) : boundary = _options.boundary;
+    }
+
     override public function onadded()
     {
         // Connect entity events
@@ -70,11 +83,11 @@ class Display extends Component
             // Get the actual width and height of this puzzle as well as the cell size.
             var baseWidth  = 128 * puzzle.columns();
             var baseHeight = 128 * puzzle.rows();
-            var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, Luxe.screen.width * 0.6, Luxe.screen.height * 0.6);
+            var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, boundary.x, boundary.y);
             size.cellSize = scaledSize.x / puzzle.columns();
 
             // Creates the render texture and batcher for the quad pack geometries.
-            targetTexture = new RenderTexture({ id : 'rtt_cells', width : Math.round(scaledSize.x), height : Math.round(scaledSize.y) });
+            targetTexture = new RenderTexture({ id : 'rtt_displayCells', width : Math.round(scaledSize.x), height : Math.round(scaledSize.y) });
 
             cellBatcher = Luxe.renderer.create_batcher({ name : 'cell_batcher' });
             cellBatcher.view.viewport = new Rectangle(0, 0, baseWidth, baseHeight);
@@ -128,6 +141,7 @@ class Display extends Component
         entity.events.unlisten('cell.brushed');
         entity.events.unlisten('cell.penciled');
         entity.events.unlisten('cell.removed');
+        entity.events.unlisten('cell.clean');
 
         // Set the visual geometry to a white box of the same size.
         visual.geometry = Luxe.draw.box({
@@ -231,4 +245,9 @@ class Display extends Component
             }
         }
     }
+}
+
+typedef DisplayOptions = {
+    > ComponentOptions,
+    @:optional var boundary : Vector;
 }
