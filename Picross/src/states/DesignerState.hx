@@ -6,6 +6,7 @@ import luxe.ParcelProgress;
 import luxe.Color;
 import luxe.Visual;
 import luxe.Vector;
+import luxe.Rectangle;
 import game.PuzzleState;
 import ui.designer.DesignerUI;
 
@@ -70,10 +71,10 @@ class DesignerState extends State
         });
 
         // Create an entity for the finished puzzle image.
-        image = new Visual({ name : 'image', pos : new Vector(688, 96) });
+        image = new Visual({ name : 'image'});
         image.add(new components.designer.PuzzleImage({ name : 'grid', width : 8, height : 8 }));
         image.add(new components.Dimensions({ name : 'dimensions' }));
-        image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Vector(496, 400) }));
+        image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Rectangle(688, 96, 496, 400) }));
         image.add(new components.MousePress({ name : 'mouse' }));
         image.add(new components.SelectedCell({ name : 'cell_selector' }));
         Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });
