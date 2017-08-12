@@ -7,13 +7,13 @@ import data.PuzzleGrid;
 import data.events.CellPosition;
 import game.PuzzleState;
 
-class PuzzleDesigner extends Component implements IPuzzle
+class PuzzleImage extends Component implements IPuzzle
 {
-    public var grid : PuzzleGrid;
+    public var active : PuzzleGrid;
     private var width : Int;
     private var height : Int;
 
-    public function new(_options : PuzzleDesignerOptions)
+    public function new(_options : PuzzleImageOptions)
     {
         super(_options);
         width = _options.width;
@@ -22,7 +22,7 @@ class PuzzleDesigner extends Component implements IPuzzle
 
     override public function onadded()
     {
-        grid = new PuzzleGrid(width, height);
+        active = new PuzzleGrid(width, height);
 
         entity.events.listen('cell.selected', onCellSelected);
     }
@@ -34,12 +34,12 @@ class PuzzleDesigner extends Component implements IPuzzle
 
     public function rows() : Int
     {
-        return grid.data.length;
+        return width;
     }
 
     public function columns() : Int
     {
-        return grid.data[0].length;
+        return height;
     }
 
     private function onCellSelected(_position : CellPosition)
@@ -47,30 +47,30 @@ class PuzzleDesigner extends Component implements IPuzzle
         switch (PuzzleState.cursor.mouse)
         {
             case Brush: brushCell(_position);
-            case Clean: cleanCell(_position);
+            case Rubber: removeCell(_position);
             default:
         }
     }
 
     private function brushCell(_position : CellPosition)
     {
-        var cell = grid.data[_position.row][_position.column];
+        var cell = active.data[_position.row][_position.column];
         cell.state = Brushed;
         cell.color = PuzzleState.color.currentColor;
 
         entity.events.fire('cell.brushed', _position);
     }
 
-    private function cleanCell(_position : CellPosition)
+    private function removeCell(_position : CellPosition)
     {
-        var cell = grid.data[_position.row][_position.column];
-        cell.state = Empty;
+        var cell = active.data[_position.row][_position.column];
+        cell.state = Destroyed;
 
         entity.events.fire('cell.removed', _position);
     }
 }
 
-typedef PuzzleDesignerOptions = {
+typedef PuzzleImageOptions = {
     > ComponentOptions,
     var width : Int;
     var height : Int;

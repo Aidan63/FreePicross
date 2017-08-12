@@ -15,8 +15,8 @@ class DesignerState extends State
 {
     private var enterData : data.states.DesignerTextureSize;
 
-    private var puzzle : Visual;
     private var design : Visual;
+    private var image  : Visual;
 
     override public function onenter<T>(_data : T)
     {
@@ -54,28 +54,29 @@ class DesignerState extends State
         PuzzleState.init();
 
         // Create an entity for the actual puzzle cells.
-        puzzle = new Visual({ name : 'puzzle' });
-        puzzle.add(new components.designer.PuzzleDesigner({ name : 'puzzle', width : 8, height : 8 }));
-        puzzle.add(new components.Dimensions({ name : 'dimensions' }));
-        puzzle.add(new components.Display   ({ name : 'display', boundary : new Vector(496, 400) }));
-        puzzle.add(new components.designer.DesignerMouse({ name : 'mouse' }));
-        puzzle.pos.set_xy(344, 296);
+        design = new Visual({ name : 'design' });
+        design.add(new components.designer.PuzzleDesign({ name : 'puzzle', width : 8, height : 8 }));
+        design.add(new components.Dimensions({ name : 'dimensions' }));
+        design.add(new components.Display   ({ name : 'display', boundary : new Vector(496, 400) }));
+        design.add(new components.SelectedCell({ name : 'cell_selector' }));
+        design.add(new components.MousePress({ name : 'mouse' }));
+        design.pos.set_xy(344, 296);
         Luxe.draw.rectangle({
-            x : puzzle.pos.x - puzzle.origin.x,
-            y : puzzle.pos.y - puzzle.origin.y,
-            w : puzzle.size.x,
-            h : puzzle.size.y,
+            x : design.pos.x - design.origin.x,
+            y : design.pos.y - design.origin.y,
+            w : design.size.x,
+            h : design.size.y,
             color : new Color(0, 0, 0, 0.25)
         });
 
         // Create an entity for the finished puzzle image.
-        design = new Visual({ name : 'design', pos : new Vector(688, 96) });
-        design.add(new components.designer.PuzzleDesigner({ name : 'grid', width : 8, height : 8 }));
-        design.add(new components.Dimensions({ name : 'dimensions' }));
-        design.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Vector(496, 400) }));
-        design.add(new components.designer.DesignerMouse({ name : 'mouse' }));
-        design.add(new components.SelectedCell({ name : 'cell_selector' }));
-        Luxe.draw.rectangle({ x : design.pos.x, y : design.pos.y, w : design.size.x, h : design.size.y, color : new Color(0, 0, 0, 0.25) });
+        image = new Visual({ name : 'image', pos : new Vector(688, 96) });
+        image.add(new components.designer.PuzzleImage({ name : 'grid', width : 8, height : 8 }));
+        image.add(new components.Dimensions({ name : 'dimensions' }));
+        image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Vector(496, 400) }));
+        image.add(new components.MousePress({ name : 'mouse' }));
+        image.add(new components.SelectedCell({ name : 'cell_selector' }));
+        Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });
 
         // Create the HUD and link up event listeners.
         PuzzleState.ui.newHud = DesignerUI.create();
@@ -88,6 +89,9 @@ class DesignerState extends State
         {
             paintsHolder.findChild('ui_paint$i').events.listen('clicked', onPaintClicked.bind(_, i));
         }
+
+        image.events.listen('cell.brushed', onPixelPainted);
+        image.events.listen('cell.removed', onPixelRemoved);
     }
 
     /**
@@ -140,9 +144,20 @@ class DesignerState extends State
         var paint    : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintsHolder').findChild('ui_paint$_paintNumber');
         var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintsHolder').findChild('ui_designerPaintSelector');
 
+        PuzzleState.color.designerColor = DesignerUI.paints[_paintNumber];
+
         if (selector.has('slide')) selector.remove('slide');
         selector.add(new components.Slider({ name : 'slide', time : 0.25, end : paint.pos, ease : luxe.tween.easing.Quad.easeInOut }));
 
         utils.Effect.select(paint.pos.clone(), paint.size.clone(), new Vector(4, 4), PuzzleState.ui.newHud.findChild('ui_paintsHolder'));
+    }
+
+    private function onPixelPainted(_position : data.events.CellPosition)
+    {
+        design.events.fire('cell.brushed', _position);
+    }
+    private function onPixelRemoved(_position : data.events.CellPosition)
+    {
+        design.events.fire('cell.removed', _position);
     }
 }

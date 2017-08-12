@@ -133,6 +133,8 @@ class Display extends Component
                 size    : visual.size,
                 flipy   : true
             });
+
+            setDisplayToActive();
         }
     }
 
@@ -219,12 +221,12 @@ class Display extends Component
     }
 
     /**
-     *  Loop over the completed grid and set each cell in the display to the completed equivilent.
+     *  Loop over the active grid and set each cell in the display to represent it.
      */
-    private function debug_setActiveToComplete()
+    private function setDisplayToActive()
     {
-        var debugPuzzle : Puzzle = cast get('puzzle');
-        var grid = debugPuzzle.completed.data;
+        var debugPuzzle : IPuzzle = cast get('puzzle');
+        var grid = debugPuzzle.active.data;
 
         for (row in 0...grid.length)
         {

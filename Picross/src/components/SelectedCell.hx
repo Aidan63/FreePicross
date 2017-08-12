@@ -33,8 +33,9 @@ class SelectedCell extends Component
                 if (highlighter == null)
                 {
                     highlighter = new Visual({
-                        size : new Vector(dimensions.cellSize, dimensions.cellSize),
-                        color : new Color(1, 1, 1, 0.5)
+                        size  : new Vector(dimensions.cellSize, dimensions.cellSize),
+                        color : new Color(1, 1, 1, 0.5),
+                        depth : 3
                     });
                 }
 

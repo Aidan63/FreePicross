@@ -11,6 +11,7 @@ import phoenix.RenderTexture;
 import phoenix.Batcher;
 import components.Dimensions;
 import data.IPuzzle;
+import game.PuzzleState;
 
 class DesignerDisplay extends Component
 {
@@ -45,7 +46,7 @@ class DesignerDisplay extends Component
         visual = cast entity;
 
         entity.events.listen('cell.brushed', onCellBrushed);
-        entity.events.listen('cell.clean', onCellClear);
+        entity.events.listen('cell.removed', onCellRemoved);
 
         if (has('grid') && has('dimensions'))
         {
@@ -91,7 +92,7 @@ class DesignerDisplay extends Component
     override public function onremoved()
     {
         entity.events.unlisten('cell.brushed');
-        entity.events.unlisten('cell.clean');
+        entity.events.unlisten('cell.removed');
 
         // Set the visual geometry to a white box of the same size.
         visual.geometry = Luxe.draw.box({
@@ -113,12 +114,14 @@ class DesignerDisplay extends Component
 
     private function onCellBrushed(_position : data.events.CellPosition)
     {
-
+        var uuid = quadUUIDs[_position.row][_position.column];
+        geom.quad_color(uuid, PuzzleState.color.designerColor.clone());
     }
 
-    private function onCellClear(_position : data.events.CellPosition)
+    private function onCellRemoved(_position : data.events.CellPosition)
     {
-        
+        var uuid = quadUUIDs[_position.row][_position.column];
+        geom.quad_alpha(uuid, 0);
     }
 
     /**
