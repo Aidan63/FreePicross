@@ -50,6 +50,11 @@ class DesignerPause extends State
 
     private function onExportClicked(_)
     {
-        //
+        var panel = popup.findChild('ui_export_panel');
+        var puzzleName : String = cast(panel.findChild('ui_export_textName'), luxe.Text).text;
+
+        Luxe.events.fire('designer.export', { name : puzzleName });
+
+        machine.disable('designer_pause');
     }
 }

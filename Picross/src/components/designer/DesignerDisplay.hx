@@ -110,6 +110,19 @@ class DesignerDisplay extends Component
         cellBatcher.destroy(true);
     }
 
+    /**
+     *  Fairly nasty way of getting a geom's colour.
+     *  @param _row - 
+     *  @param _column - 
+     *  @return Color
+     */
+    public function getColor(_row : Int, _column : Int) : Color
+    {
+        var uuid = quadUUIDs[_row][_column];
+        var thisQuad = geom.quads.get(uuid);
+        return thisQuad.verts[0].color;
+    }
+
     private function aspectRationFit(_srcWidth : Float, _srcHeight : Float, _maxWidth : Float, _maxHeight : Float) : Vector
     {
         var ratio = Math.min(_maxWidth / _srcWidth, _maxHeight / _srcHeight);

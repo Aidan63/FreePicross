@@ -256,9 +256,31 @@ class DesignerState extends State
         }
     }
 
-    private function onExport(_)
+    private function onExport(_event : { name : String })
     {
-        //
+        var puzzle : components.designer.PuzzleDesign = cast design.get('puzzle');
+        var pixels = new snow.api.buffers.Uint8Array(puzzle.columns() * puzzle.rows() * 4);
+
+        if (image.has('display'))
+        {
+            var grid : components.designer.DesignerDisplay = cast image.get('display');
+
+            var buff = new Array<Float>();
+            for (row in 0...puzzle.rows())
+            {
+                for (column in 0...puzzle.columns())
+                {
+                    var color = grid.getColor(row, column);
+                    buff.push(color.r * 255);
+                    buff.push(color.g * 255);
+                    buff.push(color.b * 255);
+                    buff.push(color.a * 255);
+                }
+            }
+            pixels.set(buff, 0);
+        }
+        
+        utils.storage.PuzzleStorage.save(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'Aidan Lee', 'A test puzzle!', puzzle.active, pixels));
     }
 
     /**
