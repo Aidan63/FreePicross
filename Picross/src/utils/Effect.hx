@@ -13,7 +13,7 @@ class Effect
             pos    : _pos.add_xyz(_size.x / 2, _size.y / 2),
             size   : _size,
             origin : _size.clone().subtract_xyz(_size.x / 2, _size.y / 2),
-            depth  : 3
+            depth  : 10
         });
 
         ent.add(new components.AlphaFade({ name : 'fade_in' , time : 0.1, startAlpha : 0, endAlpha : 1 }));

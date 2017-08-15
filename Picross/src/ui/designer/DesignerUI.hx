@@ -3,6 +3,7 @@ package ui.designer;
 import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
+import luxe.Text;
 import luxe.Sprite;
 import luxe.components.sprite.SpriteAnimation;
 import components.ui.Button;
@@ -128,6 +129,7 @@ class DesignerUI
 
     public static function exportPopup() : Visual
     {
+        // Semi transparent backdrop
         var backdrop = new Visual({
             name  : 'ui_export_backdrop',
             pos   : new Vector(0, 0),
@@ -136,6 +138,7 @@ class DesignerUI
             depth : 5
         });
 
+        // Solid colour panel
         var panel = new Visual({
             parent  : backdrop,
             name    : 'ui_export_panel',
@@ -145,16 +148,58 @@ class DesignerUI
             depth   : 6,
         });
 
+        //Outline to contain the export options.
+        new Visual({
+            name     : 'ui_export_outline',
+            parent   : panel,
+            depth    : 7,
+            color    : new Color().rgb(0x636363),
+            geometry : Luxe.draw.rectangle({
+                x : 16, y : 16, w : 640, h : 272
+            })
+        });
+
+        new Text({
+            parent : panel,
+            name : 'ui_export_title',
+            pos : new Vector(336, 48),
+            align : center,
+            text : 'Export Options',
+            align_vertical : center,
+            point_size : 16,
+            depth : 7
+        });
+        new Text({
+            parent : panel,
+            name : 'ui_export_nameTitle',
+            pos : new Vector(32, 96),
+            align : left,
+            align_vertical : center,
+            point_size : 16,
+            text : 'Type to enter puzzle name',
+            depth : 7
+        });
+
+        var textName = new Text({
+            parent : panel,
+            name : 'ui_export_textName',
+            pos : new Vector(336, 160),
+            align : center,
+            align_vertical : center,
+            point_size : 32,
+            depth : 7
+        });
+        textName.add(new components.ui.Input({ name : 'input' }));
+
         var bttnExport = new Visual({
             parent  : panel,
             name    : 'ui_export_bttnExport',
-            pos     : new Vector(32, 400),
+            pos     : new Vector(32, 208),
             size    : new Vector(608, 64),
             color   : new Color().rgb(0x636363),
             depth   : 7,
         });
         bttnExport.add(new components.ui.Button({ name : 'button' }));
-        bttnExport.add(new components.ui.Input({ name : 'input' }));
 
         var bttnMenu = new Visual({
             parent  : panel,
