@@ -14,15 +14,33 @@ using utils.EntityHelper;
 
 class DesignerState extends State
 {
-    private var enterData : data.states.DesignerTextureSize;
+    /**
+     *  The parcel which will load all of the resources needed for the designer.
+     */
+    private var parcel : Parcel;
 
+    /**
+     *  This entity will hold the actual primary and secondary colour puzzle design.
+     */
     private var design : Visual;
+
+    /**
+     *  The entity will hold the image the completed puzzle will form.
+     */
     private var image  : Visual;
+
+    /**
+     *  Visual which will hold all of the HUD elements.
+     */
+    private var hud : Visual;
+
+    /**
+     *  This entity will hold the export popup menu.
+     */
+    private var popup : Visual;
 
     override public function onenter<T>(_data : T)
     {
-        enterData = cast _data;
-
         var parcel = new Parcel({
             textures : [
                 { id : 'assets/images/cells.png' },
@@ -31,7 +49,9 @@ class DesignerState extends State
                 { id : 'assets/images/RuleCircle.png' },
                 { id : 'assets/images/RuleSquare.png' },
                 { id : 'assets/images/ui/paintSelector.png' },
-                { id : 'assets/images/ui/buttonExport.png' }
+                { id : 'assets/images/ui/buttonExport.png' },
+                { id : 'assets/images/ui/roundedPanel.png' },
+                { id : 'assets/images/ui/roundedButton.png'}
             ],
             jsons : [
                 { id : 'assets/data/animations/paintSelector.json' }
@@ -48,6 +68,16 @@ class DesignerState extends State
         });
 
         parcel.load();
+    }
+
+    override public function onleave<T>(_data : T)
+    {
+        if (popup != null) popup.destroy();
+        if (image != null) image.destroy();
+        if (design != null) design.destroy();
+        if (hud != null) hud.destroy();
+
+        parcel.unload();
     }
 
     private function assets_loaded(_parcel : Parcel)
@@ -80,12 +110,12 @@ class DesignerState extends State
         Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });
 
         // Create the HUD and link up event listeners.
-        PuzzleState.ui.newHud = DesignerUI.create();
-        PuzzleState.ui.newHud.findChild('ui_export').events.listen('clicked', onExportClicked);
-        PuzzleState.ui.newHud.findChild('ui_paintPrimary').events.listen('clicked', onPaintPrimaryClicked);
-        PuzzleState.ui.newHud.findChild('ui_paintSecondary').events.listen('clicked', onPaintSecondaryClicked);
+        hud = DesignerUI.create();
+        hud.findChild('ui_export'        ).events.listen('clicked', onExportMenuClicked);
+        hud.findChild('ui_paintPrimary'  ).events.listen('clicked', onPaintPrimaryClicked);
+        hud.findChild('ui_paintSecondary').events.listen('clicked', onPaintSecondaryClicked);
 
-        var paintsHolder = PuzzleState.ui.newHud.findChild('ui_paintsHolder');
+        var paintsHolder = hud.findChild('ui_paintsHolder');
         for (i in 0...DesignerUI.paints.length)
         {
             paintsHolder.findChild('ui_paint$i').events.listen('clicked', onPaintClicked.bind(_, i));
@@ -96,12 +126,24 @@ class DesignerState extends State
     }
 
     /**
+     *  Game UI events.
+     */
+
+    /**
      *  When export is clicked the HUD is disable and a popup is shown with save and export options.
      */
-    private function onExportClicked(_)
+    private function onExportMenuClicked(_)
     {
-        trace('Export Clicked');
-        PuzzleState.ui.disableHud();
+        disableHud();
+        design.active = false;
+        image.active  = false;
+
+        popup = DesignerUI.exportPopup();
+        var panel = popup.findChild('ui_export_panel');
+
+        panel.findChild('ui_export_bttnExport').events.listen('clicked', onExportClicked);
+        panel.findChild('ui_export_bttnMenu'  ).events.listen('clicked', onMenuClicked);
+        panel.findChild('ui_export_bttnReturn').events.listen('clicked', onReturnClicked);
     }
 
     /**
@@ -109,15 +151,15 @@ class DesignerState extends State
      */
     private function onPaintPrimaryClicked(_)
     {
-        var button   : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintPrimary');
-        var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_puzzlePaintSelector');
+        var button   : Visual = cast hud.findChild('ui_paintPrimary');
+        var selector : Visual = cast hud.findChild('ui_puzzlePaintSelector');
 
         PuzzleState.color.currentColor = Primary;
 
         if (selector.has('slide')) selector.remove('slide');
         selector.add(new components.Slider({ name : 'slide', time : 0.25, end : button.pos, ease : luxe.tween.easing.Quad.easeInOut }));
 
-        utils.Effect.select(button.pos.clone(), button.size.clone(), new Vector(8, 8), PuzzleState.ui.newHud);
+        utils.Effect.select(button.pos.clone(), button.size.clone(), new Vector(8, 8), hud);
     }
 
     /**
@@ -125,15 +167,15 @@ class DesignerState extends State
      */
     private function onPaintSecondaryClicked(_)
     {
-        var button   : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintSecondary');
-        var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_puzzlePaintSelector');
+        var button   : Visual = cast hud.findChild('ui_paintSecondary');
+        var selector : Visual = cast hud.findChild('ui_puzzlePaintSelector');
 
         PuzzleState.color.currentColor = Secondary;
 
         if (selector.has('slide')) selector.remove('slide');
         selector.add(new components.Slider({ name : 'slide', time : 0.25, end : button.pos, ease : luxe.tween.easing.Quad.easeInOut }));
 
-        utils.Effect.select(button.pos.clone(), button.size.clone(), new Vector(8, 8), PuzzleState.ui.newHud);
+        utils.Effect.select(button.pos.clone(), button.size.clone(), new Vector(8, 8), hud);
     }
 
     /**
@@ -142,23 +184,105 @@ class DesignerState extends State
      */
     private function onPaintClicked(_, _paintNumber : Int)
     {
-        var paint    : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintsHolder').findChild('ui_paint$_paintNumber');
-        var selector : Visual = cast PuzzleState.ui.newHud.findChild('ui_paintsHolder').findChild('ui_designerPaintSelector');
+        var paint    : Visual = cast hud.findChild('ui_paintsHolder').findChild('ui_paint$_paintNumber');
+        var selector : Visual = cast hud.findChild('ui_paintsHolder').findChild('ui_designerPaintSelector');
 
         PuzzleState.color.designerColor = DesignerUI.paints[_paintNumber];
 
         if (selector.has('slide')) selector.remove('slide');
         selector.add(new components.Slider({ name : 'slide', time : 0.25, end : paint.pos, ease : luxe.tween.easing.Quad.easeInOut }));
 
-        utils.Effect.select(paint.pos.clone(), paint.size.clone(), new Vector(4, 4), PuzzleState.ui.newHud.findChild('ui_paintsHolder'));
+        utils.Effect.select(paint.pos.clone(), paint.size.clone(), new Vector(4, 4), hud.findChild('ui_paintsHolder'));
     }
 
+    /**
+     *  Export popup events.
+     */
+
+    /**
+     *  Called when the return button is clicked on the export popup menu.
+     *  Destroys the popup and re-enables the UI and two displays.
+     */
+    private function onReturnClicked(_)
+    {
+        popup.destroy();
+        enableHud();
+
+        design.active = true;
+        image.active = true;
+    }
+
+    private function onMenuClicked(_)
+    {
+        machine.set('designer_list');
+    }
+
+    private function onExportClicked(_)
+    {
+        //
+    }
+
+    /**
+     *  Grid entity events.
+     */
+    
+    /**
+     *  Called when a pixel on the image display is placed.
+     *  When this happens we want to the design to use the cell at the same position in the design.
+     *  So we tell the design to brush the cell at the provided position.
+     *  
+     *  @param _position The cell row and column position.
+     */
     private function onPixelPainted(_position : data.events.CellPosition)
     {
         design.events.fire('cell.brushed', _position);
     }
+
+    /**
+     *  Called when a pixel on the image display is removed.
+     *  When this happens we want to remove the cell in the design of the same position.
+     *  So we tell the design to remove the cell at the provided position.
+     *  
+     *  @param _position The cell row and column position.
+     */
     private function onPixelRemoved(_position : data.events.CellPosition)
     {
         design.events.fire('cell.removed', _position);
+    }
+
+    /**
+     *  Misc / other
+     */
+
+    /**
+     *  Disables the HUD
+     */
+    private function disableHud()
+    {
+        for (child in hud.children)
+        {
+            child.active = false;
+
+            if (child.name == 'ui_paintsHolder')
+            {
+                for (paint in child.children) paint.active = false;
+            }
+        }
+    }
+
+    /**
+     *  Enables the HUD
+     */
+    private function enableHud()
+    {
+        for (child in hud.children)
+        {
+            child.active = true;
+
+            if (child.name == 'ui_paintsHolder')
+            {
+                for (paint in child.children) paint.active = true;
+            }
+        }
     }
 }

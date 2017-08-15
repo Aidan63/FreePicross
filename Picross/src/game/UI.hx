@@ -12,30 +12,4 @@ class UI
     public var newHud : Visual;
 
     public function new() {}
-
-    public function disableHud()
-    {
-        for (child in newHud.children)
-        {
-            child.active = false;
-
-            if (child.name == 'ui_paintsHolder')
-            {
-                for (paint in child.children) paint.active = false;
-            }
-        }
-    }
-
-    public function enableHud()
-    {
-        for (child in newHud.children)
-        {
-            child.active = true;
-
-            if (child.name == 'ui_paintsHolder')
-            {
-                for (paint in child.children) paint.active = true;
-            }
-        }
-    }
 }
