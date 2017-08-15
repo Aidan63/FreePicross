@@ -34,14 +34,9 @@ class DesignerState extends State
      */
     private var hud : Visual;
 
-    /**
-     *  This entity will hold the export popup menu.
-     */
-    private var popup : Visual;
-
     override public function onenter<T>(_data : T)
     {
-        var parcel = new Parcel({
+        parcel = new Parcel({
             textures : [
                 { id : 'assets/images/cells.png' },
                 { id : 'assets/images/cellFragment.png' },
@@ -72,16 +67,19 @@ class DesignerState extends State
 
     override public function onleave<T>(_data : T)
     {
-        if (popup != null) popup.destroy();
-        if (image != null) image.destroy();
+        if (image  != null) image.destroy();
         if (design != null) design.destroy();
-        if (hud != null) hud.destroy();
+        if (hud    != null) hud.destroy();
 
         parcel.unload();
+
+        Luxe.events.unlisten('designer.pause');
     }
 
     private function assets_loaded(_parcel : Parcel)
     {
+        Luxe.events.listen('designer.pause', onPaused);
+
         PuzzleState.init();
 
         // Create an entity for the actual puzzle cells.
@@ -134,16 +132,7 @@ class DesignerState extends State
      */
     private function onExportMenuClicked(_)
     {
-        disableHud();
-        design.active = false;
-        image.active  = false;
-
-        popup = DesignerUI.exportPopup();
-        var panel = popup.findChild('ui_export_panel');
-
-        panel.findChild('ui_export_bttnExport').events.listen('clicked', onExportClicked);
-        panel.findChild('ui_export_bttnMenu'  ).events.listen('clicked', onMenuClicked);
-        panel.findChild('ui_export_bttnReturn').events.listen('clicked', onReturnClicked);
+        machine.enable('designer_pause');
     }
 
     /**
@@ -196,33 +185,6 @@ class DesignerState extends State
     }
 
     /**
-     *  Export popup events.
-     */
-
-    /**
-     *  Called when the return button is clicked on the export popup menu.
-     *  Destroys the popup and re-enables the UI and two displays.
-     */
-    private function onReturnClicked(_)
-    {
-        popup.destroy();
-        enableHud();
-
-        design.active = true;
-        image.active = true;
-    }
-
-    private function onMenuClicked(_)
-    {
-        machine.set('designer_list');
-    }
-
-    private function onExportClicked(_)
-    {
-        //
-    }
-
-    /**
      *  Grid entity events.
      */
     
@@ -253,6 +215,22 @@ class DesignerState extends State
     /**
      *  Misc / other
      */
+
+    private function onPaused(_event : { state : Bool })
+    {
+        if (_event.state)
+        {
+            disableHud();
+            design.active = false;
+            image.active  = false;
+        }
+        else
+        {
+            enableHud();
+            design.active = true;
+            image.active  = true;
+        }
+    }
 
     /**
      *  Disables the HUD

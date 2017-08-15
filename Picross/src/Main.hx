@@ -25,6 +25,7 @@ class Main extends luxe.Game
 
         gameState = new States({ name : 'game_state' });
         gameState.add(new states.GameState({ name : 'game' }));
+        gameState.add(new states.DesignerPause({ name : 'designer_pause' }));
         gameState.add(new states.DesignerPuzzleList({ name : 'designer_list' }));
         gameState.add(new states.DesignerState({ name : 'designer' }));
 
