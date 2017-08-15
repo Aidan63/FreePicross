@@ -126,6 +126,59 @@ class DesignerUI
         anim.play();
     }
 
+    public static function exportPopup() : Visual
+    {
+        var backdrop = new Visual({
+            name  : 'ui_export_backdrop',
+            pos   : new Vector(0, 0),
+            size  : new Vector(1280, 720),
+            color : new Color(0, 0, 0, 0.5),
+            depth : 5
+        });
+
+        var panel = new Visual({
+            parent  : backdrop,
+            name    : 'ui_export_panel',
+            pos     : new Vector(304, 32),
+            size    : new Vector(672, 656),
+            color   : new Color().rgb(0x333333),
+            depth   : 6,
+        });
+
+        var bttnExport = new Visual({
+            parent  : panel,
+            name    : 'ui_export_bttnExport',
+            pos     : new Vector(32, 400),
+            size    : new Vector(608, 64),
+            color   : new Color().rgb(0x636363),
+            depth   : 7,
+        });
+        bttnExport.add(new components.ui.Button({ name : 'button' }));
+        bttnExport.add(new components.ui.Input({ name : 'input' }));
+
+        var bttnMenu = new Visual({
+            parent  : panel,
+            name    : 'ui_export_bttnMenu',
+            pos     : new Vector(32, 480),
+            size    : new Vector(608, 64),
+            color   : new Color().rgb(0x636363),
+            depth   : 7,
+        });
+        bttnMenu.add(new components.ui.Button({ name : 'button' }));
+
+        var bttnReturn = new Visual({
+            parent  : panel,
+            name    : 'ui_export_bttnReturn',
+            pos     : new Vector(32, 560),
+            size    : new Vector(608, 64),
+            color   : new Color().rgb(0x636363),
+            depth   : 7,
+        });
+        bttnReturn.add(new components.ui.Button({ name : 'button' }));
+
+        return backdrop;
+    }
+
     /*
     public function new(_puzzle : Visual)
     {
