@@ -34,6 +34,20 @@ class DesignerState extends State
      */
     private var hud : Visual;
 
+    /**
+     *  Event listeners.
+     */
+
+    private var listenPause : String;
+    private var listenExport : String;
+    private var listenPixelPainted : String;
+    private var listenPixelRemoved : String;
+    
+    private var listenBttnExport : String;
+    private var listenBttnPrimary : String;
+    private var listenBttnSecondary : String;
+    private var listenBttnPaints : Array<String>;
+
     override public function onenter<T>(_data : T)
     {
         parcel = new Parcel({
@@ -73,12 +87,21 @@ class DesignerState extends State
 
         parcel.unload();
 
-        Luxe.events.unlisten('designer.pause');
+        Luxe.events.unlisten(listenPause);
+        Luxe.events.unlisten(listenExport);
+        Luxe.events.unlisten(listenPixelPainted);
+        Luxe.events.unlisten(listenPixelRemoved);
+        
+        Luxe.events.unlisten(listenBttnExport);
+        Luxe.events.unlisten(listenBttnPrimary);
+        Luxe.events.unlisten(listenBttnSecondary);
+        for (event in listenBttnPaints) Luxe.events.unlisten(event);
     }
 
     private function assets_loaded(_parcel : Parcel)
     {
-        Luxe.events.listen('designer.pause', onPaused);
+        listenPause  = Luxe.events.listen('designer.pause' , onPaused);
+        listenExport = Luxe.events.listen('designer.export', onExport);
 
         PuzzleState.init();
 
@@ -109,18 +132,19 @@ class DesignerState extends State
 
         // Create the HUD and link up event listeners.
         hud = DesignerUI.create();
-        hud.findChild('ui_export'        ).events.listen('clicked', onExportMenuClicked);
-        hud.findChild('ui_paintPrimary'  ).events.listen('clicked', onPaintPrimaryClicked);
-        hud.findChild('ui_paintSecondary').events.listen('clicked', onPaintSecondaryClicked);
+        listenBttnExport    = hud.findChild('ui_export'        ).events.listen('clicked', onExportMenuClicked);
+        listenBttnPrimary   = hud.findChild('ui_paintPrimary'  ).events.listen('clicked', onPaintPrimaryClicked);
+        listenBttnSecondary = hud.findChild('ui_paintSecondary').events.listen('clicked', onPaintSecondaryClicked);
 
         var paintsHolder = hud.findChild('ui_paintsHolder');
+        listenBttnPaints = new Array<String>();
         for (i in 0...DesignerUI.paints.length)
         {
-            paintsHolder.findChild('ui_paint$i').events.listen('clicked', onPaintClicked.bind(_, i));
+            listenBttnPaints.push(paintsHolder.findChild('ui_paint$i').events.listen('clicked', onPaintClicked.bind(_, i)));
         }
 
-        image.events.listen('cell.brushed', onPixelPainted);
-        image.events.listen('cell.removed', onPixelRemoved);
+        listenPixelPainted = image.events.listen('cell.brushed', onPixelPainted);
+        listenPixelRemoved = image.events.listen('cell.removed', onPixelRemoved);
     }
 
     /**
@@ -230,6 +254,11 @@ class DesignerState extends State
             design.active = true;
             image.active  = true;
         }
+    }
+
+    private function onExport(_)
+    {
+        //
     }
 
     /**
