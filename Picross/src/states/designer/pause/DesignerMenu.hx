@@ -45,8 +45,6 @@ class DesignerMenu extends State
         menu.destroy();
     }
 
-    //
-
     private function onResumeClicked(_)
     {
         machine.unset();
@@ -58,7 +56,7 @@ class DesignerMenu extends State
     }
     private function onExportClicked(_)
     {
-        //
+        machine.set('export');
     }
     private function onMenuClicked(_)
     {

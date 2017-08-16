@@ -250,4 +250,66 @@ class DesignerUI
 
         return panel;
     }
+
+    public static inline function export() : Visual
+    {
+        var panel = new NineSlice({
+            name    : 'ui_designer_export_panel',
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color(0.32, 0.32, 0.32, 1),
+            depth   : 8,
+            top : 20, left : 20, bottom : 20, right : 20
+        });
+        panel.create(new Vector(0, 0), 640, 560);
+
+        var labelPos = [ new Vector(300, 30), new Vector(300, 30), new Vector(300, 50) ];
+        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
+        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.86, 0.86, 0.86, 1), new Color(0.86, 0.86, 0.86, 1) ];
+        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
+
+        new ui.Button({
+            parent  : panel,
+            name    : 'ui_designer_export_bttnExport',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 9,
+            pos     : new Vector(20, 360),
+            size    : new Vector(600, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+            labelOffsets  : labelPos,
+            labelColors   : labelCol,
+            textureUVs    : texUVs,
+            textureColors : texCol,
+            text : {
+                name : 'ui_designer_export_bttnExportText',
+                text : 'Export',
+                point_size : 32,
+                depth : 10,
+                align : center,
+                align_vertical : center
+            }
+        });
+        new ui.Button({
+            parent  : panel,
+            name    : 'ui_designer_export_bttnCancel',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 9,
+            pos     : new Vector(20, 460),
+            size    : new Vector(600, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+            labelOffsets  : labelPos,
+            labelColors   : labelCol,
+            textureUVs    : texUVs,
+            textureColors : texCol,
+            text : {
+                name : 'ui_designer_export_bttnCancelText',
+                text : 'Cancel',
+                point_size : 32,
+                depth : 10,
+                align : center,
+                align_vertical : center
+            }
+        });
+
+        return panel;
+    }
 }
