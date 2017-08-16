@@ -24,7 +24,7 @@ class DesignerMenu extends State
 
     override public function onenter<T>(_data : T)
     {
-        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 80 });
+        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(luxe.tween.easing.Quad.easeInOut);
 
         listenResume = menu.findChild('ui_designer_menu_bttnResume').events.listen('clicked', onResumeClicked);
         listenSave   = menu.findChild('ui_designer_menu_bttnSave'  ).events.listen('clicked', onSaveClicked  );
@@ -34,7 +34,7 @@ class DesignerMenu extends State
 
     override public function onleave<T>(_data : T)
     {
-        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : -560 });
+        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : -560 }).ease(luxe.tween.easing.Quad.easeInOut);
 
         menu.findChild('ui_designer_menu_bttnResume').events.unlisten(listenResume);
         menu.findChild('ui_designer_menu_bttnSave'  ).events.unlisten(listenSave);
