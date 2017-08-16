@@ -145,7 +145,7 @@ class DesignerUI
 
         var labelPos = [ new Vector(300, 30), new Vector(300, 30), new Vector(300, 50) ];
         var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.86, 0.86, 0.86, 1), new Color(0.86, 0.86, 0.86, 1) ];
+        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
         var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
 
         new Text({
@@ -251,6 +251,10 @@ class DesignerUI
         return panel;
     }
 
+    /**
+     *  Creates a visual which will hold all of the export options menu elements.
+     *  @return Visual
+     */
     public static inline function export() : Visual
     {
         var panel = new NineSlice({
@@ -264,8 +268,90 @@ class DesignerUI
 
         var labelPos = [ new Vector(300, 30), new Vector(300, 30), new Vector(300, 50) ];
         var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.86, 0.86, 0.86, 1), new Color(0.86, 0.86, 0.86, 1) ];
+        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
         var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
+
+        new Text({
+            parent : panel,
+            name   : 'ui_designer_export_title',
+            text   : 'Export Options',
+            pos    : new Vector(320, 80),
+            color  : new Color(0.9, 0.9, 0.9, 1),
+            depth  : 9,
+            align  : center,
+            align_vertical : center,
+            point_size : 64
+        });
+
+        new Text({
+            parent : panel,
+            name   : 'ui_designer_export_inputNameTitle',
+            text   : 'Puzzle Name',
+            pos    : new Vector(40, 180),
+            color  : new Color(0.9, 0.9, 0.9, 1),
+            depth  : 9,
+            align  : left,
+            align_vertical : center,
+            point_size : 24
+        });
+        new ui.TextInput({
+            colors : [ new Color().rgb(0x5e5e5e), new Color().rgb(0x7e7e7e) ],
+            background : {
+                parent : panel,
+                name : 'ui_designer_export_inputName',
+                texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+                pos : new Vector(20, 200),
+                size : new Vector(600, 40),
+                depth : 9,
+                top : 20, left : 20, bottom : 20, right : 20,
+                source_x : 160, source_y : 20, source_w : 80, source_h : 60
+            },
+            text : {
+                name : 'ui_designer_export_inputNameText',
+                text : 'test',
+                pos : new Vector(20, 20),
+                color : new Color(0.9, 0.9, 0.9, 1),
+                depth : 10,
+                align : left,
+                align_vertical : center,
+                point_size : 20
+            }
+        });
+
+        new Text({
+            parent : panel,
+            name   : 'ui_designer_export_inputDescriptionTitle',
+            text   : 'Puzzle Description',
+            pos    : new Vector(40, 260),
+            color  : new Color(0.9, 0.9, 0.9, 1),
+            depth  : 9,
+            align  : left,
+            align_vertical : center,
+            point_size : 24
+        });
+        new ui.TextInput({
+            colors : [ new Color().rgb(0x5e5e5e), new Color().rgb(0x7e7e7e) ],
+            background : {
+                parent : panel,
+                name : 'ui_designer_export_inputDescription',
+                texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+                pos : new Vector(20, 280),
+                size : new Vector(600, 40),
+                depth : 9,
+                top : 20, left : 20, bottom : 20, right : 20,
+                source_x : 160, source_y : 20, source_w : 80, source_h : 60
+            },
+            text : {
+                name : 'ui_designer_export_inputDescriptionText',
+                text : 'test',
+                pos : new Vector(20, 20),
+                color : new Color(0.9, 0.9, 0.9, 1),
+                depth : 10,
+                align : left,
+                align_vertical : center,
+                point_size : 20
+            }
+        });
 
         new ui.Button({
             parent  : panel,
