@@ -10,9 +10,17 @@ class DesignerPause extends State
     private var background : Visual;
     private var fsm : States;
 
+    private var listenMenuResume : String;
+    private var listenMenuMain : String;
+    private var listenMenuExport : String;
+
     override public function onenabled<T>(_data : T)
     {
         Luxe.events.fire('designer.pause', { state : true });
+
+        listenMenuResume = Luxe.events.listen('designer.menu.resume', onResumeClicked);
+        listenMenuMain   = Luxe.events.listen('designer.menu.main'  , onMenuClicked);
+        listenMenuExport = Luxe.events.listen('designer.menu.export', onExportClicked);
 
         fsm = new States({ name : 'designer_pause_states' });
         fsm.add(new states.designer.pause.DesignerMenu({ name : 'menu' }));
@@ -25,36 +33,31 @@ class DesignerPause extends State
             color : new Color(0, 0, 0, 0),
             depth : 5
         });
-        background.color.tween(0.5, { a : 0.5 });
-
-        /*
-        popup = DesignerUI.exportPopup();
-        var panel = popup.findChild('ui_export_panel');
-
-        panel.findChild('ui_export_bttnExport').events.listen('clicked', onExportClicked);
-        panel.findChild('ui_export_bttnMenu'  ).events.listen('clicked', onMenuClicked);
-        panel.findChild('ui_export_bttnReturn').events.listen('clicked', onReturnClicked);
-        */
+        background.color.tween(0.25, { a : 0.5 });
     }
 
     override public function ondisabled<T>(_data : T)
     {
-        //popup.destroy();
+        Luxe.events.unlisten(listenMenuResume);
+        Luxe.events.unlisten(listenMenuMain);
+        Luxe.events.unlisten(listenMenuExport);
 
-        Luxe.events.fire('designer.pause', { state : false });
+        background.color.tween(0.25, { a : 0 });
+
+        // Wait until the background has faded out then fire the events to unpause and remove stuff.
+        Luxe.timer.schedule(0.25, function() {
+            fsm.destroy();
+            background.destroy();
+
+            Luxe.events.fire('designer.pause', { state : false });
+        });
     }
 
     /**
      *  Export popup events.
      */
 
-    /**
-     *  Called when the return button is clicked on the export popup menu.
-     *  Destroys the popup and re-enables the UI and two displays.
-     */
-
-    /*
-    private function onReturnClicked(_)
+    private function onResumeClicked(_)
     {
         machine.disable('designer_pause');
     }
@@ -65,14 +68,10 @@ class DesignerPause extends State
         machine.set('designer_list');
     }
 
-    private function onExportClicked(_)
+    private function onExportClicked(_puzzleName : String)
     {
-        var panel = popup.findChild('ui_export_panel');
-        var puzzleName : String = cast(panel.findChild('ui_export_textName'), luxe.Text).text;
-
-        Luxe.events.fire('designer.export', { name : puzzleName });
+        Luxe.events.fire('designer.export', { name : _puzzleName });
 
         machine.disable('designer_pause');
     }
-    */
 }
