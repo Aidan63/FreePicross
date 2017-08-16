@@ -60,6 +60,7 @@ class DesignerMenu extends State
     }
     private function onMenuClicked(_)
     {
-        //
+        machine.unset();
+        Luxe.events.fire('designer.menu.main');
     }    
 }

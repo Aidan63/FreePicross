@@ -65,7 +65,9 @@ class DesignerPause extends State
     private function onMenuClicked(_)
     {
         machine.disable('designer_pause');
-        machine.set('designer_list');
+        Luxe.timer.schedule(0.25, function() {
+            machine.set('designer_list');
+        });
     }
 
     private function onExportClicked(_puzzleName : String)
