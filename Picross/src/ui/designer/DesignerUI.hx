@@ -5,6 +5,7 @@ import luxe.Visual;
 import luxe.Color;
 import luxe.Text;
 import luxe.Sprite;
+import luxe.NineSlice;
 import luxe.components.sprite.SpriteAnimation;
 import components.ui.Button;
 import game.PuzzleState;
@@ -222,6 +223,68 @@ class DesignerUI
         bttnReturn.add(new components.ui.Button({ name : 'button' }));
 
         return backdrop;
+    }
+
+    public static inline function menu() : Visual
+    {
+        var panel = new NineSlice({
+            name    : 'ui_designer_menu_panel',
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color(0.32, 0.32, 0.32, 1),
+            depth   : 8,
+            top : 20, left : 20, bottom : 20, right : 20
+        });
+        panel.create(new Vector(0, 0), 640, 560);
+
+        var bttnResume = new NineSlice({
+            parent  : panel,
+            name    : 'ui_designer_menu_bttnResume',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            color   : new Color(0.86, 0.86, 0.86, 1),
+            depth   : 9,
+            top      : 30, left     : 30, bottom   : 30, right    : 30,
+            source_x : 0 , source_y : 0 , source_w : 80, source_h : 80
+        });
+        bttnResume.create(new Vector(20, 160), 600, 80);
+        bttnResume.add(new components.ui.NineSliceSwitcher({ name : 'button' }));
+
+        var bttnSave = new NineSlice({
+            parent  : panel,
+            name    : 'ui_designer_menu_bttnSave',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            color   : new Color(0.86, 0.86, 0.86, 1),
+            depth   : 9,
+            top      : 30, left     : 30, bottom   : 30, right    : 30,
+            source_x : 0 , source_y : 0 , source_w : 80, source_h : 80
+        });
+        bttnSave.create(new Vector(20, 260), 600, 80);
+        bttnSave.add(new components.ui.NineSliceSwitcher({ name : 'button' }));
+
+        var bttnExport = new NineSlice({
+            parent  : panel,
+            name    : 'ui_designer_menu_bttnExport',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            color   : new Color(0.86, 0.86, 0.86, 1),
+            depth   : 9,
+            top      : 30, left     : 30, bottom   : 30, right    : 30,
+            source_x : 0 , source_y : 0 , source_w : 80, source_h : 80
+        });
+        bttnExport.create(new Vector(20, 360), 600, 80);
+        bttnExport.add(new components.ui.NineSliceSwitcher({ name : 'button' }));
+
+        var bttnMenu = new NineSlice({
+            parent  : panel,
+            name    : 'ui_designer_menu_bttnMenu',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            color   : new Color(0.86, 0.86, 0.86, 1),
+            depth   : 9,
+            top      : 30, left     : 30, bottom   : 30, right    : 30,
+            source_x : 0 , source_y : 0 , source_w : 80, source_h : 80
+        });
+        bttnMenu.create(new Vector(20, 460), 600, 80);
+        bttnMenu.add(new components.ui.NineSliceSwitcher({ name : 'button' }));
+
+        return panel;
     }
 
     /*

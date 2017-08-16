@@ -1,4 +1,4 @@
-package states;
+package states.designer;
 
 import luxe.States;
 import luxe.Parcel;
