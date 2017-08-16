@@ -14,10 +14,8 @@ class DesignerMenu extends State
     private var listenExport : String;
     private var listenMenu : String;
 
-    public function new(_options : luxe.options.StateOptions)
+    override public function init()
     {
-        super(_options);
-
         menu = ui.designer.DesignerUI.menu();
         menu.pos.set_xy(320, -560);
     }
