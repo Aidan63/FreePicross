@@ -242,6 +242,8 @@ class DesignerState extends State
 
     private function onPaused(_event : { state : Bool })
     {
+        PuzzleState.cursor.mouse = None;
+        
         if (_event.state)
         {
             disableHud();
