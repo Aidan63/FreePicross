@@ -81,28 +81,30 @@ class DesignerState extends State
 
     override public function onleave<T>(_data : T)
     {
+        // Unload the parcel resources
+        parcel.unload();
+
+        // Unlisten to all events.
+        Luxe.events.unlisten(listenPause);
+        Luxe.events.unlisten(listenExport);
+        image.events.unlisten(listenPixelPainted);
+        image.events.unlisten(listenPixelRemoved);
+
+        hud.findChild('ui_export'        ).events.unlisten(listenBttnExport);
+        hud.findChild('ui_paintPrimary'  ).events.unlisten(listenBttnPrimary);
+        hud.findChild('ui_paintSecondary').events.unlisten(listenBttnSecondary);
+
+        var paintsHolder = hud.findChild('ui_paintsHolder');
+        for (i in 0...DesignerUI.paints.length) paintsHolder.findChild('ui_paint$i').events.unlisten(listenBttnPaints[i]);
+
+        // Destroy the relevent entities.
         if (image  != null) image.destroy();
         if (design != null) design.destroy();
         if (hud    != null) hud.destroy();
-
-        parcel.unload();
-
-        Luxe.events.unlisten(listenPause);
-        Luxe.events.unlisten(listenExport);
-        Luxe.events.unlisten(listenPixelPainted);
-        Luxe.events.unlisten(listenPixelRemoved);
-        
-        Luxe.events.unlisten(listenBttnExport);
-        Luxe.events.unlisten(listenBttnPrimary);
-        Luxe.events.unlisten(listenBttnSecondary);
-        for (event in listenBttnPaints) Luxe.events.unlisten(event);
     }
 
     private function assets_loaded(_parcel : Parcel)
     {
-        listenPause  = Luxe.events.listen('designer.pause' , onPaused);
-        listenExport = Luxe.events.listen('designer.export', onExport);
-
         PuzzleState.init();
 
         // Create an entity for the actual puzzle cells.
@@ -132,6 +134,10 @@ class DesignerState extends State
 
         // Create the HUD and link up event listeners.
         hud = DesignerUI.create();
+
+        listenPause  = Luxe.events.listen('designer.pause' , onPaused);
+        listenExport = Luxe.events.listen('designer.export', onExport);
+
         listenBttnExport    = hud.findChild('ui_export'        ).events.listen('clicked', onExportMenuClicked);
         listenBttnPrimary   = hud.findChild('ui_paintPrimary'  ).events.listen('clicked', onPaintPrimaryClicked);
         listenBttnSecondary = hud.findChild('ui_paintSecondary').events.listen('clicked', onPaintSecondaryClicked);
@@ -237,9 +243,13 @@ class DesignerState extends State
     }
 
     /**
-     *  Misc / other
+     *  Misc / External Events
      */
 
+    /**
+     *  Called by the enabling or disabling of the pause state.
+     *  @param _event Structure containing a boolean if the state has just been paused.
+     */
     private function onPaused(_event : { state : Bool })
     {
         PuzzleState.cursor.mouse = None;
@@ -258,6 +268,10 @@ class DesignerState extends State
         }
     }
 
+    /**
+     *  When called the current puzzle design and image will be turnt into a playable .puzzle
+     *  @param _event - Structure containing the name and description of the puzzle.
+     */
     private function onExport(_event : { name : String, description : String })
     {
         var puzzle : components.designer.PuzzleDesign = cast design.get('puzzle');
