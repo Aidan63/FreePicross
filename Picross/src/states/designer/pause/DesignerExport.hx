@@ -38,10 +38,13 @@ class DesignerExport extends State
     {
         menu.destroy();
     }
-
     private function onExportClicked(_)
     {
-        //
+        var nameInput : ui.TextInput = cast menu.findChild('ui_designer_export_inputName');
+        var descInput : ui.TextInput = cast menu.findChild('ui_designer_export_inputDescription');
+        Luxe.events.queue('designer.menu.export', { name : nameInput.text, description : descInput.text });
+
+        machine.unset();
     }
     private function onCancelClicked(_)
     {

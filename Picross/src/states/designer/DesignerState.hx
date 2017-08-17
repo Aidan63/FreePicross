@@ -258,7 +258,7 @@ class DesignerState extends State
         }
     }
 
-    private function onExport(_event : { name : String })
+    private function onExport(_event : { name : String, description : String })
     {
         var puzzle : components.designer.PuzzleDesign = cast design.get('puzzle');
         var pixels = new snow.api.buffers.Uint8Array(puzzle.columns() * puzzle.rows() * 4);
@@ -282,7 +282,7 @@ class DesignerState extends State
             pixels.set(buff, 0);
         }
         
-        utils.storage.PuzzleStorage.save(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'Aidan Lee', 'A test puzzle!', puzzle.active, pixels));
+        utils.storage.PuzzleStorage.save(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, pixels));
     }
 
     /**

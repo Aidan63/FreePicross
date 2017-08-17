@@ -70,10 +70,9 @@ class DesignerPause extends State
         });
     }
 
-    private function onExportClicked(_puzzleName : String)
+    private function onExportClicked(_event : { _name : String, _description : String})
     {
-        Luxe.events.fire('designer.export', { name : _puzzleName });
-
-        machine.disable('designer_pause');
+        Luxe.events.fire('designer.export', _event);
+        onMenuClicked(null);
     }
 }
