@@ -172,14 +172,14 @@ class DesignerUI
             labelColors   : labelCol,
             textureUVs    : texUVs,
             textureColors : texCol,
-            text : {
+            label : new luxe.Text({
                 name : 'ui_designer_menu_bttnResumeText',
                 text : 'Resume',
                 point_size : 32,
                 depth : 10,
                 align : center,
                 align_vertical : center
-            }
+            })
         });
 
         new ui.Button({
@@ -194,14 +194,14 @@ class DesignerUI
             labelColors   : labelCol,
             textureUVs    : texUVs,
             textureColors : texCol,
-            text : {
+            label : new luxe.Text({
                 name : 'ui_designer_menu_bttnSaveText',
                 text : 'Save',
                 point_size : 32,
                 depth : 10,
                 align : center,
                 align_vertical : center
-            }
+            })
         });
 
         new ui.Button({
@@ -216,14 +216,14 @@ class DesignerUI
             labelColors   : labelCol,
             textureUVs    : texUVs,
             textureColors : texCol,
-            text : {
+            label : new luxe.Text({
                 name : 'ui_designer_menu_bttnExportText',
                 text : 'Export',
                 point_size : 32,
                 depth : 10,
                 align : center,
                 align_vertical : center
-            }
+            })
         });
 
         new ui.Button({
@@ -238,14 +238,14 @@ class DesignerUI
             labelColors   : labelCol,
             textureUVs    : texUVs,
             textureColors : texCol,
-            text : {
+            label : new luxe.Text({
                 name : 'ui_designer_menu_bttnMenuText',
                 text : 'Exit to Menu',
                 point_size : 32,
                 depth : 10,
                 align : center,
                 align_vertical : center
-            }
+            })
         });
 
         return panel;
@@ -365,14 +365,14 @@ class DesignerUI
             labelColors   : labelCol,
             textureUVs    : texUVs,
             textureColors : texCol,
-            text : {
+            label : new luxe.Text({
                 name : 'ui_designer_export_bttnExportText',
                 text : 'Export',
                 point_size : 32,
                 depth : 10,
                 align : center,
                 align_vertical : center
-            }
+            })
         });
         new ui.Button({
             parent  : panel,
@@ -386,14 +386,14 @@ class DesignerUI
             labelColors   : labelCol,
             textureUVs    : texUVs,
             textureColors : texCol,
-            text : {
+            label : new luxe.Text({
                 name : 'ui_designer_export_bttnCancelText',
                 text : 'Cancel',
                 point_size : 32,
                 depth : 10,
                 align : center,
                 align_vertical : center
-            }
+            })
         });
 
         return panel;

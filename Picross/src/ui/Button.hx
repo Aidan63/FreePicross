@@ -1,13 +1,13 @@
 package ui;
 
 import luxe.Text;
+import luxe.Visual;
 import luxe.Rectangle;
 import luxe.NineSlice;
 import luxe.Vector;
 import luxe.Color;
 import luxe.Input;
 import luxe.options.NineSliceOptions;
-import luxe.options.TextOptions;
 
 enum ButtonState {
     None;
@@ -20,7 +20,7 @@ class Button extends NineSlice
     /**
      *  The string this button will display.
      */
-    public var text : String;
+    public var label : Visual;
 
     /**
      *  The colour of the label in each button state.
@@ -71,16 +71,24 @@ class Button extends NineSlice
 
         create(pos, size.x, size.y, true);
 
-        _options.text.parent = this;
-        _options.text.color  = labelColors[0];
-        _options.text.pos    = labelOffsets[0];
-        textObject = new Text(_options.text);
+        label = _options.label;
+        if (label != null)
+        {
+            label.parent = this;
+            label.color  = labelColors[0];
+            label.pos    = labelOffsets[0];
+        }
+    }
+
+    override public function ondestroy()
+    {
+        if (label != null) label.destroy();
     }
 
     override public function onmousedown(_event : MouseEvent)
     {
         var mouse : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-        if (Luxe.utils.geometry.point_in_polygon(mouse, pos.clone().add(parent.pos), verts))
+        if (Luxe.utils.geometry.point_in_polygon(mouse, pos, verts))
         {
             source_x = textureUVs[2].x;
             source_y = textureUVs[2].y;
@@ -88,8 +96,7 @@ class Button extends NineSlice
             source_h = textureUVs[2].h;
             color = textureColors[2];
 
-            textObject.pos   = labelOffsets[2];
-            textObject.color = labelColors[2];
+            setLabel(2);
 
             create(pos, size.x, size.y, true);
             state = Clicked;
@@ -99,7 +106,7 @@ class Button extends NineSlice
     override public function onmousemove(_event : MouseEvent)
     {
         var mouse : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-        if (Luxe.utils.geometry.point_in_polygon(mouse, pos.clone().add(parent.pos), verts))
+        if (Luxe.utils.geometry.point_in_polygon(mouse, pos, verts))
         {
             if (state == Hover || state == Clicked) return;
 
@@ -109,8 +116,7 @@ class Button extends NineSlice
             source_h = textureUVs[1].h;
             color = textureColors[1];
 
-            textObject.pos   = labelOffsets[1];
-            textObject.color = labelColors[1];
+            setLabel(1);
 
             create(pos, size.x, size.y, true);
             state = Hover;
@@ -125,8 +131,7 @@ class Button extends NineSlice
             source_h = textureUVs[0].h;
             color = textureColors[0];
 
-            textObject.pos   = labelOffsets[0];
-            textObject.color = labelColors[0];
+            setLabel(0);
 
             create(pos, size.x, size.y, true);
             state = None;
@@ -145,18 +150,24 @@ class Button extends NineSlice
             source_h = textureUVs[1].h;
             color = textureColors[1];
 
-            textObject.pos   = labelOffsets[1];
-            textObject.color = labelColors[1];
+            setLabel(1);
 
             create(pos, size.x, size.y, true);
             state = Hover;
         }
     }
+
+    private function setLabel(_int : Int)
+    {
+        if (label == null) return;
+        label.pos   = labelOffsets[_int];
+        label.color = labelColors[_int];
+    }
 }
 
 typedef ButtonOptions = {
     > NineSliceOptions,
-    var text : TextOptions;
+    @:optional var label : Visual;
     @:optional var labelColors   : Array<Color>;
     @:optional var labelOffsets  : Array<Vector>;
     @:optional var textureUVs    : Array<Rectangle>;
