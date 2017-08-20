@@ -111,16 +111,10 @@ class GridView extends Visual
 
         var diff = (_event.y * 10);
 
-        //if (items[0].pos.y + diff > (pos.y - y_offset)) return;
-        //if (items[items.length - 1].pos.y + diff < (pos.y + size.y - y_offset)) return;
         var firstItem = items[0];
         var lastItem = items[items.length - 1];
-
         if (firstItem.pos.y + diff > pos.y - y_offset) return;
-        //trace(lastItem.pos.y  + lastItem.size.y + diff, pos.y + size.y);
-        //trace('${lastItem.pos.y  + lastItem.size.y + diff}  : ${lastItem.pos.y} + ${lastItem.size.y} + ${diff}');
-        //trace('${pos.y + size.y}  : ${pos.y} + ${size.y}');
-        //if (lastItem.pos.y + diff < (pos.y + size.y) - y_offset) return;
+        if (lastItem.pos.y + lastItem.size.y + diff < size.y - y_offset) return;
 
         for (item in items)
         {
