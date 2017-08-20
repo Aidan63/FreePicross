@@ -1,6 +1,7 @@
 package utils;
 
 import luxe.Entity;
+import luxe.Vector;
 
 class EntityHelper
 {
@@ -12,5 +13,10 @@ class EntityHelper
         }
 
         return null;
+    }
+
+    public static function pointInside(_point : Vector, _pos : Vector, _size) : Bool
+    {
+        return (_point.x > _pos.x && _point.y > _pos.y && _point.x < _pos.x + _size.x && _point.y < _pos.y + _size.y);
     }
 }
