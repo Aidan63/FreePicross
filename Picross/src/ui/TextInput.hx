@@ -7,6 +7,7 @@ import luxe.Input;
 import luxe.Color;
 import luxe.options.NineSliceOptions;
 import luxe.options.TextOptions;
+using utils.EntityHelper;
 
 class TextInput extends NineSlice
 {
@@ -23,6 +24,8 @@ class TextInput extends NineSlice
     public function new(_options : TextInputOptions)
     {
         super(_options.background);
+
+        transform.world.auto_decompose = true;
 
         _options.colors == null ? colors = [ new Color(), new Color() ] : colors = _options.colors;
         color = colors[0];
@@ -47,7 +50,7 @@ class TextInput extends NineSlice
     override public function onmousemove(_event : MouseEvent)
     {
         var mouse : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-        if (Luxe.utils.geometry.point_in_geometry(mouse, geometry))
+        if (mouse.pointInside(transform.world.pos, size))
         {
             enabled = true;
             color = colors[1];

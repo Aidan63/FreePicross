@@ -8,6 +8,7 @@ import luxe.Vector;
 import luxe.Color;
 import luxe.Input;
 import luxe.options.NineSliceOptions;
+using utils.EntityHelper;
 
 enum ButtonState {
     None;
@@ -18,7 +19,7 @@ enum ButtonState {
 class Button extends NineSlice
 {
     /**
-     *  The string this button will display.
+     *  The visual label this button will have.
      */
     public var label : Visual;
 
@@ -49,6 +50,8 @@ class Button extends NineSlice
     public function new(_options : ButtonOptions)
     {
         super(_options);
+
+        transform.world.auto_decompose = true;
 
         _options.labelColors   == null ? labelColors   = [ new Color() , new Color() , new Color()  ] : labelColors   = _options.labelColors;
         _options.labelOffsets  == null ? labelOffsets  = [ new Vector(), new Vector(), new Vector() ] : labelOffsets  = _options.labelOffsets;
@@ -88,7 +91,7 @@ class Button extends NineSlice
     override public function onmousedown(_event : MouseEvent)
     {
         var mouse : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-        if (Luxe.utils.geometry.point_in_polygon(mouse, pos, verts))
+        if (mouse.pointInside(transform.world.pos, size))
         {
             source_x = textureUVs[2].x;
             source_y = textureUVs[2].y;
@@ -106,7 +109,7 @@ class Button extends NineSlice
     override public function onmousemove(_event : MouseEvent)
     {
         var mouse : Vector = Luxe.camera.screen_point_to_world(_event.pos);
-        if (Luxe.utils.geometry.point_in_polygon(mouse, pos, verts))
+        if (mouse.pointInside(transform.world.pos, size))
         {
             if (state == Hover || state == Clicked) return;
 
