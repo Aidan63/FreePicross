@@ -8,7 +8,7 @@ import luxe.Visual;
 import luxe.Vector;
 import luxe.Rectangle;
 import game.PuzzleState;
-import ui.designer.DesignerUI;
+import ui.creators.DesignerUI;
 
 using utils.EntityHelper;
 

@@ -16,7 +16,7 @@ class DesignerMenu extends State
 
     override public function init()
     {
-        menu = ui.designer.DesignerUI.menu();
+        menu = ui.creators.DesignerUI.menu();
         menu.pos.set_xy(320, -560);
     }
 

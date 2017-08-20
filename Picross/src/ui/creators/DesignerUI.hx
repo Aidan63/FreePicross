@@ -1,4 +1,4 @@
-package ui.designer;
+package ui.creators;
 
 import luxe.Vector;
 import luxe.Visual;

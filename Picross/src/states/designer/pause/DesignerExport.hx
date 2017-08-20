@@ -14,7 +14,7 @@ class DesignerExport extends State
 
     override public function init()
     {
-        menu = ui.designer.DesignerUI.export();
+        menu = ui.creators.DesignerUI.export();
         menu.pos.set_xy(320, 720);
     }
 
