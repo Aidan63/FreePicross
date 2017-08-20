@@ -9,6 +9,8 @@ import luxe.Input;
 import phoenix.RenderTexture;
 import phoenix.Batcher;
 
+using utils.EntityHelper;
+
 class GridView extends Visual
 {
     private var targetTexture : RenderTexture;
@@ -101,29 +103,39 @@ class GridView extends Visual
      */
     override public function onmousewheel(_event : MouseEvent)
     {
+        if (items.length == 0) return;
+
         // Only scroll if we are over the list.
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (!Luxe.utils.geometry.point_in_geometry(mouse, geometry)) return;
+        if (!mouse.pointInside(pos, size)) return;
 
         var diff = (_event.y * 10);
 
-        if (items[0].pos.y + diff > (pos.y - 20)) return;
-        if (items[items.length - 1].pos.y + diff < (pos.y + size.y - 40)) return;
+        //if (items[0].pos.y + diff > (pos.y - y_offset)) return;
+        //if (items[items.length - 1].pos.y + diff < (pos.y + size.y - y_offset)) return;
+        var firstItem = items[0];
+        var lastItem = items[items.length - 1];
+
+        if (firstItem.pos.y + diff > pos.y - y_offset) return;
+        //trace(lastItem.pos.y  + lastItem.size.y + diff, pos.y + size.y);
+        //trace('${lastItem.pos.y  + lastItem.size.y + diff}  : ${lastItem.pos.y} + ${lastItem.size.y} + ${diff}');
+        //trace('${pos.y + size.y}  : ${pos.y} + ${size.y}');
+        //if (lastItem.pos.y + diff < (pos.y + size.y) - y_offset) return;
 
         for (item in items)
         {
             item.pos.y += diff;
         }
 
-        updateHighlight(mouse);
+        updateHighlight(mouse.subtract(pos));
     }
 
     override public function onmousemove(_event : MouseEvent)
     {
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (!Luxe.utils.geometry.point_in_geometry(mouse, geometry)) return;
+        if (!mouse.pointInside(pos, size)) return;
 
-        updateHighlight(mouse);
+        updateHighlight(mouse.subtract(pos));
     }
 
     /**
@@ -135,11 +147,11 @@ class GridView extends Visual
         if (_event.button != left) return;
 
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (!Luxe.utils.geometry.point_in_geometry(mouse, geometry)) return;
+        if (!mouse.pointInside(pos, size)) return;
 
         for (i in 0...items.length)
         {
-            if (Luxe.utils.geometry.point_in_geometry(mouse.clone().subtract(pos), items[i].geometry))
+            if (mouse.clone().subtract(pos).pointInside(items[i].pos, items[i].size))
             {
                 events.fire('item.clicked', i);
                 return;
@@ -154,7 +166,7 @@ class GridView extends Visual
     {
         for (item in items)
         {
-            if (Luxe.utils.geometry.point_in_geometry(_mouse.clone().subtract(pos), item.geometry))
+            if (_mouse.pointInside(item.pos, item.size))
             {
                 item.color.a = 0.5;
             }
