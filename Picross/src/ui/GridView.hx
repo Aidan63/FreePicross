@@ -97,6 +97,15 @@ class GridView extends Visual
         batcher.on(postrender, after);
     }
 
+    override public function ondestroy()
+    {
+        batcher.destroy(true);
+        targetTexture.destroy();
+
+        items = null;
+        background = null;
+    }
+
     /**
      *  Moves all items up or down depending on what way the mouse wheel moved.
      *  @param _event MouseEvent.
