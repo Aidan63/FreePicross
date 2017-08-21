@@ -97,4 +97,9 @@ class MyPuzzles
 
         return panel;
     }
+
+    public static inline function newPuzzlePopup() : Visual
+    {
+        return new Visual({});
+    }
 }

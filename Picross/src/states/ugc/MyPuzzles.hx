@@ -1,4 +1,4 @@
-package states;
+package states.ugc;
 
 import luxe.States;
 import luxe.Visual;
@@ -68,6 +68,8 @@ class MyPuzzles extends State
     private var selectedID : Int;
 
     private var listenPuzzleSelected : String;
+    private var listenCreateClicked : String;
+    private var listenPause : String;
 
     override public function onenter<T>(_data : T)
     {
@@ -107,9 +109,11 @@ class MyPuzzles extends State
 
     override public function onleave<T>(_data : T)
     {
+        Luxe.events.unlisten(listenPause);
         gridView.events.unlisten(listenPuzzleSelected);
-        gridView.destroy();
+        bttnCreate.events.unlisten(listenCreateClicked);
 
+        gridView.destroy();
         bttnHome.destroy();
         bttnCreate.destroy();
         panel1.destroy();
@@ -200,7 +204,9 @@ class MyPuzzles extends State
         panel2.pos.set_xy(660, -640);
         
         // Connect listeners.
+        listenPause = Luxe.events.listen('myPuzzles.pause', onPaused);
         listenPuzzleSelected = gridView.events.listen('item.clicked', onItemSelected);
+        listenCreateClicked = bttnCreate.events.listen('clicked', onCreateClicked);
     }
 
     /**
@@ -246,5 +252,49 @@ class MyPuzzles extends State
         title.text = puzzle.name;
         description.text = puzzle.description;
         preview.texture = puzzleTextures[_puzzleID];
+    }
+
+    /**
+     *  Event listen functions.
+     */
+
+    /**
+     *  Pauses or unpauses the myPuzzles state.
+     *  @param _event - 
+     */
+    private function onPaused(_event : { pause : Bool })
+    {
+        if (_event.pause)
+        {
+            bttnHome.active = false;
+            bttnCreate.active = false;
+            gridView.active = false;
+
+            if (activePanel != null)
+            {
+                activePanel.findChild('bttnPlay').active = false;
+                activePanel.findChild('bttnDelete').active = false;
+            }
+        }
+        else
+        {
+            bttnHome.active = true;
+            bttnCreate.active = true;
+            gridView.active = true;
+
+            if (activePanel != null)
+            {
+                activePanel.findChild('bttnPlay').active = true;
+                activePanel.findChild('bttnDelete').active = true;
+            }
+        }
+    }
+
+    /**
+     *  Opens the create puzzle popup.
+     */
+    private function onCreateClicked(_)
+    {
+        machine.enable('myPuzzles_create');
     }
 }
