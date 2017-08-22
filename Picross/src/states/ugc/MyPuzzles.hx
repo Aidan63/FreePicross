@@ -70,6 +70,7 @@ class MyPuzzles extends State
     private var listenPuzzleSelected : String;
     private var listenCreateClicked : String;
     private var listenPause : String;
+    private var listenCreate : String;
 
     override public function onenter<T>(_data : T)
     {
@@ -205,6 +206,7 @@ class MyPuzzles extends State
         
         // Connect listeners.
         listenPause = Luxe.events.listen('myPuzzles.pause', onPaused);
+        listenCreate = Luxe.events.listen('myPuzzles.create', onCreatePuzzle);
         listenPuzzleSelected = gridView.events.listen('item.clicked', onItemSelected);
         listenCreateClicked = bttnCreate.events.listen('clicked', onCreateClicked);
     }
@@ -296,5 +298,12 @@ class MyPuzzles extends State
     private function onCreateClicked(_)
     {
         machine.enable('myPuzzles_create');
+    }
+
+    private function onCreatePuzzle(_)
+    {
+        //machine.disable('myPuzzles_create');
+        trace('Switching to designer...');
+        machine.set('designer');
     }
 }

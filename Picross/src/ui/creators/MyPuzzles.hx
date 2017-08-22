@@ -100,6 +100,140 @@ class MyPuzzles
 
     public static inline function newPuzzlePopup() : Visual
     {
-        return new Visual({});
+        var panel = new NineSlice({
+            name    : 'create_panel',
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color().rgb(0x333333),
+            depth   : 8,
+            top : 20, left : 20, bottom : 20, right : 20,
+        });
+        panel.create(new Vector(0, 0), 680, 500);
+
+        new Text({
+            parent : panel,
+            name   : 'text_title',
+            pos    : new Vector(340, 60),
+            text   : 'New Puzzle',
+            depth  : 9,
+            align  : center,
+            align_vertical : center,
+            point_size : 48
+        });
+
+        new Text({
+            parent : panel,
+            name : 'text_width',
+            pos : new Vector(40, 145),
+            depth  : 9,
+            point_size : 32,
+            text : 'width',
+            align : left,
+            align_vertical : center
+        });
+        new Text({
+            parent : panel,
+            name : 'text_height',
+            pos : new Vector(40, 225),
+            depth  : 9,
+            point_size : 32,
+            text : 'height',
+            align : left,
+            align_vertical : center
+        });
+
+        var widthPanel = new NineSlice({
+            parent : panel,
+            name : 'panel_width',
+            size : new Vector(440, 60),
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color().rgb(0x494949),
+            depth   : 8,
+            top : 20, left : 20, bottom : 20, right : 20,
+        });
+        widthPanel.create(new Vector(200, 120), 440, 60);
+        widthPanel.transform.world.auto_decompose = true; 
+
+        var heightPanel = new NineSlice({
+            parent : panel,
+            name : 'panel_height',
+            size : new Vector(440, 60),
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color().rgb(0x494949),
+            depth   : 8,
+            top : 20, left : 20, bottom : 20, right : 20,
+        });
+        heightPanel.create(new Vector(200, 200), 440, 60);
+        heightPanel.transform.world.auto_decompose = true; 
+
+        new Text({
+            parent : panel,
+            name : 'textentry_width',
+            pos : new Vector(240, 145),
+            depth  : 9,
+            point_size : 32,
+            text : '8',
+            align : left,
+            align_vertical : center
+        });
+        new Text({
+            parent : panel,
+            name : 'textentry_height',
+            pos : new Vector(240, 225),
+            depth  : 9,
+            point_size : 32,
+            text : '8',
+            align : left,
+            align_vertical : center
+        });
+
+        var labelPos = [ new Vector(320, 30), new Vector(320, 30), new Vector(320, 50) ];
+        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
+        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
+        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
+
+        new Button({
+            parent  : panel,
+            name    : 'bttn_create',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 9,
+            pos     : new Vector(20, 300),
+            size    : new Vector(640, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+            labelOffsets  : labelPos,
+            labelColors   : labelCol,
+            textureUVs    : texUVs,
+            textureColors : texCol,
+            label : new luxe.Text({
+                name : 'bttn_create_label',
+                text : 'Create',
+                point_size : 32,
+                depth : 10,
+                align : center,
+                align_vertical : center
+            })
+        });
+        new Button({
+            parent  : panel,
+            name    : 'bttn_cancel',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 9,
+            pos     : new Vector(20, 400),
+            size    : new Vector(640, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+            labelOffsets  : labelPos,
+            labelColors   : labelCol,
+            textureUVs    : texUVs,
+            textureColors : texCol,
+            label : new luxe.Text({
+                name : 'bttn_cancel_label',
+                text : 'Cancel',
+                point_size : 32,
+                depth : 10,
+                align : center,
+                align_vertical : center
+            })
+        });
+
+        return panel;
     }
 }
