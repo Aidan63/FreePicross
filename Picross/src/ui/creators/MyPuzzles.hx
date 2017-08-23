@@ -5,6 +5,7 @@ import luxe.Text;
 import luxe.Visual;
 import luxe.NineSlice;
 import luxe.Color;
+import luxe.Rectangle;
 
 class MyPuzzles
 {
@@ -186,12 +187,7 @@ class MyPuzzles
             align_vertical : center
         });
 
-        var labelPos = [ new Vector(320, 30), new Vector(320, 30), new Vector(320, 50) ];
-        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
-        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
-
-        new Button({
+        var bttnCreate = new NineSlice({
             parent  : panel,
             name    : 'bttn_create',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
@@ -199,20 +195,39 @@ class MyPuzzles
             pos     : new Vector(20, 300),
             size    : new Vector(640, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'bttn_create_label',
-                text : 'Create',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
-        new Button({
+        bttnCreate.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnCreate.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(320, 30),
+                new Vector(320, 30),
+                new Vector(320, 50),
+            ],
+            text : 'Create',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
+        var bttnCreate = new NineSlice({
             parent  : panel,
             name    : 'bttn_cancel',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
@@ -220,19 +235,38 @@ class MyPuzzles
             pos     : new Vector(20, 400),
             size    : new Vector(640, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'bttn_cancel_label',
-                text : 'Cancel',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnCreate.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnCreate.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(320, 30),
+                new Vector(320, 30),
+                new Vector(320, 50),
+            ],
+            text : 'Create',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
         return panel;
     }
