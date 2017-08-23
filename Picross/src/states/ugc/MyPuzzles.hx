@@ -164,7 +164,7 @@ class MyPuzzles extends State
         var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
 
         bttnHome = new Button({
-            name : 'bttnHome',
+            name : 'bttn_home',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth : 3,
             pos : new Vector(40, 600),
@@ -177,7 +177,7 @@ class MyPuzzles extends State
         });
 
         bttnCreate = new Button({
-            name : 'bttnCreate',
+            name : 'bttn_create',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth : 3,
             pos : new Vector(140, 600),
@@ -188,7 +188,7 @@ class MyPuzzles extends State
             textureUVs : texUVs,
             textureColors : texCol,
             label : new luxe.Text({
-                name : 'bttnCreateText',
+                name : 'label_create',
                 text : 'Create',
                 point_size : 32,
                 depth : 4,
@@ -300,10 +300,14 @@ class MyPuzzles extends State
         machine.enable('myPuzzles_create');
     }
 
+    /**
+     *  Switch to the puzzle designer state with the width and height of the puzzle.
+     *  @param _ - 
+     */
     private function onCreatePuzzle(_)
     {
-        //machine.disable('myPuzzles_create');
-        trace('Switching to designer...');
-        machine.set('designer');
+        machine.disable('myPuzzles_create');
+        //trace('Switching to designer...');
+        //machine.set('designer');
     }
 }

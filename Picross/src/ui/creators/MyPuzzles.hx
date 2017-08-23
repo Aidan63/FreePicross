@@ -101,7 +101,7 @@ class MyPuzzles
     public static inline function newPuzzlePopup() : Visual
     {
         var panel = new NineSlice({
-            name    : 'create_panel',
+            name    : 'panel_main',
             texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
             color   : new Color().rgb(0x333333),
             depth   : 8,
@@ -111,7 +111,7 @@ class MyPuzzles
 
         new Text({
             parent : panel,
-            name   : 'text_title',
+            name   : 'label_title',
             pos    : new Vector(340, 60),
             text   : 'New Puzzle',
             depth  : 9,
@@ -122,7 +122,7 @@ class MyPuzzles
 
         new Text({
             parent : panel,
-            name : 'text_width',
+            name : 'label_width',
             pos : new Vector(40, 145),
             depth  : 9,
             point_size : 32,
@@ -132,7 +132,7 @@ class MyPuzzles
         });
         new Text({
             parent : panel,
-            name : 'text_height',
+            name : 'label_height',
             pos : new Vector(40, 225),
             depth  : 9,
             point_size : 32,
