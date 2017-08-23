@@ -48,53 +48,86 @@ class MyPuzzles
         });
 
         // Add play and remove buttons.
-        var labelPos = [ new Vector(270, 20), new Vector(270, 20), new Vector(270, 40) ];
-        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
-        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
-
-        new Button({
+        var bttnCreate = new NineSlice({
             parent  : panel,
-            name    : 'bttnPlay',
+            name    : 'bttn_play',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-            depth   : 3,
+            depth   : 9,
             pos     : new Vector(20, 480),
             size    : new Vector(540, 60),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'bttnPlayText',
-                text : 'Play',
-                point_size : 24,
-                depth : 4,
-                align : center,
-                align_vertical : center
-            })
         });
-        new Button({
+        bttnCreate.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnCreate.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(270, 20),
+                new Vector(270, 20),
+                new Vector(270, 40),
+            ],
+            text : 'Play',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
+        var bttnCreate = new NineSlice({
             parent  : panel,
-            name    : 'bttnDelete',
+            name    : 'bttn_delete',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-            depth   : 3,
+            depth   : 9,
             pos     : new Vector(20, 560),
             size    : new Vector(540, 60),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'bttnDeleteText',
-                text : 'Delete',
-                point_size : 24,
-                depth : 4,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnCreate.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnCreate.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(270, 20),
+                new Vector(270, 20),
+                new Vector(270, 40),
+            ],
+            text : 'Delete',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
         return panel;
     }
