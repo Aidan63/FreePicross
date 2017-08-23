@@ -8,7 +8,7 @@ import luxe.Vector;
 import luxe.Rectangle;
 import luxe.Parcel;
 import luxe.ParcelProgress;
-import ui.Button;
+import luxe.NineSlice;
 import ui.GridView;
 import data.PuzzleInfo;
 import phoenix.Texture;
@@ -30,12 +30,12 @@ class MyPuzzles extends State
     /**
      *  Button which will open a popup to create a new puzzle.
      */
-    private var bttnCreate : Button;
+    private var bttnCreate : NineSlice;
 
     /**
      *  Button which will return the user to the main menu.
      */
-    private var bttnHome : Button;
+    private var bttnHome : NineSlice;
 
     /**
      *  The first preview panel.
@@ -158,44 +158,67 @@ class MyPuzzles extends State
             items : previews
         });
 
-        var labelPos = [ new Vector(240, 30), new Vector(240, 30), new Vector(240, 50) ];
-        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
-        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
-
-        bttnHome = new Button({
-            name : 'bttn_home',
+        bttnHome = new NineSlice({
+            name    : 'bttn_home',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-            depth : 3,
-            pos : new Vector(40, 600),
-            size : new Vector(80, 80),
+            depth   : 3,
+            pos     : new Vector(40, 600),
+            size    : new Vector(80, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets : labelPos,
-            labelColors : labelCol,
-            textureUVs : texUVs,
-            textureColors : texCol
         });
+        bttnHome.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
 
-        bttnCreate = new Button({
-            name : 'bttn_create',
+        bttnCreate = new NineSlice({
+            name    : 'bttn_create',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-            depth : 3,
-            pos : new Vector(140, 600),
-            size : new Vector(480, 80),
+            depth   : 3,
+            pos     : new Vector(140, 600),
+            size    : new Vector(480, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets : labelPos,
-            labelColors : labelCol,
-            textureUVs : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'label_create',
-                text : 'Create',
-                point_size : 32,
-                depth : 4,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnCreate.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnCreate.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(240, 30),
+                new Vector(240, 30),
+                new Vector(240, 50),
+            ],
+            text : 'Create',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 4
+        }));
 
         // Create the preview panels and place them offscreen.
         panel1 = ui.creators.MyPuzzles.previewPanel();
