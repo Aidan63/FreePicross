@@ -54,8 +54,10 @@ class Label extends Component
 
     override public function onremoved()
     {
-        label.destroy();
+        // label.destroy() does not need to be called since it is a child of the entity.
+        // This means it will be destroyed when destroy() is called on the entity.
 
+        // Disconnect event listeners.
         visual.events.unlisten(listenMouseOver);
         visual.events.unlisten(listenMouseOut);
         visual.events.unlisten(listenMouseClicked);
