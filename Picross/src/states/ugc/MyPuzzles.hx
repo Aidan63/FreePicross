@@ -231,7 +231,7 @@ class MyPuzzles extends State
         listenPause = Luxe.events.listen('myPuzzles.pause', onPaused);
         listenCreate = Luxe.events.listen('myPuzzles.create', onCreatePuzzle);
         listenPuzzleSelected = gridView.events.listen('item.clicked', onItemSelected);
-        listenCreateClicked = bttnCreate.events.listen('clicked', onCreateClicked);
+        listenCreateClicked = bttnCreate.events.listen('released', onCreateClicked);
     }
 
     /**
