@@ -6,6 +6,7 @@ import luxe.Color;
 import luxe.Text;
 import luxe.Sprite;
 import luxe.NineSlice;
+import luxe.Rectangle;
 import luxe.components.sprite.SpriteAnimation;
 import components.ui.Button;
 import game.PuzzleState;
@@ -135,7 +136,7 @@ class DesignerUI
     public static inline function menu() : Visual
     {
         var panel = new NineSlice({
-            name    : 'ui_designer_menu_panel',
+            name    : 'panel_pause',
             texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
             color   : new Color(0.32, 0.32, 0.32, 1),
             depth   : 8,
@@ -143,14 +144,9 @@ class DesignerUI
         });
         panel.create(new Vector(0, 0), 640, 560);
 
-        var labelPos = [ new Vector(300, 30), new Vector(300, 30), new Vector(300, 50) ];
-        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
-        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
-
         new Text({
             parent : panel,
-            name   : 'ui_designer_menu_title',
+            name   : 'label_title',
             text   : 'Designer',
             pos    : new Vector(320, 80),
             color  : new Color(0.9, 0.9, 0.9, 1),
@@ -160,93 +156,169 @@ class DesignerUI
             point_size : 64
         });
 
-        new ui.Button({
+        var bttnResume = new NineSlice({
             parent  : panel,
-            name    : 'ui_designer_menu_bttnResume',
+            name    : 'bttn_resume',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 160),
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'ui_designer_menu_bttnResumeText',
-                text : 'Resume',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnResume.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnResume.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50),
+            ],
+            text : 'Resume',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
-        new ui.Button({
+        var bttnSave = new NineSlice({
             parent  : panel,
-            name    : 'ui_designer_menu_bttnSave',
+            name    : 'bttn_save',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 260),
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'ui_designer_menu_bttnSaveText',
-                text : 'Save',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnSave.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnSave.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50),
+            ],
+            text : 'Save',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
-        new ui.Button({
+        var bttnExport = new NineSlice({
             parent  : panel,
-            name    : 'ui_designer_menu_bttnExport',
+            name    : 'bttn_export',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 360),
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'ui_designer_menu_bttnExportText',
-                text : 'Export',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnExport.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnExport.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50),
+            ],
+            text : 'Export',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
-        new ui.Button({
+        var bttnMenu = new NineSlice({
             parent  : panel,
-            name    : 'ui_designer_menu_bttnMenu',
+            name    : 'bttn_menu',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 460),
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'ui_designer_menu_bttnMenuText',
-                text : 'Exit to Menu',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnMenu.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [
+                new Color(0.86, 0.86, 0.86, 1),
+                new Color(0.72, 0.72, 0.72, 1),
+                new Color(0.72, 0.72, 0.72, 1)
+            ]
+        }));
+        bttnMenu.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1),
+                new Color(0.58, 0.58, 0.58, 1)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50),
+            ],
+            text : 'Exit to Menu',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
         return panel;
     }

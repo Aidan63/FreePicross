@@ -24,20 +24,20 @@ class DesignerMenu extends State
     {
         luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(luxe.tween.easing.Quad.easeInOut);
 
-        listenResume = menu.findChild('ui_designer_menu_bttnResume').events.listen('clicked', onResumeClicked);
-        listenSave   = menu.findChild('ui_designer_menu_bttnSave'  ).events.listen('clicked', onSaveClicked  );
-        listenExport = menu.findChild('ui_designer_menu_bttnExport').events.listen('clicked', onExportClicked);
-        listenMenu   = menu.findChild('ui_designer_menu_bttnMenu'  ).events.listen('clicked', onMenuClicked  );
+        listenResume = menu.findChild('bttn_resume').events.listen('clicked', onResumeClicked);
+        listenSave   = menu.findChild('bttn_save'  ).events.listen('clicked', onSaveClicked  );
+        listenExport = menu.findChild('bttn_export').events.listen('clicked', onExportClicked);
+        listenMenu   = menu.findChild('bttn_menu'  ).events.listen('clicked', onMenuClicked  );
     }
 
     override public function onleave<T>(_data : T)
     {
         luxe.tween.Actuate.tween(menu.pos, 0.25, { y : -560 }).ease(luxe.tween.easing.Quad.easeInOut);
 
-        menu.findChild('ui_designer_menu_bttnResume').events.unlisten(listenResume);
-        menu.findChild('ui_designer_menu_bttnSave'  ).events.unlisten(listenSave);
-        menu.findChild('ui_designer_menu_bttnExport').events.unlisten(listenExport);
-        menu.findChild('ui_designer_menu_bttnMenu'  ).events.unlisten(listenMenu);
+        menu.findChild('bttn_resume').events.unlisten(listenResume);
+        menu.findChild('bttn_save'  ).events.unlisten(listenSave);
+        menu.findChild('bttn_export').events.unlisten(listenExport);
+        menu.findChild('bttn_menu'  ).events.unlisten(listenMenu);
     }
 
     override public function ondestroy()
