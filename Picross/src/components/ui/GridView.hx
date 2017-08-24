@@ -1,21 +1,32 @@
-package ui;
+package components.ui;
 
+import luxe.Component;
 import luxe.Visual;
 import luxe.Color;
 import luxe.Vector;
 import luxe.NineSlice;
 import luxe.Rectangle;
 import luxe.Input;
+import luxe.Log.def;
 import phoenix.RenderTexture;
 import phoenix.Batcher;
 
 using utils.EntityHelper;
 
-class GridView extends Visual
+class GridView extends Component
 {
+    private var listenMouseMove : String;
+    private var listenMouseDown : String;
+    private var listenMouseWheel : String;
+
     private var targetTexture : RenderTexture;
     private var batcher : Batcher;
     private var background : NineSlice;
+
+    /**
+     *  The visual entity which will hold the render texture.
+     */
+    public var visual : Visual;
 
     /**
      *  All of the visual entities to be displayed in this grid view.
@@ -49,10 +60,12 @@ class GridView extends Visual
 
     public function new(_options : GridViewOptions)
     {
-        super({});
+        super(_options);
 
-        pos.set_xy(_options.boundary.x, _options.boundary.y);
-        size.set_xy(_options.boundary.w, _options.boundary.h);
+        visual = cast entity;
+
+        //visual.pos.set_xy(_options.boundary.x, _options.boundary.y);
+        //visual.size.set_xy(_options.boundary.w, _options.boundary.h);
 
         _options.x_offset == null ? x_offset = 0 : x_offset = _options.x_offset;
         _options.y_offset == null ? y_offset = 0 : y_offset = _options.y_offset;
@@ -63,16 +76,18 @@ class GridView extends Visual
         columns = _options.columns;
     }
 
-    override public function init()
+    override public function onadded()
     {
+        visual = cast entity;
+        
         targetTexture = new RenderTexture({
             id     : 'rtt_listView',
-            width  : cast size.x,
-            height : cast size.y
+            width  : cast visual.size.x,
+            height : cast visual.size.y
         });
 
         batcher = Luxe.renderer.create_batcher({ name : 'batcher_listView' });
-        batcher.view.viewport = new Rectangle(0, 0, size.x, size.y);
+        batcher.view.viewport = new Rectangle(0, 0, visual.size.x, visual.size.y);
 
         // Add background
         background = new NineSlice({
@@ -82,19 +97,26 @@ class GridView extends Visual
             color : new Color().rgb(0x333333),
             batcher : batcher
         });
-        background.create(new Vector(0, 0), size.x, size.y);
+        background.create(new Vector(0, 0), visual.size.x, visual.size.y);
 
         // Set the position, parent, and bactcher for all of the items in this grid view.
         build();
 
         // Set the position, size, and texture of the base visual
-        geometry = Luxe.draw.texture({
+        visual.geometry = Luxe.draw.texture({
             texture : targetTexture,
             flipy : true
         });
 
         batcher.on(prerender , before);
         batcher.on(postrender, after);
+    }
+
+    override public function onremoved()
+    {
+        background.destroy();
+        batcher.destroy();
+        targetTexture.destroy();
     }
 
     /**
@@ -107,29 +129,29 @@ class GridView extends Visual
 
         // Only scroll if we are over the list.
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (!mouse.pointInside(pos, size)) return;
+        if (!mouse.pointInside(visual.pos, visual.size)) return;
 
         var diff = (_event.y * 10);
 
         var firstItem = items[0];
         var lastItem = items[items.length - 1];
-        if (firstItem.pos.y + diff > pos.y - y_offset) return;
-        if (lastItem.pos.y + lastItem.size.y + diff < size.y - y_offset) return;
+        if (firstItem.pos.y + diff > visual.pos.y - y_offset) return;
+        if (lastItem.pos.y + lastItem.size.y + diff < visual.size.y - y_offset) return;
 
         for (item in items)
         {
             item.pos.y += diff;
         }
 
-        updateHighlight(mouse.subtract(pos));
+        updateHighlight(mouse.subtract(visual.pos));
     }
 
     override public function onmousemove(_event : MouseEvent)
     {
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (!mouse.pointInside(pos, size)) return;
+        if (!mouse.pointInside(visual.pos, visual.size)) return;
 
-        updateHighlight(mouse.subtract(pos));
+        updateHighlight(mouse.subtract(visual.pos));
     }
 
     /**
@@ -141,13 +163,13 @@ class GridView extends Visual
         if (_event.button != left) return;
 
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (!mouse.pointInside(pos, size)) return;
+        if (!mouse.pointInside(visual.pos, visual.size)) return;
 
         for (i in 0...items.length)
         {
-            if (mouse.clone().subtract(pos).pointInside(items[i].pos, items[i].size))
+            if (mouse.clone().subtract(visual.pos).pointInside(items[i].pos, items[i].size))
             {
-                events.fire('item.clicked', i);
+                visual.events.fire('item.clicked', i);
                 return;
             }
         }
@@ -171,6 +193,9 @@ class GridView extends Visual
         }
     }
 
+    /**
+     *  [Description]
+     */
     public function build()
     {
         var i = 0;
@@ -212,6 +237,7 @@ class GridView extends Visual
 }
 
 typedef GridViewOptions = {
+    var name : String;
     var boundary : Rectangle;
     var columns : Int;
     @:optional var x_offset : Int;
