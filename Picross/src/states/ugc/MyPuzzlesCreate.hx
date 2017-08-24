@@ -5,6 +5,7 @@ import luxe.Visual;
 import luxe.Input;
 import luxe.Vector;
 import luxe.Color;
+import luxe.Text;
 import components.ui.TextEdit;
 using utils.EntityHelper;
 
@@ -106,10 +107,21 @@ class MyPuzzlesCreate extends State
         }
     }
 
+    /**
+     *  Called when the user presses the create button.
+     *  Converts the numbers from a string to int and clamps them between a range.
+     *  @param _ - 
+     */
     private function onCreateClicked(_)
     {
-        trace('Create clicked');
-        Luxe.events.fire('myPuzzles.create');
+        var editWidth  : Text = cast popup.findChild('textentry_width');
+        var editHeight : Text = cast popup.findChild('textentry_height');
+
+        var width  : Int = Std.int(luxe.utils.Maths.clamp(Std.parseInt(editWidth.text), 1, 32));
+        var height : Int = Std.int(luxe.utils.Maths.clamp(Std.parseInt(editHeight.text), 1, 32));
+        trace(width, height);
+        
+        Luxe.events.fire('myPuzzles.create', new data.events.PuzzleSize(width, height));
     }
     private function onCancelClicked(_)
     {
