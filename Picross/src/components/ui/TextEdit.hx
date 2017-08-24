@@ -23,7 +23,7 @@ class TextEdit extends Component {
 
     var lp0:Vector;
     var lp1:Vector;
-    var blink = false;
+    var blink = true;
     var next_blink:Float = 0.0;
 
     public var filter:EReg;
