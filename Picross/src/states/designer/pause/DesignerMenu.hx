@@ -24,10 +24,10 @@ class DesignerMenu extends State
     {
         luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(luxe.tween.easing.Quad.easeInOut);
 
-        listenResume = menu.findChild('bttn_resume').events.listen('clicked', onResumeClicked);
-        listenSave   = menu.findChild('bttn_save'  ).events.listen('clicked', onSaveClicked  );
-        listenExport = menu.findChild('bttn_export').events.listen('clicked', onExportClicked);
-        listenMenu   = menu.findChild('bttn_menu'  ).events.listen('clicked', onMenuClicked  );
+        listenResume = menu.findChild('bttn_resume').events.listen('released', onResumeClicked);
+        listenSave   = menu.findChild('bttn_save'  ).events.listen('released', onSaveClicked  );
+        listenExport = menu.findChild('bttn_export').events.listen('released', onExportClicked);
+        listenMenu   = menu.findChild('bttn_menu'  ).events.listen('released', onMenuClicked  );
     }
 
     override public function onleave<T>(_data : T)
