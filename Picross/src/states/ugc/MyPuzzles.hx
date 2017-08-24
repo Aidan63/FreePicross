@@ -9,7 +9,7 @@ import luxe.Rectangle;
 import luxe.Parcel;
 import luxe.ParcelProgress;
 import luxe.NineSlice;
-import ui.GridView;
+import components.ui.GridView;
 import data.PuzzleInfo;
 import phoenix.Texture;
 
@@ -25,7 +25,7 @@ class MyPuzzles extends State
     /**
      *  The grid which will hold all of the puzzle preview icons.
      */
-    private var gridView : GridView;
+    private var gridView : Visual;
 
     /**
      *  Button which will open a popup to create a new puzzle.
@@ -156,13 +156,19 @@ class MyPuzzles extends State
         }
 
         // Creates the grid view, back, and create buttons.
-        gridView = new GridView({
+        gridView = new Visual({
+            name : 'ucg_puzzles_grid',
+            pos : new Vector(40, 40),
+            size : new Vector(580, 540)
+        });
+        gridView.add(new GridView({
+            name : 'gridView',
             boundary : new Rectangle(40, 40, 580, 540),
             columns  : 4,
             x_offset : 20, y_offset : 20,
             x_sep    : 20, y_sep    : 20,
             items : previews
-        });
+        }));
 
         bttnHome = new NineSlice({
             name    : 'bttn_home',
@@ -234,10 +240,10 @@ class MyPuzzles extends State
         panel2.pos.set_xy(660, -640);
         
         // Connect listeners.
-        listenPause = Luxe.events.listen('myPuzzles.pause', onPaused);
+        listenPause  = Luxe.events.listen('myPuzzles.pause' , onPaused);
         listenCreate = Luxe.events.listen('myPuzzles.create', onCreatePuzzle);
         listenPuzzleSelected = gridView.events.listen('item.clicked', onItemSelected);
-        listenCreateClicked = bttnCreate.events.listen('released', onCreateClicked);
+        listenCreateClicked  = bttnCreate.events.listen('released', onCreateClicked);
     }
 
     /**
