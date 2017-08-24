@@ -66,7 +66,7 @@ class DesignerPause extends State
     {
         machine.disable('designer_pause');
         Luxe.timer.schedule(0.25, function() {
-            machine.set('designer_list');
+            machine.set('myPuzzles');
         });
     }
 
