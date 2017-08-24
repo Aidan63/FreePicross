@@ -40,6 +40,9 @@ class DesignerState extends State
      */
     private var size : data.events.PuzzleSize;
 
+    private var designBox : phoenix.geometry.Geometry;
+    private var imageBox : phoenix.geometry.Geometry;
+
     /**
      *  Event listeners.
      */
@@ -98,6 +101,9 @@ class DesignerState extends State
         image.events.unlisten(listenPixelPainted);
         image.events.unlisten(listenPixelRemoved);
 
+        designBox.drop();
+        imageBox.drop();
+
         hud.findChild('ui_export'        ).events.unlisten(listenBttnExport);
         hud.findChild('ui_paintPrimary'  ).events.unlisten(listenBttnPrimary);
         hud.findChild('ui_paintSecondary').events.unlisten(listenBttnSecondary);
@@ -123,7 +129,9 @@ class DesignerState extends State
         design.add(new components.SelectedCell({ name : 'cell_selector' }));
         design.add(new components.MousePress({ name : 'mouse' }));
         design.pos.set_xy(344, 296);
-        Luxe.draw.rectangle({
+
+        // Small outline box showing the limits of the design area.
+        designBox = Luxe.draw.rectangle({
             x : design.pos.x - design.origin.x,
             y : design.pos.y - design.origin.y,
             w : design.size.x,
@@ -138,7 +146,9 @@ class DesignerState extends State
         image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Rectangle(688, 96, 496, 400) }));
         image.add(new components.MousePress({ name : 'mouse' }));
         image.add(new components.SelectedCell({ name : 'cell_selector' }));
-        Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });
+
+        // Small outline box showing the limits of the image area.
+        imageBox = Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });
 
         // Create the HUD and link up event listeners.
         hud = DesignerUI.create();
