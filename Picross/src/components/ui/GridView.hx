@@ -64,14 +64,11 @@ class GridView extends Component
 
         visual = cast entity;
 
-        //visual.pos.set_xy(_options.boundary.x, _options.boundary.y);
-        //visual.size.set_xy(_options.boundary.w, _options.boundary.h);
-
-        _options.x_offset == null ? x_offset = 0 : x_offset = _options.x_offset;
-        _options.y_offset == null ? y_offset = 0 : y_offset = _options.y_offset;
-        _options.x_sep == null ? x_sep = 0 : x_sep = _options.x_sep;
-        _options.y_sep == null ? y_sep = 0 : y_sep = _options.y_sep;
-        _options.items == null ? items = new Array<Visual>() : items = _options.items;
+        x_offset = def(_options.x_offset, 0);
+        y_offset = def(_options.y_offset, 0);
+        x_sep = def(_options.x_sep, 0);
+        y_sep = def(_options.y_sep, 0);
+        items = def(_options.items, new Array<Visual>());
 
         columns = _options.columns;
     }
