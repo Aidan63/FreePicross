@@ -51,8 +51,8 @@ class MyPuzzles
         var bttnCreate = new NineSlice({
             parent  : panel,
             name    : 'bttn_play',
+            depth   : 1,
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-            depth   : 9,
             pos     : new Vector(20, 480),
             size    : new Vector(540, 60),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -86,13 +86,13 @@ class MyPuzzles
             align : center,
             align_vertical : center,
             point_size : 24,
-            depth : 10
+            depth : 2
         }));
         var bttnCreate = new NineSlice({
             parent  : panel,
             name    : 'bttn_delete',
+            depth   : 1,
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-            depth   : 9,
             pos     : new Vector(20, 560),
             size    : new Vector(540, 60),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -126,7 +126,7 @@ class MyPuzzles
             align : center,
             align_vertical : center,
             point_size : 24,
-            depth : 10
+            depth : 2
         }));
 
         return panel;
