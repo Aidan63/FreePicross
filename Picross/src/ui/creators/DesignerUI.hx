@@ -33,7 +33,7 @@ class DesignerUI
     ];
 
     /**
-     *  [Description]
+     *  Actual in designer UI / HUD
      *  @return Visual
      */
     public static function create() : Visual
@@ -138,7 +138,7 @@ class DesignerUI
         var panel = new NineSlice({
             name    : 'panel_pause',
             texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
-            color   : new Color(0.32, 0.32, 0.32, 1),
+            color   : new Color().rgb(0x333333),
             depth   : 8,
             top : 20, left : 20, bottom : 20, right : 20
         });
@@ -149,7 +149,7 @@ class DesignerUI
             name   : 'label_title',
             text   : 'Designer',
             pos    : new Vector(320, 80),
-            color  : new Color(0.9, 0.9, 0.9, 1),
+            color  : new Color().rgb(0xe7e7e7),
             depth  : 9,
             align  : center,
             align_vertical : center,
@@ -172,18 +172,14 @@ class DesignerUI
                 new Rectangle(80 , 0, 80, 80),
                 new Rectangle(160, 0, 80, 80)
             ],
-            colors : [
-                new Color(0.86, 0.86, 0.86, 1),
-                new Color(0.72, 0.72, 0.72, 1),
-                new Color(0.72, 0.72, 0.72, 1)
-            ]
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
         bttnResume.add(new components.ui.Label({
             name : 'label',
             colors : [
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1)
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
             ],
             offsets : [
                 new Vector(300, 30),
@@ -213,18 +209,14 @@ class DesignerUI
                 new Rectangle(80 , 0, 80, 80),
                 new Rectangle(160, 0, 80, 80)
             ],
-            colors : [
-                new Color(0.86, 0.86, 0.86, 1),
-                new Color(0.72, 0.72, 0.72, 1),
-                new Color(0.72, 0.72, 0.72, 1)
-            ]
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
         bttnSave.add(new components.ui.Label({
             name : 'label',
             colors : [
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1)
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
             ],
             offsets : [
                 new Vector(300, 30),
@@ -254,18 +246,14 @@ class DesignerUI
                 new Rectangle(80 , 0, 80, 80),
                 new Rectangle(160, 0, 80, 80)
             ],
-            colors : [
-                new Color(0.86, 0.86, 0.86, 1),
-                new Color(0.72, 0.72, 0.72, 1),
-                new Color(0.72, 0.72, 0.72, 1)
-            ]
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
         bttnExport.add(new components.ui.Label({
             name : 'label',
             colors : [
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1)
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
             ],
             offsets : [
                 new Vector(300, 30),
@@ -295,18 +283,14 @@ class DesignerUI
                 new Rectangle(80 , 0, 80, 80),
                 new Rectangle(160, 0, 80, 80)
             ],
-            colors : [
-                new Color(0.86, 0.86, 0.86, 1),
-                new Color(0.72, 0.72, 0.72, 1),
-                new Color(0.72, 0.72, 0.72, 1)
-            ]
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
         bttnMenu.add(new components.ui.Label({
             name : 'label',
             colors : [
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1),
-                new Color(0.58, 0.58, 0.58, 1)
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
             ],
             offsets : [
                 new Vector(300, 30),
@@ -330,22 +314,17 @@ class DesignerUI
     public static inline function export() : Visual
     {
         var panel = new NineSlice({
-            name    : 'ui_designer_export_panel',
+            name    : 'panel_export',
             texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
-            color   : new Color(0.32, 0.32, 0.32, 1),
+            color   : new Color().rgb(0x333333),
             depth   : 8,
             top : 20, left : 20, bottom : 20, right : 20
         });
         panel.create(new Vector(0, 0), 640, 560);
 
-        var labelPos = [ new Vector(300, 30), new Vector(300, 30), new Vector(300, 50) ];
-        var labelCol = [ new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1), new Color(0.54, 0.54, 0.54, 1) ];
-        var texCol = [ new Color(0.86, 0.86, 0.86, 1), new Color(0.72, 0.72, 0.72, 1), new Color(0.72, 0.72, 0.72, 1) ];
-        var texUVs = [ new luxe.Rectangle(0  , 0, 80, 80), new luxe.Rectangle(80 , 0, 80, 80), new luxe.Rectangle(160, 0, 80, 80) ];
-
         new Text({
             parent : panel,
-            name   : 'ui_designer_export_title',
+            name   : 'label_title',
             text   : 'Export Options',
             pos    : new Vector(320, 80),
             color  : new Color(0.9, 0.9, 0.9, 1),
@@ -357,7 +336,7 @@ class DesignerUI
 
         new Text({
             parent : panel,
-            name   : 'ui_designer_export_inputNameTitle',
+            name   : 'label_name',
             text   : 'Puzzle Name',
             pos    : new Vector(40, 180),
             color  : new Color(0.9, 0.9, 0.9, 1),
@@ -366,33 +345,33 @@ class DesignerUI
             align_vertical : center,
             point_size : 24
         });
-        new ui.TextInput({
-            colors : [ new Color().rgb(0x5e5e5e), new Color().rgb(0x7e7e7e) ],
-            background : {
-                parent : panel,
-                name : 'ui_designer_export_inputName',
-                texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-                pos : new Vector(20, 200),
-                size : new Vector(600, 40),
-                depth : 9,
-                top : 20, left : 20, bottom : 20, right : 20,
-                source_x : 160, source_y : 20, source_w : 80, source_h : 60
-            },
-            text : {
-                name : 'ui_designer_export_inputNameText',
-                text : 'test',
-                pos : new Vector(20, 20),
-                color : new Color(0.9, 0.9, 0.9, 1),
-                depth : 10,
-                align : left,
-                align_vertical : center,
-                point_size : 20
-            }
+        var panelEditName = new NineSlice({
+            parent  : panel,
+            name    : 'panel_textedit_name',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            size    : new Vector(600, 40),
+            depth   : 9,
+            color   : new Color().rgb(0x494949),
+            top : 20, left : 20, bottom : 20, right : 20,
+            source_x : 160, source_y : 20, source_w : 80, source_h : 60
+        });
+        panelEditName.create(new Vector(40, 200), 560, 40);
+        panelEditName.transform.world.auto_decompose = true;
+        new Text({
+            parent : panel,
+            name   : 'textedit_name',
+            text   : 'name',
+            pos    : new Vector(60, 218),
+            color  : new Color().rgb(0xa2a2a2),
+            depth  : 9,
+            align  : left,
+            align_vertical : center,
+            point_size : 24
         });
 
         new Text({
             parent : panel,
-            name   : 'ui_designer_export_inputDescriptionTitle',
+            name   : 'label_description',
             text   : 'Puzzle Description',
             pos    : new Vector(40, 260),
             color  : new Color(0.9, 0.9, 0.9, 1),
@@ -401,72 +380,103 @@ class DesignerUI
             align_vertical : center,
             point_size : 24
         });
-        new ui.TextInput({
-            colors : [ new Color().rgb(0x5e5e5e), new Color().rgb(0x7e7e7e) ],
-            background : {
-                parent : panel,
-                name : 'ui_designer_export_inputDescription',
-                texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
-                pos : new Vector(20, 280),
-                size : new Vector(600, 40),
-                depth : 9,
-                top : 20, left : 20, bottom : 20, right : 20,
-                source_x : 160, source_y : 20, source_w : 80, source_h : 60
-            },
-            text : {
-                name : 'ui_designer_export_inputDescriptionText',
-                text : 'test',
-                pos : new Vector(20, 20),
-                color : new Color(0.9, 0.9, 0.9, 1),
-                depth : 10,
-                align : left,
-                align_vertical : center,
-                point_size : 20
-            }
+        var panelEditDescription = new NineSlice({
+            parent  : panel,
+            name    : 'panel_textedit_description',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            size    : new Vector(600, 40),
+            depth   : 9,
+            color   : new Color().rgb(0x494949),
+            top : 20, left : 20, bottom : 20, right : 20,
+            source_x : 160, source_y : 20, source_w : 80, source_h : 60
+        });
+        panelEditDescription.create(new Vector(40, 280), 560, 40);
+        panelEditDescription.transform.world.auto_decompose = true;
+        new Text({
+            parent : panel,
+            name   : 'textedit_description',
+            text   : 'description',
+            pos    : new Vector(60, 298),
+            color  : new Color().rgb(0xa2a2a2),
+            depth  : 9,
+            align  : left,
+            align_vertical : center,
+            point_size : 24
         });
 
-        new ui.Button({
+        var bttnExport = new NineSlice({
             parent  : panel,
-            name    : 'ui_designer_export_bttnExport',
+            name    : 'bttn_export',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 360),
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'ui_designer_export_bttnExportText',
-                text : 'Export',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
-        new ui.Button({
+        bttnExport.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
+        }));
+        bttnExport.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50)
+            ],
+            text : 'Export',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
+
+        var bttnCancel = new NineSlice({
             parent  : panel,
-            name    : 'ui_designer_export_bttnCancel',
+            name    : 'bttn_cancel',
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 460),
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
-            labelOffsets  : labelPos,
-            labelColors   : labelCol,
-            textureUVs    : texUVs,
-            textureColors : texCol,
-            label : new luxe.Text({
-                name : 'ui_designer_export_bttnCancelText',
-                text : 'Cancel',
-                point_size : 32,
-                depth : 10,
-                align : center,
-                align_vertical : center
-            })
         });
+        bttnCancel.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
+        }));
+        bttnCancel.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50)
+            ],
+            text : 'Cancel',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
 
         return panel;
     }
