@@ -18,9 +18,7 @@
     build : {
       dependencies : {
         luxe : '*',
-        hxInflate : '*',
-        mint : '*',
-        linc_dialogs : '*'
+        hxInflate : '*'
       }
     },
 
