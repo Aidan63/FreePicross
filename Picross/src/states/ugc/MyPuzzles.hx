@@ -297,8 +297,8 @@ class MyPuzzles extends State
 
             if (activePanel != null)
             {
-                activePanel.findChild('bttnPlay').active = false;
-                activePanel.findChild('bttnDelete').active = false;
+                activePanel.findChild('bttn_play').active = false;
+                activePanel.findChild('bttn_delete').active = false;
             }
         }
         else
@@ -309,8 +309,8 @@ class MyPuzzles extends State
 
             if (activePanel != null)
             {
-                activePanel.findChild('bttnPlay').active = true;
-                activePanel.findChild('bttnDelete').active = true;
+                activePanel.findChild('bttn_play').active = true;
+                activePanel.findChild('bttn_delete').active = true;
             }
         }
     }
