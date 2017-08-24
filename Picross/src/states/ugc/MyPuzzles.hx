@@ -104,7 +104,8 @@ class MyPuzzles extends State
 
         ugPuzzles = [
             utils.storage.PuzzleStorage.load('strawberry'),
-            utils.storage.PuzzleStorage.load('277008110')
+            utils.storage.PuzzleStorage.load('277008110'),
+            utils.storage.PuzzleStorage.load('-2125184015'),
         ];
     }
 
@@ -119,6 +120,11 @@ class MyPuzzles extends State
         bttnCreate.destroy();
         panel1.destroy();
         panel2.destroy();
+
+        for (tex in puzzleTextures)
+        {
+            tex.invalidate();
+        }
     }
 
     private function assets_loaded(_parcel : Parcel)
@@ -327,10 +333,9 @@ class MyPuzzles extends State
      *  Switch to the puzzle designer state with the width and height of the puzzle.
      *  @param _ - 
      */
-    private function onCreatePuzzle(_)
+    private function onCreatePuzzle(_size : data.events.PuzzleSize)
     {
         machine.disable('myPuzzles_create');
-        //trace('Switching to designer...');
-        //machine.set('designer');
+        machine.set('designer', _size);
     }
 }

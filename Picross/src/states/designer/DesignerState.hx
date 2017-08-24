@@ -35,6 +35,12 @@ class DesignerState extends State
     private var hud : Visual;
 
     /**
+     *  The class which holds the size of this puzzle.
+     *  It is the data which is sent to this state when it's entered.
+     */
+    private var size : data.events.PuzzleSize;
+
+    /**
      *  Event listeners.
      */
 
@@ -50,6 +56,8 @@ class DesignerState extends State
 
     override public function onenter<T>(_data : T)
     {
+        size = cast _data;
+
         parcel = new Parcel({
             textures : [
                 { id : 'assets/images/cells.png' },
@@ -109,7 +117,7 @@ class DesignerState extends State
 
         // Create an entity for the actual puzzle cells.
         design = new Visual({ name : 'design' });
-        design.add(new components.designer.PuzzleDesign({ name : 'puzzle', width : 8, height : 8 }));
+        design.add(new components.designer.PuzzleDesign({ name : 'puzzle', width : size.width, height : size.height }));
         design.add(new components.Dimensions({ name : 'dimensions' }));
         design.add(new components.Display   ({ name : 'display', boundary : new Vector(496, 400) }));
         design.add(new components.SelectedCell({ name : 'cell_selector' }));
@@ -125,7 +133,7 @@ class DesignerState extends State
 
         // Create an entity for the finished puzzle image.
         image = new Visual({ name : 'image'});
-        image.add(new components.designer.PuzzleImage({ name : 'grid', width : 8, height : 8 }));
+        image.add(new components.designer.PuzzleImage({ name : 'grid', width : size.width, height : size.height }));
         image.add(new components.Dimensions({ name : 'dimensions' }));
         image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Rectangle(688, 96, 496, 400) }));
         image.add(new components.MousePress({ name : 'mouse' }));
