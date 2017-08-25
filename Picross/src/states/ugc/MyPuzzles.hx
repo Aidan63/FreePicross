@@ -72,6 +72,9 @@ class MyPuzzles extends State
     private var listenPause : String;
     private var listenCreate : String;
 
+    private var listenPanel1Play : String;
+    private var listenPanel2Play : String;
+
     override public function onenter<T>(_data : T)
     {
         parcel = new Parcel({
@@ -111,6 +114,9 @@ class MyPuzzles extends State
 
     override public function onleave<T>(_data : T)
     {
+        panel1.findChild('bttn_play').events.unlisten(listenPanel1Play);
+        panel2.findChild('bttn_play').events.unlisten(listenPanel2Play);
+
         Luxe.events.unlisten(listenPause);
         gridView.events.unlisten(listenPuzzleSelected);
         bttnCreate.events.unlisten(listenCreateClicked);
@@ -240,6 +246,9 @@ class MyPuzzles extends State
         panel2.pos.set_xy(660, -640);
         
         // Connect listeners.
+        listenPanel1Play = panel1.findChild('bttn_play').events.listen('released', onPlayClicked);
+        listenPanel2Play = panel2.findChild('bttn_play').events.listen('released', onPlayClicked);
+
         listenPause  = Luxe.events.listen('myPuzzles.pause' , onPaused);
         listenCreate = Luxe.events.listen('myPuzzles.create', onCreatePuzzle);
         listenPuzzleSelected = gridView.events.listen('item.clicked', onItemSelected);
@@ -343,5 +352,15 @@ class MyPuzzles extends State
     {
         machine.disable('myPuzzles_create');
         machine.set('designer', _size);
+    }
+
+    /**
+     *  Called when the play button on the active panel is pressed.
+     *  @param _ - 
+     */
+    private function onPlayClicked(_)
+    {
+        trace('Play!');
+        machine.set('game', ugPuzzles[selectedID]);
     }
 }

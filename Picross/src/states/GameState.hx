@@ -5,11 +5,16 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 import luxe.Color;
 import game.PuzzleState;
+import data.PuzzleInfo;
 
 class GameState extends State
 {
+    private var info : PuzzleInfo;
+
     override public function onenter<T>(_data : T)
     {
+        info = cast _data;
+
         var parcel = new Parcel({
             textures : [
                 { id : 'assets/images/cells.png' },
@@ -47,7 +52,7 @@ class GameState extends State
     private function assets_loaded(_parcel : Parcel)
     {
         PuzzleState.init();
-        PuzzleState.loadPuzzle('');
+        PuzzleState.loadPuzzle(info);
     }
 
     override public function update(_dt : Float)

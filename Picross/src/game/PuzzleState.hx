@@ -49,14 +49,15 @@ class PuzzleState
      *  Loads the puzzle from the provided location and start a countdown.
      *  @param _puzzleLocation The path to the puzzle file on disk.
      */
-    public static function loadPuzzle(_puzzleLocation : String)
+    public static function loadPuzzle(_puzzle : PuzzleInfo)
     {
         if (puzzle != null)
         {
             puzzle.destroy();
         }
 
-        info = utils.storage.PuzzleStorage.load('strawberry');
+        //info = utils.storage.PuzzleStorage.load('strawberry');
+        info = _puzzle;
         if (info == null)
         {
             trace('NULL');
