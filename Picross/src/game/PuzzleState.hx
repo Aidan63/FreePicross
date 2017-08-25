@@ -39,10 +39,8 @@ class PuzzleState
 
     public static function init()
     {
-        timer  = new Timer({ name : 'puzzle_timer' });
         color  = new ColorSelector();
         cursor = new Cursor();
-        ui     = new UI();
     }
     
     /**
