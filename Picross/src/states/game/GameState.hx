@@ -2,6 +2,7 @@ package states.game;
 
 import luxe.States;
 import luxe.Parcel;
+import luxe.Visual;
 import luxe.ParcelProgress;
 import luxe.Color;
 import game.PuzzleState;
@@ -10,6 +11,10 @@ import data.PuzzleInfo;
 class GameState extends State
 {
     private var info : PuzzleInfo;
+
+    private var puzzle : Visual;
+
+    private var hud : Visual;
 
     override public function onenter<T>(_data : T)
     {
@@ -49,21 +54,28 @@ class GameState extends State
     private function assets_loaded(_parcel : Parcel)
     {
         PuzzleState.init();
-        PuzzleState.loadPuzzle(info);
-    }
+        //PuzzleState.loadPuzzle(info);
 
-    override public function update(_dt : Float)
-    {
-        /*
-        if (Luxe.input.keypressed(Key.space))
-        {
-            var data : components.Puzzle = cast PuzzleState.puzzle.get('puzzle');
-            utils.PuzzleSaver.save(data.active, '/media/aidan/archive/projects/FreePicross/Picross/assets/puzzles/test.puzzle');
-        }
-        if (Luxe.input.keypressed(Key.lshift))
-        {
-            PuzzleState.loadPuzzle('');
-        }
-        */
+        puzzle = new Visual({ name : 'puzzle' });
+        puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : info.grid }));
+        puzzle.add(new components.Rules      ({ name : 'rules'        }));
+        puzzle.add(new components.Dimensions ({ name : 'dimensions'   }));
+        puzzle.add(new components.Display    ({ name : 'display'      }));
+        puzzle.add(new components.RuleDisplay({ name : 'rule_display' }));
+        puzzle.add(new components.Faults     ({ name : 'faults'       }));
+        puzzle.add(new components.CellHighlighter({ name : 'cell_highlighter' }));
+        puzzle.add(new components.LineHighlighter({ name : 'line_highlighter' }));
+        puzzle.add(new components.CellBreaker    ({ name : 'remove_effect'    }));
+
+        utils.Banner.create('Start!', 1);
+        Luxe.timer.schedule(2, function() {
+            puzzle.add(new components.MousePress ({ name : 'mouse' }));
+
+            hud = ui.creators.Game.createHUD();
+        });
+
+        // Connect listeners to the puzzle.
+
+        // Connect listeners to the HUD.
     }
 }
