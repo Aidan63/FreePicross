@@ -1,4 +1,4 @@
-package states;
+package states.game;
 
 import luxe.States;
 import luxe.Parcel;
