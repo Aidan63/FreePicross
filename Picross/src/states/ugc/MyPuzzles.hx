@@ -105,11 +105,7 @@ class MyPuzzles extends State
 
         parcel.load();
 
-        ugPuzzles = [
-            utils.storage.PuzzleStorage.load('strawberry'),
-            utils.storage.PuzzleStorage.load('277008110'),
-            utils.storage.PuzzleStorage.load('-2125184015'),
-        ];
+        ugPuzzles = utils.storage.PuzzleStorage.getUGPuzzles();
     }
 
     override public function onleave<T>(_data : T)
