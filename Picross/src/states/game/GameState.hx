@@ -32,9 +32,6 @@ class GameState extends State
                 { id : 'assets/data/animations/bubbleDown.json' },
                 { id : 'assets/data/animations/paintSelector.json' }
             ],
-            bytes : [
-                { id : 'assets/puzzles/ics.puzzle' }
-            ],
             fonts : [
                 { id : 'assets/fonts/odin.fnt' }
             ]
