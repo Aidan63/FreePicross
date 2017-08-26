@@ -31,6 +31,15 @@ class GameState extends State
      */
     private var hud : Visual;
 
+    // event listeners
+    private var listenPauseClicked : String;
+    private var listenPrimaryClicked : String;
+    private var listenSecondaryClicked : String;
+
+    private var listenCellBrushed : String;
+    private var listenCellRemoved : String;
+    private var listenCellFault : String;
+
     override public function onenter<T>(_data : T)
     {
         info = cast _data;
@@ -69,7 +78,6 @@ class GameState extends State
     private function assets_loaded(_parcel : Parcel)
     {
         PuzzleState.init();
-        //PuzzleState.loadPuzzle(info);
 
         puzzle = new Visual({ name : 'puzzle' });
         puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : info.grid }));
@@ -95,13 +103,14 @@ class GameState extends State
         luxe.tween.Actuate.tween(hud.pos, 0.25, { x : 0 });
 
         // Connect listeners to the puzzle.
-        puzzle.events.listen('cell.brushed', checkCompletedPuzzle);
-        puzzle.events.listen('cell.removed', checkCompletedPuzzle);
+        listenCellBrushed = puzzle.events.listen('cell.brushed', checkCompletedPuzzle);
+        listenCellRemoved = puzzle.events.listen('cell.removed', checkCompletedPuzzle);
+        listenCellFault   = puzzle.events.listen('cell.fault'  , checkPuzzleFailed);
 
         // Connect listeners to the HUD.
-        hud.findChild('bttn_pause').events.listen('clicked', onPausePressed);
-        hud.findChild('bttn_paintPrimary').events.listen('clicked', onPrimaryPressed);
-        hud.findChild('bttn_paintSecondary').events.listen('clicked', onSecondaryPressed);
+        listenPauseClicked     = hud.findChild('bttn_pause').events.listen('clicked', onPausePressed);
+        listenPrimaryClicked   = hud.findChild('bttn_paintPrimary').events.listen('clicked', onPrimaryPressed);
+        listenSecondaryClicked = hud.findChild('bttn_paintSecondary').events.listen('clicked', onSecondaryPressed);
     }
 
     /**
@@ -165,17 +174,77 @@ class GameState extends State
         {
             trace('Puzzle completed!');
             endPuzzle();
+            puzzleCompleted();
 
             //Luxe.events.fire('puzzle.completed');
             //PuzzleState.endPuzzle();
         }
     }
 
+    /**
+     *  Checks if the puzzle has been failed.
+     */
+    private function checkPuzzleFailed(_)
+    {
+        //
+    }
+
+    /**
+     *  End game stuff regardless of if the puzzle has been completed or failed.
+     */
     private function endPuzzle()
     {
+        hud.findChild('bttn_pause').events.unlisten(listenPauseClicked);
+        hud.findChild('bttn_paintPrimary').events.unlisten(listenPauseClicked);
+        hud.findChild('bttn_paintSecondary').events.unlisten(listenPauseClicked);
+
+        puzzle.events.unlisten(listenCellBrushed);
+        puzzle.events.unlisten(listenCellRemoved);
+        puzzle.events.unlisten(listenCellFault);
+
         if (puzzle.has('mouse')) puzzle.remove('mouse');
         if (puzzle.has('gamepad')) puzzle.remove('gamepad');
+        if (puzzle.has('rule_display')) cast(puzzle.get('rule_display'), components.RuleDisplay).fadeOut();
 
         luxe.tween.Actuate.tween(hud.pos, 0.25, { x : -128 });
+    }
+
+    /**
+     *  Called when the puzzle has been successfully completed.
+     */
+    private function puzzleCompleted()
+    {
+        // Slide the puzzle to the center of the screen.
+        puzzle.add(new components.Slider({ name : 'move_mid', time : 2, end : new Vector(640, 360), ease : luxe.tween.easing.Quad.easeOut }));
+
+        // After the puzzle has reached the center of the screen.
+        Luxe.timer.schedule(2.5, function() {
+            Luxe.camera.add(new components.Flash({ name : 'flash', time : 1 }));
+
+            utils.PuzzleHelper.imageFromPixels(puzzle, info.pixels);
+            utils.Banner.create('Complete!', 1);
+        });
+
+        // Once the 'complete' banner has vanished.
+        Luxe.timer.schedule(4.5, function() {
+            puzzle.add(new components.Slider({
+                name : 'move_mid',
+                time : 0.5,
+                end  : new Vector(320, 360),
+                ease : luxe.tween.easing.Quad.easeOut
+            }));
+
+            // Temp create the end ui.
+            //ui.results = new ui.game.PuzzleResults();
+            //ui.results.moveIn();
+        });
+    }
+
+    /**
+     *  Called when the puzzle has been failed.
+     */
+    private function puzzleFailed()
+    {
+        //
     }
 }
