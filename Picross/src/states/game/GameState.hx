@@ -31,6 +31,12 @@ class GameState extends State
      */
     private var hud : Visual;
 
+    /**
+     *  the results panel when the puzzle is over.
+     *  The success and failed panel both use this variable.
+     */
+    private var hudResults : Visual;
+
     // event listeners
     private var listenPauseClicked : String;
     private var listenPrimaryClicked : String;
@@ -54,7 +60,8 @@ class GameState extends State
                 { id : 'assets/images/bubblesUp.png' },
                 { id : 'assets/images/bubblesDown.png' },
                 { id : 'assets/images/ui/buttonPause.png' },
-                { id : 'assets/images/ui/paintSelector.png' }
+                { id : 'assets/images/ui/paintSelector.png' },
+                { id : 'assets/images/ui/roundedButton.png' }
             ],
             jsons : [
                 { id : 'assets/data/animations/bubbleUp.json' },
@@ -234,9 +241,9 @@ class GameState extends State
                 ease : luxe.tween.easing.Quad.easeOut
             }));
 
-            // Temp create the end ui.
-            //ui.results = new ui.game.PuzzleResults();
-            //ui.results.moveIn();
+            hudResults = ui.creators.Game.createResults();
+            hudResults.pos.set_xy(1280, 48);
+            luxe.tween.Actuate.tween(hudResults.pos, 0.5, { x : 688 });
         });
     }
 

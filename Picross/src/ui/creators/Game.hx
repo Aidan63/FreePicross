@@ -2,7 +2,9 @@ package ui.creators;
 
 import luxe.Visual;
 import luxe.Text;
+import luxe.NineSlice;
 import luxe.Sprite;
+import luxe.Rectangle;
 import luxe.Vector;
 import luxe.Color;
 import luxe.components.sprite.SpriteAnimation;
@@ -10,6 +12,10 @@ import game.PuzzleState;
 
 class Game
 {
+    /**
+     *  Create the in game UI.
+     *  @return Visual
+     */
     public static inline function createHUD() : Visual
     {
         var panel = new Visual({
@@ -75,6 +81,82 @@ class Game
             align : center,
             align_vertical : center
         });
+
+        return panel;
+    }
+
+    /**
+     *  Create the results panel for a successfully completed panel.
+     *  @return Visual
+     */
+    public static inline function createResults() : Visual
+    {
+        var panel = new NineSlice({
+            name    : 'panel_results',
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color().rgb(0x333333),
+            depth   : 8,
+            top : 20, left : 20, bottom : 20, right : 20
+        });
+        panel.create(new Vector(0, 0), 544, 624);
+
+        var bttnMenu = new NineSlice({
+            parent  : panel,
+            name    : 'bttn_menu',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 9,
+            pos     : new Vector(20, 360),
+            size    : new Vector(600, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+        });
+        bttnMenu.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
+        }));
+        bttnMenu.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
+            ],
+            offsets : [
+                new Vector(300, 30),
+                new Vector(300, 30),
+                new Vector(300, 50)
+            ],
+            text : 'Return to Menu',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 10
+        }));
+        bttnMenu.create(new Vector(16, 544), 432, 64);
+
+        var bttnRestart = new NineSlice({
+            parent  : panel,
+            name    : 'bttn_restart',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 9,
+            pos     : new Vector(20, 360),
+            size    : new Vector(600, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+        });
+        bttnRestart.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
+        }));
+        bttnRestart.create(new Vector(464, 544), 64, 64);
 
         return panel;
     }
