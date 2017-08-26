@@ -23,7 +23,6 @@ class RuleDisplay extends Component
     {
         entity.events.listen('row.completed'   , onRowCompleted);
         entity.events.listen('column.completed', onColumnCompleted);
-        Luxe.events.listen('puzzle.completed', onPuzzleCompleted);
 
         visual = cast entity;
 
@@ -202,7 +201,7 @@ class RuleDisplay extends Component
         }
     }
 
-    private function onPuzzleCompleted(_)
+    public function fadeOut()
     {
         for (group in rowRules)
         {
