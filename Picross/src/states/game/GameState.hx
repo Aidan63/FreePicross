@@ -8,7 +8,10 @@ import luxe.ParcelProgress;
 import luxe.Color;
 import game.PuzzleState;
 import data.PuzzleInfo;
+
 import utils.Effect;
+import utils.PuzzleHelper;
+
 using utils.EntityHelper;
 
 class GameState extends State
@@ -92,6 +95,8 @@ class GameState extends State
         luxe.tween.Actuate.tween(hud.pos, 0.25, { x : 0 });
 
         // Connect listeners to the puzzle.
+        puzzle.events.listen('cell.brushed', checkCompletedPuzzle);
+        puzzle.events.listen('cell.removed', checkCompletedPuzzle);
 
         // Connect listeners to the HUD.
         hud.findChild('bttn_pause').events.listen('clicked', onPausePressed);
@@ -145,5 +150,32 @@ class GameState extends State
         selector.add(new components.Slider({ name : 'slide', time : 0.25, end : secondary.pos, ease : luxe.tween.easing.Quad.easeOut }));
 
         Effect.select(secondary.transform.world.pos.clone(), secondary.size.clone(), new Vector(12, 12));
+    }
+
+    /**
+     *  Puzzle listener functions
+     */
+
+    /**
+     *  Check if the puzzle has been completed.
+     */
+    private function checkCompletedPuzzle(_)
+    {
+        if (PuzzleHelper.puzzleComplete(puzzle.get('puzzle')))
+        {
+            trace('Puzzle completed!');
+            endPuzzle();
+
+            //Luxe.events.fire('puzzle.completed');
+            //PuzzleState.endPuzzle();
+        }
+    }
+
+    private function endPuzzle()
+    {
+        if (puzzle.has('mouse')) puzzle.remove('mouse');
+        if (puzzle.has('gamepad')) puzzle.remove('gamepad');
+
+        luxe.tween.Actuate.tween(hud.pos, 0.25, { x : -128 });
     }
 }

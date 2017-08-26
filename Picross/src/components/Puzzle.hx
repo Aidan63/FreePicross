@@ -75,15 +75,6 @@ class Puzzle extends Component implements IPuzzle
             case Rubber : removeCell(_position);
             default:
         }
-
-        if (PuzzleHelper.puzzleComplete(this))
-        {
-            if (has('mouse')) remove('mouse');
-            if (has('gamepad')) remove('gamepad');
-
-            //Luxe.events.fire('puzzle.completed');
-            PuzzleState.endPuzzle();
-        }
     }
 
     /**
