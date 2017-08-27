@@ -122,9 +122,7 @@ class Display extends Component
                     }) ] ];
 
             // Set our visual entity to have the rtt as a texture.
-            visual.pos     = Luxe.screen.mid.add_xyz(0, size.cellSize / 2);
-            visual.origin  = scaledSize.clone().subtract_xyz(scaledSize.x / 2, scaledSize.y / 2);
-            visual.size    = scaledSize;
+            visual.size = scaledSize;
             
             targetTexture.filter_mag = targetTexture.filter_min = nearest;
 

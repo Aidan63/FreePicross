@@ -80,12 +80,6 @@ class DesignerDisplay extends Component
                     }) ] ];
 
             // Shift the puzzle over for even padding on the sides of the two displays.
-            /*
-            visual.pos.set_xy(
-                boundary.x + Math.abs(boundary.x - scaledSize.x) / 2,
-                boundary.y + Math.abs(boundary.y - scaledSize.y) / 2
-            );
-            */
             visual.size = scaledSize;
 
             visual.geometry = Luxe.draw.texture({

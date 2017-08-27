@@ -128,6 +128,7 @@ class DesignerState extends State
         design.add(new components.Display   ({ name : 'display', boundary : new Vector(496, 400) }));
         design.add(new components.SelectedCell({ name : 'cell_selector' }));
         design.add(new components.MousePress({ name : 'mouse' }));
+        design.origin.set_xy(design.size.x / 2, design.size.y / 2);
         design.pos.set_xy(344, 296);
 
         // Small outline box showing the limits of the design area.
@@ -146,10 +147,17 @@ class DesignerState extends State
         image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Vector(496, 400) }));
         image.add(new components.MousePress({ name : 'mouse' }));
         image.add(new components.SelectedCell({ name : 'cell_selector' }));
-        image.pos.set_xy(688, 96);
+        image.origin.set_xy(image.size.x / 2, image.size.y / 2);
+        image.pos.set_xy(888, 296);
 
         // Small outline box showing the limits of the image area.
-        imageBox = Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });
+        imageBox = Luxe.draw.rectangle({
+            x : image.pos.x - image.origin.x,
+            y : image.pos.y - image.origin.y,
+            w : image.size.x,
+            h : image.size.y,
+            color : new Color(0, 0, 0, 0.25)
+        });
 
         // Create the HUD and link up event listeners.
         hud = DesignerUI.create();

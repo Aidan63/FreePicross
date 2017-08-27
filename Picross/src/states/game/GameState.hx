@@ -119,6 +119,8 @@ class GameState extends State
         puzzle.add(new components.CellHighlighter({ name : 'cell_highlighter' }));
         puzzle.add(new components.LineHighlighter({ name : 'line_highlighter' }));
         puzzle.add(new components.CellBreaker    ({ name : 'remove_effect'    }));
+        puzzle.origin.set_xy(puzzle.size.x / 2, puzzle.size.y / 2);
+        puzzle.pos.set_xy(640, 360);
 
         utils.Banner.create('Start!', 1);
         Luxe.timer.schedule(2, startPuzzle);
