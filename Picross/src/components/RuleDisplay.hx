@@ -3,33 +3,51 @@ package components;
 import luxe.Component;
 import luxe.Vector;
 import luxe.Visual;
-import phoenix.geometry.Geometry;
+import luxe.Rectangle;
+import phoenix.geometry.QuadPackGeometry;
+import phoenix.geometry.TextGeometry;
+
 import components.Dimensions;
 import components.Rules;
 import game.PuzzleState;
+import game.ColorSelector.ColorTypes;
 import data.events.LineColor;
 
 class RuleDisplay extends Component
 {
-    private var rowRules : Array<Array<Geometry>>;
-    private var rowRuleBkgs : Array<Array<Geometry>>;
+    private var rowRules : Array<Map<ColorTypes, TextGeometry>>;
+    private var rowRulesIDs : Array<Map<ColorTypes, Int>>;
+    private var rowRulesBkgs : QuadPackGeometry;
 
-    private var columnRules : Array<Array<Geometry>>;
-    private var columnRulesBkgs : Array<Array<Geometry>>;
+    private var columnRules : Array<Map<ColorTypes, TextGeometry>>;
+    private var columnRulesIDs : Array<Map<ColorTypes, Int>>;
+    private var columnRulesBkgs : QuadPackGeometry;
 
     private var visual : Visual;
 
+    private var listenRowComplete : String;
+    private var listenColComplete : String;
+
     override public function onadded()
     {
-        entity.events.listen('row.completed'   , onRowCompleted);
-        entity.events.listen('column.completed', onColumnCompleted);
+        listenRowComplete = entity.events.listen('row.completed'   , onRowCompleted);
+        listenRowComplete = entity.events.listen('column.completed', onColumnCompleted);
 
         visual = cast entity;
 
-        rowRules    = new Array<Array<Geometry>>();
-        rowRuleBkgs = new Array<Array<Geometry>>();
-        columnRules     = new Array<Array<Geometry>>();
-        columnRulesBkgs = new Array<Array<Geometry>>();
+        rowRules     = new Array<Map<ColorTypes, TextGeometry>>();
+        rowRulesIDs  = new Array<Map<ColorTypes, Int>>();
+        rowRulesBkgs = new QuadPackGeometry({
+            texture : Luxe.resources.texture('assets/images/rules.png'),
+            batcher : Luxe.renderer.batcher
+        });
+
+        columnRules     = new Array<Map<ColorTypes, TextGeometry>>();
+        columnRulesIDs  = new Array<Map<ColorTypes, Int>>();
+        columnRulesBkgs = new QuadPackGeometry({
+            texture : Luxe.resources.texture('assets/images/rules.png'),
+            batcher : Luxe.renderer.batcher
+        });
 
         if (has('dimensions') && has('rules'))
         {
@@ -37,106 +55,110 @@ class RuleDisplay extends Component
             var rules   : Rules       = cast get('rules');
 
             // Calculate the top left position of the puzzle display.
-            var cellPos : Vector = visual.pos.clone().subtract(visual.origin);
+            var displayPos : Vector = visual.pos.clone().subtract(visual.origin);
 
             // Create visuals for row rules.
-            for (rowRuleGroup in 0...rules.rowRules.length)
+            for (i in 0...rules.rowRules.length)
             {
-                var ruleGroup    = new Array<Geometry>();
-                var ruleBkgGroup = new Array<Geometry>();
+                var groupID   = new Map<ColorTypes, Int>();
+                var groupText = new Map<ColorTypes, TextGeometry>();
 
-                for (rule in 0...rules.rowRules[rowRuleGroup].length)
+                for (j in 0...rules.rowRules[i].length)
                 {
-                    var textPos = cellPos.clone().add_xyz(visual.size.x + (rule * size.cellSize), (rowRuleGroup * size.cellSize));
-                    var curRule = rules.rowRules[rowRuleGroup][rule];
+                    var thisRule = rules.rowRules[i][j];
+                    var rulePos  = displayPos.clone().add_xyz(visual.size.x + (j * size.cellSize), i * size.cellSize);
 
-                    ruleGroup.push(Luxe.draw.text({
-                        pos   : textPos.clone().addScalar(size.cellSize / 2),
-                        text  : Std.string(curRule.number),
+                    // Create the text geometry for this rule.
+                    groupText.set(thisRule.color, Luxe.draw.text({
+                        pos   : rulePos.clone().addScalar(size.cellSize / 2),
+                        text  : Std.string(thisRule.number),
                         align : center,
                         align_vertical : center,
                         point_size : size.cellSize / 3,
-                        color : PuzzleState.color.colors.get(curRule.color).clone()
+                        color : PuzzleState.color.colors.get(thisRule.color).clone()
                     }));
 
-                    switch (curRule.type)
+                    // Create any background.
+                    switch(thisRule.type)
                     {
-                        case Continuous : ruleBkgGroup.push(null);
-                        case Split : ruleBkgGroup.push(Luxe.draw.texture({
-                                            x : textPos.x,
-                                            y : textPos.y,
-                                            w : size.cellSize,
-                                            h : size.cellSize,
-                                            texture : Luxe.resources.texture('assets/images/RuleCircle.png'),
-                                            color : PuzzleState.color.colors.get(curRule.color).clone()
-                                        }));
-                        case Group : ruleBkgGroup.push(Luxe.draw.texture({
-                                            x : textPos.x,
-                                            y : textPos.y,
-                                            w : size.cellSize,
-                                            h : size.cellSize,
-                                            texture : Luxe.resources.texture('assets/images/RuleSquare.png'),
-                                            color : PuzzleState.color.colors.get(curRule.color).clone()
-                                        }));
+                        case Split : groupID.set(thisRule.color, rowRulesBkgs.quad_add({
+                            x : rulePos.x,
+                            y : rulePos.y,
+                            w : size.cellSize,
+                            h : size.cellSize,
+                            uv : new Rectangle(0, 0, 128, 128),
+                            color : PuzzleState.color.colors.get(thisRule.color).clone()
+                        }));
+                        case Group : groupID.set(thisRule.color, rowRulesBkgs.quad_add({
+                            x : rulePos.x,
+                            y : rulePos.y,
+                            w : size.cellSize,
+                            h : size.cellSize,
+                            uv : new Rectangle(128, 0, 128, 128),
+                            color : PuzzleState.color.colors.get(thisRule.color).clone()
+                        }));
+                        default:
                     }
                 }
 
-                rowRules.push(ruleGroup);
-                rowRuleBkgs.push(ruleBkgGroup);
+                rowRules.push(groupText);
+                rowRulesIDs.push(groupID);
             }
 
-            // Create visuals for column rules.
-            for (colRuleGroup in 0...rules.columnRules.length)
+            // Create visuals for row rules.
+            for (i in 0...rules.columnRules.length)
             {
-                var ruleGroup    = new Array<Geometry>();
-                var ruleBkgGroup = new Array<Geometry>();
+                var groupID   = new Map<ColorTypes, Int>();
+                var groupText = new Map<ColorTypes, TextGeometry>();
 
-                for (rule in 0...rules.columnRules[colRuleGroup].length)
+                for (j in 0...rules.columnRules[i].length)
                 {
-                    var textPos = cellPos.clone().add_xyz(colRuleGroup * size.cellSize, - (size.cellSize + (rule * size.cellSize)));
-                    var curRule = rules.columnRules[colRuleGroup][rule];
+                    var thisRule = rules.columnRules[i][j];
+                    var rulePos  = displayPos.clone().add_xyz(i * size.cellSize, -(size.cellSize + j * size.cellSize));
 
-                    ruleGroup.push(Luxe.draw.text({
-                        pos   : textPos.clone().addScalar(size.cellSize / 2),
-                        text  : Std.string(curRule.number),
+                    // Create the text geometry for this rule.
+                    groupText.set(thisRule.color, Luxe.draw.text({
+                        pos   : rulePos.clone().addScalar(size.cellSize / 2),
+                        text  : Std.string(thisRule.number),
                         align : center,
                         align_vertical : center,
                         point_size : size.cellSize / 3,
-                        color : PuzzleState.color.colors.get(curRule.color).clone()
+                        color : PuzzleState.color.colors.get(thisRule.color).clone()
                     }));
 
-                    switch (curRule.type)
+                    // Create any background.
+                    switch(thisRule.type)
                     {
-                        case Continuous : ruleBkgGroup.push(null);
-                        case Split : ruleBkgGroup.push(Luxe.draw.texture({
-                                            x : textPos.x,
-                                            y : textPos.y,
-                                            w : size.cellSize,
-                                            h : size.cellSize,
-                                            texture : Luxe.resources.texture('assets/images/RuleCircle.png'),
-                                            color : PuzzleState.color.colors.get(curRule.color).clone()
-                                        }));
-                        case Group : ruleBkgGroup.push(Luxe.draw.texture({
-                                            x : textPos.x,
-                                            y : textPos.y,
-                                            w : size.cellSize,
-                                            h : size.cellSize,
-                                            texture : Luxe.resources.texture('assets/images/RuleSquare.png'),
-                                            color : PuzzleState.color.colors.get(curRule.color).clone()
-                                        }));
+                        case Split : groupID.set(thisRule.color, columnRulesBkgs.quad_add({
+                            x : rulePos.x,
+                            y : rulePos.y,
+                            w : size.cellSize,
+                            h : size.cellSize,
+                            uv : new Rectangle(0, 0, 128, 128),
+                            color : PuzzleState.color.colors.get(thisRule.color).clone()
+                        }));
+                        case Group : groupID.set(thisRule.color, columnRulesBkgs.quad_add({
+                            x : rulePos.x,
+                            y : rulePos.y,
+                            w : size.cellSize,
+                            h : size.cellSize,
+                            uv : new Rectangle(128, 0, 128, 128),
+                            color : PuzzleState.color.colors.get(thisRule.color).clone()
+                        }));
+                        default:
                     }
                 }
 
-                columnRules.push(ruleGroup);
-                columnRulesBkgs.push(ruleBkgGroup);
+                columnRules.push(groupText);
+                columnRulesIDs.push(groupID);
             }
         }
     }
 
     override public function onremoved()
     {
-        entity.events.unlisten('row.completed');
-        entity.events.unlisten('column.completed');
+        entity.events.unlisten(listenRowComplete);
+        entity.events.unlisten(listenColComplete);
 
         for (group in rowRules)
         {
@@ -145,13 +167,7 @@ class RuleDisplay extends Component
                 rule.drop();
             }
         }
-        for (group in rowRuleBkgs)
-        {
-            for (rule in group)
-            {
-                if (rule != null) rule.drop();
-            }
-        }
+        rowRulesBkgs.drop();
 
         for (group in columnRules)
         {
@@ -160,45 +176,25 @@ class RuleDisplay extends Component
                 rule.drop();
             }
         }
-        for (group in columnRulesBkgs)
-        {
-            for (rule in group)
-            {
-                if (rule != null) rule.drop();
-            }
-        }
+        columnRulesBkgs.drop();
     }
 
     private function onRowCompleted(_row : LineColor)
     {
-        var ruleGroup = rowRules[_row.number];
-        var bkgGroup  = rowRuleBkgs[_row.number];
+        var ruleGroup : Map<ColorTypes, TextGeometry> = rowRules[_row.number];
+        var quadGroup : Map<ColorTypes, Int> = rowRulesIDs[_row.number];
 
-        switch (_row.color)
-        {
-            case Primary:
-                ruleGroup[0].color.a = 0.5;
-                if (bkgGroup[0] != null) bkgGroup[0].color.a = 0.25;
-            case Secondary:
-                ruleGroup[1].color.a = 0.5;
-                if (bkgGroup[1] != null) bkgGroup[1].color.a = 0.25;
-        }
+        if (ruleGroup.exists(_row.color)) ruleGroup.get(_row.color).color.a = 0.5;
+        if (quadGroup.exists(_row.color)) rowRulesBkgs.quad_alpha(quadGroup.get(_row.color), 0.5);
     }
 
     private function onColumnCompleted(_column : LineColor)
     {
-        var ruleGroup = columnRules[_column.number];
-        var bkgGroup  = columnRulesBkgs[_column.number];
+        var ruleGroup : Map<ColorTypes, TextGeometry> = columnRules[_column.number];
+        var quadGroup : Map<ColorTypes, Int> = columnRulesIDs[_column.number];
 
-        switch (_column.color)
-        {
-            case Primary:
-                ruleGroup[0].color.a = 0.5;
-                if (bkgGroup[0] != null) bkgGroup[0].color.a = 0.25;
-            case Secondary:
-                ruleGroup[1].color.a = 0.5;
-                if (bkgGroup[1] != null) bkgGroup[1].color.a = 0.25;
-        }
+        if (ruleGroup.exists(_column.color)) ruleGroup.get(_column.color).color.a = 0.5;
+        if (quadGroup.exists(_column.color)) columnRulesBkgs.quad_alpha(quadGroup.get(_column.color), 0.5);
     }
 
     public function fadeOut()
@@ -210,14 +206,14 @@ class RuleDisplay extends Component
                 rule.color.tween(0.25, { a : 0 });
             }
         }
-        for (group in rowRuleBkgs)
+        for (quad in rowRulesBkgs.quads)
         {
-            for (rule in group)
+            for (ver in quad.verts)
             {
-                if (rule != null) rule.color.tween(0.25, { a : 0 });
+                ver.color.tween(0.25, { a : 0 });
             }
         }
-
+        
         for (group in columnRules)
         {
             for (rule in group)
@@ -225,11 +221,11 @@ class RuleDisplay extends Component
                 rule.color.tween(0.25, { a : 0 });
             }
         }
-        for (group in columnRulesBkgs)
+        for (quad in columnRulesBkgs.quads)
         {
-            for (rule in group)
+            for (ver in quad.verts)
             {
-                if (rule != null) rule.color.tween(0.25, { a : 0 });
+                ver.color.tween(0.25, { a : 0 });
             }
         }
 

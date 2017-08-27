@@ -61,8 +61,7 @@ class GameState extends State
                 { id : 'assets/images/cells.png' },
                 { id : 'assets/images/cellFragment.png' },
                 { id : 'assets/images/fault.png' },
-                { id : 'assets/images/RuleCircle.png' },
-                { id : 'assets/images/RuleSquare.png' },
+                { id : 'assets/images/rules.png' },
                 { id : 'assets/images/bubblesUp.png' },
                 { id : 'assets/images/bubblesDown.png' },
                 { id : 'assets/images/ui/buttonPause.png' },
@@ -114,13 +113,14 @@ class GameState extends State
         puzzle.add(new components.Rules      ({ name : 'rules'        }));
         puzzle.add(new components.Dimensions ({ name : 'dimensions'   }));
         puzzle.add(new components.Display    ({ name : 'display'      }));
+        puzzle.origin.set_xy(puzzle.size.x / 2, puzzle.size.y / 2);
+        puzzle.pos.set_xy(640, 360);
+
         puzzle.add(new components.RuleDisplay({ name : 'rule_display' }));
         puzzle.add(new components.Faults     ({ name : 'faults'       }));
         puzzle.add(new components.CellHighlighter({ name : 'cell_highlighter' }));
         puzzle.add(new components.LineHighlighter({ name : 'line_highlighter' }));
         puzzle.add(new components.CellBreaker    ({ name : 'remove_effect'    }));
-        puzzle.origin.set_xy(puzzle.size.x / 2, puzzle.size.y / 2);
-        puzzle.pos.set_xy(640, 360);
 
         utils.Banner.create('Start!', 1);
         Luxe.timer.schedule(2, startPuzzle);
