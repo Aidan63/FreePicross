@@ -21,7 +21,7 @@ class DesignerDisplay extends Component
 
     private var quadUUIDs : Array<Array<Int>>;
 
-    private var boundary : Rectangle;
+    private var boundary : Vector;
 
     /**
      *  The texture the brush and pencil quad packs will be drawn to.
@@ -56,7 +56,7 @@ class DesignerDisplay extends Component
             // Get the actual width and height of this puzzle as well as the cell size.
             var baseWidth  = 128 * grid.columns();
             var baseHeight = 128 * grid.rows();
-            var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, boundary.w, boundary.h);
+            var scaledSize : Vector = aspectRationFit(baseWidth, baseHeight, boundary.x, boundary.y);
             size.cellSize = scaledSize.x / grid.columns();
 
             // Creates the render texture and batcher for the quad pack geometries.
@@ -80,10 +80,12 @@ class DesignerDisplay extends Component
                     }) ] ];
 
             // Shift the puzzle over for even padding on the sides of the two displays.
+            /*
             visual.pos.set_xy(
-                boundary.x + Math.abs(boundary.w - scaledSize.x) / 2,
-                boundary.y + Math.abs(boundary.h - scaledSize.y) / 2
+                boundary.x + Math.abs(boundary.x - scaledSize.x) / 2,
+                boundary.y + Math.abs(boundary.y - scaledSize.y) / 2
             );
+            */
             visual.size = scaledSize;
 
             visual.geometry = Luxe.draw.texture({
@@ -166,5 +168,5 @@ class DesignerDisplay extends Component
 
 typedef DesignerDisplayOptions = {
     > ComponentOptions,
-    var boundary : Rectangle;
+    var boundary : Vector;
 }

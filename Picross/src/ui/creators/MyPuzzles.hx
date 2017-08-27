@@ -156,28 +156,28 @@ class MyPuzzles
 
         new Text({
             parent : panel,
-            name : 'label_width',
+            name : 'label_rows',
             pos : new Vector(40, 145),
             depth  : 9,
             point_size : 32,
-            text : 'width',
+            text : 'rows',
             align : left,
             align_vertical : center
         });
         new Text({
             parent : panel,
-            name : 'label_height',
+            name : 'label_columns',
             pos : new Vector(40, 225),
             depth  : 9,
             point_size : 32,
-            text : 'height',
+            text : 'columns',
             align : left,
             align_vertical : center
         });
 
         var widthPanel = new NineSlice({
             parent : panel,
-            name : 'panel_width',
+            name : 'panel_rows',
             size : new Vector(440, 60),
             texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
             color   : new Color().rgb(0x494949),
@@ -189,7 +189,7 @@ class MyPuzzles
 
         var heightPanel = new NineSlice({
             parent : panel,
-            name : 'panel_height',
+            name : 'panel_columns',
             size : new Vector(440, 60),
             texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
             color   : new Color().rgb(0x494949),
@@ -201,7 +201,7 @@ class MyPuzzles
 
         new Text({
             parent : panel,
-            name : 'textentry_width',
+            name : 'textentry_rows',
             pos : new Vector(240, 145),
             depth  : 9,
             point_size : 32,
@@ -211,7 +211,7 @@ class MyPuzzles
         });
         new Text({
             parent : panel,
-            name : 'textentry_height',
+            name : 'textentry_columns',
             pos : new Vector(240, 225),
             depth  : 9,
             point_size : 32,

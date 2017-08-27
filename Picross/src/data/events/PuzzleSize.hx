@@ -5,16 +5,16 @@ class PuzzleSize
     /**
      *  The width of the puzzle.
      */
-    public var width : Int;
+    public var rows : Int;
 
     /**
      *  The height of the puzzle.
      */
-    public var height : Int;
+    public var columns : Int;
 
-    public function new(_width : Int, _height : Int)
+    public function new(_rows : Int, _columns : Int)
     {
-        width = _width;
-        height = _height;
+        rows = _rows;
+        columns = _columns;
     }
 }

@@ -123,7 +123,7 @@ class DesignerState extends State
 
         // Create an entity for the actual puzzle cells.
         design = new Visual({ name : 'design' });
-        design.add(new components.designer.PuzzleDesign({ name : 'puzzle', width : size.width, height : size.height }));
+        design.add(new components.designer.PuzzleDesign({ name : 'puzzle', columns : size.columns, rows : size.rows }));
         design.add(new components.Dimensions({ name : 'dimensions' }));
         design.add(new components.Display   ({ name : 'display', boundary : new Vector(496, 400) }));
         design.add(new components.SelectedCell({ name : 'cell_selector' }));
@@ -141,11 +141,12 @@ class DesignerState extends State
 
         // Create an entity for the finished puzzle image.
         image = new Visual({ name : 'image'});
-        image.add(new components.designer.PuzzleImage({ name : 'grid', width : size.width, height : size.height }));
+        image.add(new components.designer.PuzzleImage({ name : 'grid', columns : size.columns, rows : size.rows }));
         image.add(new components.Dimensions({ name : 'dimensions' }));
-        image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Rectangle(688, 96, 496, 400) }));
+        image.add(new components.designer.DesignerDisplay({ name : 'display', boundary : new Vector(496, 400) }));
         image.add(new components.MousePress({ name : 'mouse' }));
         image.add(new components.SelectedCell({ name : 'cell_selector' }));
+        image.pos.set_xy(688, 96);
 
         // Small outline box showing the limits of the image area.
         imageBox = Luxe.draw.rectangle({ x : image.pos.x, y : image.pos.y, w : image.size.x, h : image.size.y, color : new Color(0, 0, 0, 0.25) });

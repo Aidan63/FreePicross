@@ -10,19 +10,19 @@ import game.PuzzleState;
 class PuzzleImage extends Component implements IPuzzle
 {
     public var active : PuzzleGrid;
-    private var width : Int;
-    private var height : Int;
+    private var _rows : Int;
+    private var _columns : Int;
 
     public function new(_options : PuzzleImageOptions)
     {
         super(_options);
-        width = _options.width;
-        height = _options.height;
+        _rows = _options.rows;
+        _columns = _options.columns;
     }
 
     override public function onadded()
     {
-        active = new PuzzleGrid(width, height);
+        active = new PuzzleGrid(_rows, _columns);
 
         entity.events.listen('cell.selected', onCellSelected);
     }
@@ -34,12 +34,12 @@ class PuzzleImage extends Component implements IPuzzle
 
     public function rows() : Int
     {
-        return width;
+        return _rows;
     }
 
     public function columns() : Int
     {
-        return height;
+        return _columns;
     }
 
     private function onCellSelected(_position : CellPosition)
@@ -72,6 +72,6 @@ class PuzzleImage extends Component implements IPuzzle
 
 typedef PuzzleImageOptions = {
     > ComponentOptions,
-    var width : Int;
-    var height : Int;
+    var rows : Int;
+    var columns : Int;
 }

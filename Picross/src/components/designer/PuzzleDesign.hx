@@ -10,19 +10,19 @@ import game.PuzzleState;
 class PuzzleDesign extends Component implements IPuzzle
 {
     public var active : PuzzleGrid;
-    private var width : Int;
-    private var height : Int;
+    private var _rows : Int;
+    private var _columns : Int;
 
     public function new(_options : PuzzleDesignOptions)
     {
         super(_options);
-        width = _options.width;
-        height = _options.height;
+        _rows = _options.rows;
+        _columns = _options.columns;
     }
 
     override public function onadded()
     {
-        active = new PuzzleGrid(width, height);
+        active = new PuzzleGrid(_rows, _columns);
 
         // Loop over the grid and set all cells to destroyed.
         for (row in active.data)
@@ -47,12 +47,12 @@ class PuzzleDesign extends Component implements IPuzzle
 
     public function rows() : Int
     {
-        return height;
+        return _rows;
     }
 
     public function columns() : Int
     {
-        return width;
+        return _columns;
     }
 
     private function onCellBrushed(_position : CellPosition)
@@ -80,6 +80,6 @@ class PuzzleDesign extends Component implements IPuzzle
 
 typedef PuzzleDesignOptions = {
     > ComponentOptions,
-    var width : Int;
-    var height : Int;
+    var rows : Int;
+    var columns : Int;
 }

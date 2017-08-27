@@ -63,26 +63,26 @@ class MyPuzzlesCreate extends State
     {
         var mouse = Luxe.camera.screen_point_to_world(_event.pos);
 
-        var widthPanel  : Visual = cast popup.findChild('panel_width');
-        var heightPanel : Visual = cast popup.findChild('panel_height');
-        var editWidth  = popup.findChild('textentry_width');
-        var editHeight = popup.findChild('textentry_height');
+        var rowsPanel : Visual = cast popup.findChild('panel_rows');
+        var colsPanel : Visual = cast popup.findChild('panel_columns');
+        var editRows = popup.findChild('textentry_rows');
+        var editCols = popup.findChild('textentry_columns');
 
-        if (editWidth.has('text_edit')) editWidth.remove('text_edit');
-        if (editHeight.has('text_edit')) editHeight.remove('text_edit');
+        if (editRows.has('text_edit')) editRows.remove('text_edit');
+        if (editCols.has('text_edit')) editCols.remove('text_edit');
 
-        if (mouse.pointInside(widthPanel.transform.world.pos, widthPanel.size))
+        if (mouse.pointInside(rowsPanel.transform.world.pos, rowsPanel.size))
         {
-            if (!editWidth.has('text_edit'))
+            if (!editRows.has('text_edit'))
             {
-                editWidth.add(new TextEdit({ filter:regFilter }));
+                editRows.add(new TextEdit({ filter:regFilter }));
             }
         }
-        if (mouse.pointInside(heightPanel.transform.world.pos, heightPanel.size))
+        if (mouse.pointInside(colsPanel.transform.world.pos, colsPanel.size))
         {
-            if (!editHeight.has('text_edit'))
+            if (!editCols.has('text_edit'))
             {
-                editHeight.add(new TextEdit({ filter:regFilter }));
+                editCols.add(new TextEdit({ filter:regFilter }));
             }
         }
     }
@@ -91,19 +91,19 @@ class MyPuzzlesCreate extends State
     {
         var mouse = Luxe.camera.screen_point_to_world(_event.pos);
 
-        var widthPanel  : Visual = cast popup.findChild('panel_width');
-        var heightPanel : Visual = cast popup.findChild('panel_height');
+        var panelRows : Visual = cast popup.findChild('panel_rows');
+        var panelCols : Visual = cast popup.findChild('panel_columns');
 
-        widthPanel.color.a = 1;
-        heightPanel.color.a = 1;
+        panelRows.color.a = 1;
+        panelCols.color.a = 1;
 
-        if (mouse.pointInside(widthPanel.transform.world.pos, widthPanel.size))
+        if (mouse.pointInside(panelRows.transform.world.pos, panelRows.size))
         {
-            widthPanel.color.a = 0.5;
+            panelRows.color.a = 0.5;
         }
-        if (mouse.pointInside(heightPanel.transform.world.pos, heightPanel.size))
+        if (mouse.pointInside(panelCols.transform.world.pos, panelCols.size))
         {
-            heightPanel.color.a = 0.5;
+            panelCols.color.a = 0.5;
         }
     }
 
@@ -114,14 +114,13 @@ class MyPuzzlesCreate extends State
      */
     private function onCreateClicked(_)
     {
-        var editWidth  : Text = cast popup.findChild('textentry_width');
-        var editHeight : Text = cast popup.findChild('textentry_height');
+        var editRows : Text = cast popup.findChild('textentry_rows');
+        var editCols : Text = cast popup.findChild('textentry_columns');
 
-        var width  : Int = Std.int(luxe.utils.Maths.clamp(Std.parseInt(editWidth.text), 1, 32));
-        var height : Int = Std.int(luxe.utils.Maths.clamp(Std.parseInt(editHeight.text), 1, 32));
-        trace(width, height);
+        var rows : Int = Std.int(luxe.utils.Maths.clamp(Std.parseInt(editRows.text), 1, 32));
+        var cols : Int = Std.int(luxe.utils.Maths.clamp(Std.parseInt(editCols.text), 1, 32));
         
-        Luxe.events.fire('myPuzzles.create', new data.events.PuzzleSize(width, height));
+        Luxe.events.fire('myPuzzles.create', new data.events.PuzzleSize(rows, cols));
     }
     private function onCancelClicked(_)
     {
