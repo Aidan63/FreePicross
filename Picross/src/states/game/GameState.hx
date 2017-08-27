@@ -8,6 +8,7 @@ import luxe.ParcelProgress;
 import luxe.Color;
 import game.PuzzleState;
 import data.PuzzleInfo;
+import data.Stats;
 
 import utils.Effect;
 import utils.PuzzleHelper;
@@ -36,6 +37,11 @@ class GameState extends State
      *  The success and failed panel both use this variable.
      */
     private var hudResults : Visual;
+
+    /**
+     *  Holds the time and number of faults for this current puzzle session.
+     */
+    private var stats : Stats;
 
     // event listeners
     private var listenPauseClicked : String;
@@ -82,9 +88,26 @@ class GameState extends State
         parcel.load();
     }
 
+    override public function onleave<T>(_data : T)
+    {
+        //
+    }
+
+    override public function update(_dt : Float)
+    {
+        // If the puzzle has a mouse component then we assume the game is in progress so the timer should increase.
+        if (puzzle != null && puzzle.has('mouse'))
+        {
+            stats.time += 1 * _dt;
+            cast(hud.findChild('label_timer'), luxe.Text).text = stats.formattedTime();
+        }
+    }
+
     private function assets_loaded(_parcel : Parcel)
     {
         PuzzleState.init();
+
+        stats = new Stats();
 
         puzzle = new Visual({ name : 'puzzle' });
         puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : info.grid }));
@@ -179,12 +202,8 @@ class GameState extends State
     {
         if (PuzzleHelper.puzzleComplete(puzzle.get('puzzle')))
         {
-            trace('Puzzle completed!');
             endPuzzle();
             puzzleCompleted();
-
-            //Luxe.events.fire('puzzle.completed');
-            //PuzzleState.endPuzzle();
         }
     }
 
