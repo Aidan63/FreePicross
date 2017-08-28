@@ -1,0 +1,24 @@
+{
+    project : {
+        name : 'FreePicross Tests',
+        version : '0.0.1',
+        author : 'Aidan Lee',
+
+        app : {
+            main : 'RunTests',
+            codepaths : [
+                './',
+                '../src/'
+            ],
+            name : 'FreePicross_Tests',
+            package : 'uk.aidanlee.freepicross.tests'
+        },
+
+        build : {
+            dependencies : {
+                luxe : '*',
+                utest : '*'
+            }
+        }
+    }
+}
