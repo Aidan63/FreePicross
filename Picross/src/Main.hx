@@ -20,6 +20,9 @@ class Main extends luxe.Game
 
     override function ready()
     {
+        // Init the game, creating any useful static utils.
+        Picross.init();
+
         Luxe.camera.size = new Vector(1280, 720);
         Luxe.camera.size_mode = cover;
 

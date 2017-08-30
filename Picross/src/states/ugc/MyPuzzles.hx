@@ -105,7 +105,7 @@ class MyPuzzles extends State
 
         parcel.load();
 
-        ugPuzzles = utils.storage.PuzzleStorage.getUGPuzzles();
+        ugPuzzles = Picross.storage.getUGPuzzles();
     }
 
     override public function onleave<T>(_data : T)

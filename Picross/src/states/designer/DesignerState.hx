@@ -302,7 +302,7 @@ class DesignerState extends State
     private function onExport(_event : { name : String, description : String })
     {
         var puzzle : components.designer.PuzzleDesign = cast design.get('puzzle');
-        var pixels = new snow.api.buffers.Uint8Array(puzzle.columns() * puzzle.rows() * 4);
+        var pixels : snow.api.buffers.Uint8Array = null;
 
         if (image.has('display'))
         {
@@ -320,10 +320,11 @@ class DesignerState extends State
                     buff.push(color.a * 255);
                 }
             }
-            pixels.set(buff, 0);
+
+            pixels = snow.api.buffers.Uint8Array.fromArray(buff);
         }
         
-        utils.storage.PuzzleStorage.save(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, pixels));
+        Picross.storage.saveUGPuzzle(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, cast pixels));
     }
 
     /**
