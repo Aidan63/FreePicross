@@ -74,6 +74,8 @@ class MyPuzzles extends State
 
     private var listenPanel1Play : String;
     private var listenPanel2Play : String;
+    private var listenPanel1Delete : String;
+    private var listenPanel2Delete : String;
 
     override public function onenter<T>(_data : T)
     {
@@ -104,14 +106,14 @@ class MyPuzzles extends State
         });
 
         parcel.load();
-
-        ugPuzzles = Picross.storage.getUGPuzzles();
     }
 
     override public function onleave<T>(_data : T)
     {
         panel1.findChild('bttn_play').events.unlisten(listenPanel1Play);
         panel2.findChild('bttn_play').events.unlisten(listenPanel2Play);
+        panel1.findChild('bttn_delete').events.unlisten(listenPanel1Delete);
+        panel2.findChild('bttn_delete').events.unlisten(listenPanel2Delete);
 
         Luxe.events.unlisten(listenPause);
         gridView.events.unlisten(listenPuzzleSelected);
@@ -131,6 +133,8 @@ class MyPuzzles extends State
 
     private function assets_loaded(_parcel : Parcel)
     {
+        ugPuzzles = Picross.storage.getUGPuzzles();
+
         // Generate textures from all of the loaded user puzzles.
         puzzleTextures = new Array<Texture>();
         for (puzzle in ugPuzzles)
@@ -244,6 +248,8 @@ class MyPuzzles extends State
         // Connect listeners.
         listenPanel1Play = panel1.findChild('bttn_play').events.listen('released', onPlayClicked);
         listenPanel2Play = panel2.findChild('bttn_play').events.listen('released', onPlayClicked);
+        listenPanel1Delete = panel1.findChild('bttn_delete').events.listen('released', onDeleteClicked);
+        listenPanel2Delete = panel2.findChild('bttn_delete').events.listen('released', onDeleteClicked);
 
         listenPause  = Luxe.events.listen('myPuzzles.pause' , onPaused);
         listenCreate = Luxe.events.listen('myPuzzles.create', onCreatePuzzle);
@@ -358,5 +364,21 @@ class MyPuzzles extends State
     {
         trace('Play!');
         machine.set('game', ugPuzzles[selectedID]);
+    }
+
+    private function onDeleteClicked(_)
+    {
+        activePanel.pos.y = 720;
+        activePanel = null;
+        
+        var puzzle  = ugPuzzles[selectedID];
+        var texture = puzzleTextures[selectedID];
+
+        gridView.events.fire('remove', selectedID);
+        Picross.storage.deleteUGPuzzle(puzzle);
+
+        ugPuzzles.remove(puzzle);
+        puzzleTextures.remove(texture);
+        texture.invalidate();
     }
 }
