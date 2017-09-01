@@ -55,6 +55,11 @@ class JsStorage implements IStorage
         return null;
     }
 
+    public function deleteUGPuzzle(_puzzle : PuzzleInfo) : Bool
+    {
+        return false;
+    }
+
     private function decompress(_structure : String) : Array<PuzzleInfo>
     {
         var structure : Array<PuzzleInfo> = Json.parse(_structure);

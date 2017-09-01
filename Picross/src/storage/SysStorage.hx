@@ -42,6 +42,18 @@ class SysStorage implements IStorage
         return decompress(File.getBytes(Path.join([ puzzleStorage(), _name ])));
     }
 
+    public function deleteUGPuzzle(_puzzle : PuzzleInfo)
+    {
+        var path = Path.join([ puzzleStorage(), Std.string(_puzzle.id) + '-${_puzzle.name}.puzzle' ]);
+        if (FileSystem.exists(path))
+        {
+            FileSystem.deleteFile(path);
+            return true;
+        }
+        
+        return false;
+    }
+
     /**
      *  Returns an absolute path to the puzzle storage.
      *  @return String

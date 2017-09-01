@@ -10,4 +10,5 @@ interface IStorage
     public function getUGPuzzles() : Array<PuzzleInfo>;
     public function saveUGPuzzle(_puzzle : PuzzleInfo) : Bool;
     public function loadUGPuzzle(_name : String) : PuzzleInfo;
+    public function deleteUGPuzzle(_puzzle : PuzzleInfo) : Bool;
 }
