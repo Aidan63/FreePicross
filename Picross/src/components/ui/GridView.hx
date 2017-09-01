@@ -58,6 +58,8 @@ class GridView extends Component
      */
     public var y_sep : Int;
 
+    private var listenRemoveItem : String;
+
     public function new(_options : GridViewOptions)
     {
         super(_options);
@@ -107,10 +109,14 @@ class GridView extends Component
 
         batcher.on(prerender , before);
         batcher.on(postrender, after);
+
+        listenRemoveItem = entity.events.listen('remove', onItemRemoved);
     }
 
     override public function onremoved()
     {
+        entity.events.unlisten(listenRemoveItem);
+
         background.destroy();
         batcher.destroy();
         targetTexture.destroy();
@@ -193,7 +199,7 @@ class GridView extends Component
     /**
      *  [Description]
      */
-    public function build()
+    private function build()
     {
         var i = 0;
         var j = 0;
@@ -219,6 +225,16 @@ class GridView extends Component
                 j ++;
             }
         }
+    }
+
+    private function onItemRemoved(_id : Int)
+    {
+        var item = items[_id];
+
+        items.remove(item);
+        item.destroy();
+
+        build();
     }
 
     private function before(_)
