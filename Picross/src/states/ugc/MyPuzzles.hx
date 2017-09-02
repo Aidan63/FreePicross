@@ -114,6 +114,7 @@ class MyPuzzles extends State
         panel2.findChild('bttn_play').events.unlisten(listenPanel2Play);
         panel1.findChild('bttn_delete').events.unlisten(listenPanel1Delete);
         panel2.findChild('bttn_delete').events.unlisten(listenPanel2Delete);
+        activePanel = null;
 
         Luxe.events.unlisten(listenPause);
         gridView.events.unlisten(listenPuzzleSelected);
