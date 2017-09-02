@@ -67,6 +67,11 @@ class MyPuzzles extends State
      */
     private var selectedID : Int;
 
+    /**
+     *  State machine which will handle any popups.
+     */
+    private var subStates : States;
+
     private var listenPuzzleSelected : String;
     private var listenCreateClicked : String;
     private var listenPause : String;
@@ -110,6 +115,8 @@ class MyPuzzles extends State
 
     override public function onleave<T>(_data : T)
     {
+        subStates.destroy();
+
         panel1.findChild('bttn_play').events.unlisten(listenPanel1Play);
         panel2.findChild('bttn_play').events.unlisten(listenPanel2Play);
         panel1.findChild('bttn_delete').events.unlisten(listenPanel1Delete);
@@ -245,6 +252,9 @@ class MyPuzzles extends State
 
         panel1.pos.set_xy(660, -640);
         panel2.pos.set_xy(660, -640);
+
+        subStates = new States({ name : 'myPuzzles_states' });
+        subStates.add(new states.ugc.MyPuzzlesCreate({ name : 'create' }));
         
         // Connect listeners.
         listenPanel1Play = panel1.findChild('bttn_play').events.listen('released', onPlayClicked);
@@ -344,7 +354,7 @@ class MyPuzzles extends State
      */
     private function onCreateClicked(_)
     {
-        machine.enable('myPuzzles_create');
+        subStates.set('create');
     }
 
     /**
@@ -353,7 +363,6 @@ class MyPuzzles extends State
      */
     private function onCreatePuzzle(_size : data.events.PuzzleSize)
     {
-        machine.disable('myPuzzles_create');
         machine.set('designer', _size);
     }
 

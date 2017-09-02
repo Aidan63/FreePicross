@@ -33,7 +33,6 @@ class Main extends luxe.Game
         gameState.add(new states.designer.DesignerPause({ name : 'designer_pause' }));
 
         gameState.add(new states.ugc.MyPuzzles({ name : 'myPuzzles' }));
-        gameState.add(new states.ugc.MyPuzzlesCreate({ name : 'myPuzzles_create' }));
 
         gameState.set('myPuzzles');
     }
