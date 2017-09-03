@@ -27,12 +27,9 @@ class Main extends luxe.Game
         Luxe.camera.size_mode = cover;
 
         gameState = new States({ name : 'game_state' });
-        gameState.add(new states.game.GameState({ name : 'game' }));
-
-        gameState.add(new states.designer.DesignerState({ name : 'designer' }));
-        gameState.add(new states.designer.DesignerPause({ name : 'designer_pause' }));
-
         gameState.add(new states.ugc.MyPuzzles({ name : 'myPuzzles' }));
+        gameState.add(new states.designer.DesignerState({ name : 'designer' }));
+        gameState.add(new states.game.GameState({ name : 'game' }));
 
         gameState.set('myPuzzles');
     }
