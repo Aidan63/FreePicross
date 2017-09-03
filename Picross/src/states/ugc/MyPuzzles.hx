@@ -124,6 +124,7 @@ class MyPuzzles extends State
         activePanel = null;
 
         Luxe.events.unlisten(listenPause);
+        Luxe.events.unlisten(listenCreate);
         gridView.events.unlisten(listenPuzzleSelected);
         bttnCreate.events.unlisten(listenCreateClicked);
 
@@ -372,7 +373,6 @@ class MyPuzzles extends State
      */
     private function onPlayClicked(_)
     {
-        trace('Play!');
         machine.set('game', ugPuzzles[selectedID]);
     }
 
