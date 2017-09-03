@@ -4,6 +4,8 @@ import luxe.States;
 import luxe.Visual;
 import luxe.Input;
 import luxe.Text;
+import luxe.tween.Actuate;
+import luxe.tween.easing.Quad;
 
 using utils.EntityHelper;
 
@@ -14,6 +16,8 @@ class DesignerExport extends State
     private var listenExport : String;
     private var listenCancel : String;
 
+    private var background : Visual;
+
     override public function init()
     {
         menu = ui.creators.DesignerUI.export();
@@ -23,7 +27,7 @@ class DesignerExport extends State
     override public function onenter<T>(_data : T)
     {
         // Move the popup in and connect event listeners.
-        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(luxe.tween.easing.Quad.easeInOut);
+        Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(Quad.easeInOut);
 
         listenExport = menu.findChild('bttn_export').events.listen('released', onExportClicked);
         listenCancel = menu.findChild('bttn_cancel').events.listen('released', onCancelClicked);
@@ -32,7 +36,7 @@ class DesignerExport extends State
     override public function onleave<T>(_data : T)
     {
         // Move the popup out and remove event listeners.
-        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 720 }).ease(luxe.tween.easing.Quad.easeInOut);
+        Actuate.tween(menu.pos, 0.25, { y : 720 }).ease(Quad.easeInOut);
 
         menu.findChild('bttn_export').events.unlisten(listenExport);
         menu.findChild('bttn_cancel').events.unlisten(listenCancel);
@@ -80,9 +84,8 @@ class DesignerExport extends State
     {
         var nameInput : Text = cast menu.findChild('textedit_name');
         var descInput : Text = cast menu.findChild('textedit_description');
-        Luxe.events.queue('designer.menu.export', { name : nameInput.text, description : descInput.text });
-
-        machine.unset();
+        Luxe.events.fire('designer.export', { name : nameInput.text, description : descInput.text });
+        Luxe.events.fire('designer.exit');
     }
 
     /**

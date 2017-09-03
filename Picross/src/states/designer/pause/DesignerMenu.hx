@@ -2,6 +2,8 @@ package states.designer.pause;
 
 import luxe.States;
 import luxe.Visual;
+import luxe.tween.Actuate;
+import luxe.tween.easing.Quad;
 
 using utils.EntityHelper;
 
@@ -14,6 +16,8 @@ class DesignerMenu extends State
     private var listenExport : String;
     private var listenMenu : String;
 
+    private var background : Visual;
+
     override public function init()
     {
         menu = ui.creators.DesignerUI.menu();
@@ -22,7 +26,15 @@ class DesignerMenu extends State
 
     override public function onenter<T>(_data : T)
     {
-        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(luxe.tween.easing.Quad.easeInOut);
+        Luxe.events.fire('designer.pause', { state : true });
+
+        if (_data != null)
+        {
+            background = cast _data;
+            background.color.tween(0.25, { a : 0.5 });
+        }
+
+        Actuate.tween(menu.pos, 0.25, { y : 80 }).ease(Quad.easeInOut);
 
         listenResume = menu.findChild('bttn_resume').events.listen('released', onResumeClicked);
         listenSave   = menu.findChild('bttn_save'  ).events.listen('released', onSaveClicked  );
@@ -32,7 +44,7 @@ class DesignerMenu extends State
 
     override public function onleave<T>(_data : T)
     {
-        luxe.tween.Actuate.tween(menu.pos, 0.25, { y : -560 }).ease(luxe.tween.easing.Quad.easeInOut);
+        Actuate.tween(menu.pos, 0.25, { y : -560 }).ease(Quad.easeInOut);
 
         menu.findChild('bttn_resume').events.unlisten(listenResume);
         menu.findChild('bttn_save'  ).events.unlisten(listenSave);
@@ -47,8 +59,10 @@ class DesignerMenu extends State
 
     private function onResumeClicked(_)
     {
-        machine.unset();
-        Luxe.events.fire('designer.menu.resume');
+        if (background != null) background.color.tween(0.25, { a : 0 });
+        Luxe.events.fire('designer.pause', { state : false });
+
+        machine.unset(true);
     }
     private function onSaveClicked(_)
     {
@@ -60,7 +74,6 @@ class DesignerMenu extends State
     }
     private function onMenuClicked(_)
     {
-        machine.unset();
-        Luxe.events.fire('designer.menu.main');
+        Luxe.events.fire('designer.exit');
     }    
 }

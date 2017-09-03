@@ -6,7 +6,6 @@ import luxe.ParcelProgress;
 import luxe.Color;
 import luxe.Visual;
 import luxe.Vector;
-import luxe.Rectangle;
 import game.PuzzleState;
 import ui.creators.DesignerUI;
 
@@ -40,6 +39,16 @@ class DesignerState extends State
      */
     private var size : data.events.PuzzleSize;
 
+    /**
+     *  Holds all of the popups in this state machine.
+     */
+    private var subStates : States;
+
+    /**
+     *  Background visual which will fade in and out wwhen paused.
+     */
+    private var background : Visual;
+
     private var designBox : phoenix.geometry.Geometry;
     private var imageBox : phoenix.geometry.Geometry;
 
@@ -49,6 +58,7 @@ class DesignerState extends State
 
     private var listenPause : String;
     private var listenExport : String;
+    private var listenExit : String;
     private var listenPixelPainted : String;
     private var listenPixelRemoved : String;
     
@@ -95,14 +105,14 @@ class DesignerState extends State
         // Unload the parcel resources
         parcel.unload();
 
+        subStates.destroy();
+
         // Unlisten to all events.
         Luxe.events.unlisten(listenPause);
         Luxe.events.unlisten(listenExport);
+        Luxe.events.unlisten(listenExit);
         image.events.unlisten(listenPixelPainted);
         image.events.unlisten(listenPixelRemoved);
-
-        designBox.drop();
-        imageBox.drop();
 
         hud.findChild('ui_export'        ).events.unlisten(listenBttnExport);
         hud.findChild('ui_paintPrimary'  ).events.unlisten(listenBttnPrimary);
@@ -111,10 +121,16 @@ class DesignerState extends State
         var paintsHolder = hud.findChild('ui_paintsHolder');
         for (i in 0...DesignerUI.paints.length) paintsHolder.findChild('ui_paint$i').events.unlisten(listenBttnPaints[i]);
 
-        // Destroy the relevent entities.
-        if (image  != null) image.destroy();
-        if (design != null) design.destroy();
-        if (hud    != null) hud.destroy();
+        // Destroy the entities / drop geometry.
+        luxe.tween.Actuate.stop(background.color);
+        background.destroy();
+
+        designBox.drop();
+        imageBox.drop();
+
+        image.destroy();
+        design.destroy();
+        hud.destroy();
     }
 
     private function assets_loaded(_parcel : Parcel)
@@ -159,11 +175,27 @@ class DesignerState extends State
             color : new Color(0, 0, 0, 0.25)
         });
 
+        // Create a transparent black background visual
+        background = new Visual({
+            name  : 'background',
+            pos   : new Vector(0, 0),
+            size  : new Vector(1280, 720),
+            color : new Color(0, 0, 0, 0),
+            depth : 5
+        });
+
+        // Create the states machine and sub states.
+        subStates = new States({ name : 'designer_states' });
+        subStates.add(new states.designer.pause.DesignerMenu({ name : 'menu' }));
+        subStates.add(new states.designer.pause.DesignerExport({ name : 'export' }));
+
         // Create the HUD and link up event listeners.
         hud = DesignerUI.create();
 
+        // Listen to events.
         listenPause  = Luxe.events.listen('designer.pause' , onPaused);
         listenExport = Luxe.events.listen('designer.export', onExport);
+        listenExit   = Luxe.events.listen('designer.exit'  , onExit);
 
         listenBttnExport    = hud.findChild('ui_export'        ).events.listen('clicked', onExportMenuClicked);
         listenBttnPrimary   = hud.findChild('ui_paintPrimary'  ).events.listen('clicked', onPaintPrimaryClicked);
@@ -189,7 +221,8 @@ class DesignerState extends State
      */
     private function onExportMenuClicked(_)
     {
-        machine.enable('designer_pause');
+        // Enter with the background so it can be faded in.
+        subStates.set('menu', background);
     }
 
     /**
@@ -324,7 +357,15 @@ class DesignerState extends State
             pixels = snow.api.buffers.Uint8Array.fromArray(buff);
         }
         
-        Picross.storage.saveUGPuzzle(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, cast pixels));
+        Picross.storage.saveUGPuzzle(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, pixels));
+    }
+
+    /**
+     *  Returns to the myPuzzles state.
+     */
+    private function onExit(_)
+    {
+        machine.set('myPuzzles');
     }
 
     /**
