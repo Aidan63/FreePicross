@@ -294,7 +294,7 @@ class MyPuzzles
                 new Vector(320, 30),
                 new Vector(320, 50),
             ],
-            text : 'Create',
+            text : 'Cancel',
             align : center,
             align_vertical : center,
             point_size : 24,
