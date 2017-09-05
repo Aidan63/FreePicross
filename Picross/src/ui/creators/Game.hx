@@ -334,6 +334,18 @@ class Game
         });
         panel.create(new Vector(0, 0), 640, 240);
 
+        new Text({
+            parent : panel,
+            name : 'label_title',
+            text : '',
+            depth : 8.1,
+            point_size : 32,
+            color : new Color(0.9, 0.9, 0.9, 1),
+            align : center,
+            align_vertical : center,
+            pos : new Vector(320, 60)
+        });
+
         var bttnConfirm = new NineSlice({
             parent : panel,
             name : 'bttn_confirm',

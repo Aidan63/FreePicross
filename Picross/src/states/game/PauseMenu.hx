@@ -83,7 +83,8 @@ class PauseMenu extends State
     {
         machine.set('confirm', {
             onConfirm : function(_) { Luxe.events.fire('puzzle.restart'); },
-            onCancel  : function(_) { machine.set('menu'); }
+            onCancel  : function(_) { machine.set('menu'); },
+            text      : 'Restart the current puzzle?'
         });
     }
 
@@ -91,7 +92,8 @@ class PauseMenu extends State
     {
         machine.set('confirm', {
             onConfirm : function(_) { Luxe.events.fire('puzzle.exit'); },
-            onCancel  : function(_) { machine.set('menu'); }
+            onCancel  : function(_) { machine.set('menu'); },
+            text      : 'Return to the menu?'
         });
     }
 }

@@ -2,6 +2,7 @@ package states.game;
 
 import luxe.States;
 import luxe.Visual;
+import luxe.Text;
 import luxe.tween.Actuate;
 using utils.EntityHelper;
 
@@ -35,7 +36,8 @@ class PauseConfirm extends State
     {
         var functions : ConfirmFunctions = cast _data;
         onConfirm = functions.onConfirm;
-        onCancel = functions.onCancel;
+        onCancel  = functions.onCancel;
+        if (functions.text != null) cast(menu.findChild('label_title'), Text).text = functions.text;
 
         Actuate.tween(menu.pos, 0.25, { y : 240 });
 
@@ -60,4 +62,5 @@ class PauseConfirm extends State
 typedef ConfirmFunctions = {
     var onConfirm : Dynamic -> Void;
     var onCancel  : Dynamic -> Void;
+    @:optional var text : String;
 }
