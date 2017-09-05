@@ -98,7 +98,7 @@ class Game
             depth   : 8,
             top : 20, left : 20, bottom : 20, right : 20
         });
-        panel.create(new Vector(0, 0), 544, 624);
+        panel.create(new Vector(0, 0), 560, 640);
 
         var bttnMenu = new NineSlice({
             parent  : panel,
@@ -106,7 +106,7 @@ class Game
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 360),
-            size    : new Vector(600, 80),
+            size    : new Vector(420, 80),
             top : 30, left : 30, bottom : 30, right : 30,
         });
         bttnMenu.add(new components.ui.NineSliceButton({
@@ -126,9 +126,9 @@ class Game
                 new Color().rgb(0x949494)
             ],
             offsets : [
-                new Vector(300, 30),
-                new Vector(300, 30),
-                new Vector(300, 50)
+                new Vector(210, 30),
+                new Vector(210, 30),
+                new Vector(210, 50)
             ],
             text : 'Return to Menu',
             align : center,
@@ -136,7 +136,7 @@ class Game
             point_size : 24,
             depth : 10
         }));
-        bttnMenu.create(new Vector(16, 544), 432, 64);
+        bttnMenu.create(new Vector(20, 540), 420, 80);
 
         var bttnRestart = new NineSlice({
             parent  : panel,
@@ -144,7 +144,7 @@ class Game
             texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
             depth   : 9,
             pos     : new Vector(20, 360),
-            size    : new Vector(600, 80),
+            size    : new Vector(80, 80),
             top : 30, left : 30, bottom : 30, right : 30,
         });
         bttnRestart.add(new components.ui.NineSliceButton({
@@ -156,7 +156,7 @@ class Game
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
-        bttnRestart.create(new Vector(464, 544), 64, 64);
+        bttnRestart.create(new Vector(460, 540), 80, 80);
 
         return panel;
     }

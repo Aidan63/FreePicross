@@ -263,8 +263,8 @@ class GameState extends State
             }));
 
             hudResults = ui.creators.Game.createResults();
-            hudResults.pos.set_xy(1280, 48);
-            luxe.tween.Actuate.tween(hudResults.pos, 0.5, { x : 688 });
+            hudResults.pos.set_xy(1280, 40);
+            luxe.tween.Actuate.tween(hudResults.pos, 0.5, { x : 680 });
         });
     }
 
