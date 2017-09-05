@@ -122,6 +122,7 @@ class GameState extends State
 
         pauseState = new States({ name : 'game_pause' });
         pauseState.add(new PauseMenu({ name : 'menu' }));
+        pauseState.add(new PauseConfirm({ name : 'confirm' }));
 
         puzzle = new Visual({ name : 'puzzle' });
         puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : info.grid }));

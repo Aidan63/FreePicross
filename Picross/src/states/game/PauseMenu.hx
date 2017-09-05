@@ -81,11 +81,17 @@ class PauseMenu extends State
 
     private function onBttnRestart(_)
     {
-        Luxe.events.fire('puzzle.restart');
+        machine.set('confirm', {
+            onConfirm : function(_) { Luxe.events.fire('puzzle.restart'); },
+            onCancel  : function(_) { machine.set('menu'); }
+        });
     }
 
     private function onBttnMenu(_)
     {
-        Luxe.events.fire('puzzle.exit');
+        machine.set('confirm', {
+            onConfirm : function(_) { Luxe.events.fire('puzzle.exit'); },
+            onCancel  : function(_) { machine.set('menu'); }
+        });
     }
 }

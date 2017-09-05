@@ -322,4 +322,92 @@ class Game
 
         return panel;
     }
+    
+    public static inline function createPauseConfirm() : Visual
+    {
+        var panel = new NineSlice({
+            name : 'panel_pauseConfirm',
+            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            color   : new Color().rgb(0x333333),
+            depth   : 8.0,
+            top : 20, left : 20, bottom : 20, right : 20
+        });
+        panel.create(new Vector(0, 0), 640, 240);
+
+        var bttnConfirm = new NineSlice({
+            parent : panel,
+            name : 'bttn_confirm',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 8.1,
+            size    : new Vector(290, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+        });
+        bttnConfirm.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
+        }));
+        bttnConfirm.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
+            ],
+            offsets : [
+                new Vector(145, 30),
+                new Vector(145, 30),
+                new Vector(145, 50)
+            ],
+            text : 'Confirm',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 8.2
+        }));
+        bttnConfirm.create(new Vector(20, 140), 290, 80);
+
+        var bttnCancel = new NineSlice({
+            parent : panel,
+            name : 'bttn_cancel',
+            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            depth   : 8.1,
+            size    : new Vector(290, 80),
+            top : 30, left : 30, bottom : 30, right : 30,
+        });
+        bttnCancel.add(new components.ui.NineSliceButton({
+            name : 'button',
+            uvs : [
+                new Rectangle(0  , 0, 80, 80),
+                new Rectangle(80 , 0, 80, 80),
+                new Rectangle(160, 0, 80, 80)
+            ],
+            colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
+        }));
+        bttnCancel.add(new components.ui.Label({
+            name : 'label',
+            colors : [
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494),
+                new Color().rgb(0x949494)
+            ],
+            offsets : [
+                new Vector(145, 30),
+                new Vector(145, 30),
+                new Vector(145, 50)
+            ],
+            text : 'Cancel',
+            align : center,
+            align_vertical : center,
+            point_size : 24,
+            depth : 8.2
+        }));
+        bttnCancel.create(new Vector(330, 140), 290, 80);
+
+        return panel;
+    }
 }
