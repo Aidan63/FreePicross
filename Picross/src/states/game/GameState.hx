@@ -52,6 +52,9 @@ class GameState extends State
     private var listenCellRemoved : String;
     private var listenCellFault : String;
 
+    private var listenResultsMenu : String;
+    private var listenResultsRestart : String;
+
     override public function onenter<T>(_data : T)
     {
         info = cast _data;
@@ -89,7 +92,7 @@ class GameState extends State
 
     override public function onleave<T>(_data : T)
     {
-        //
+        cleanup();
     }
 
     override public function update(_dt : Float)
@@ -124,6 +127,34 @@ class GameState extends State
 
         utils.Banner.create('Start!', 1);
         Luxe.timer.schedule(2, startPuzzle);
+    }
+
+    private function cleanup()
+    {
+        // disconnect listeners to the puzzle.
+        puzzle.events.unlisten(listenCellBrushed);
+        puzzle.events.unlisten(listenCellRemoved);
+        puzzle.events.unlisten(listenCellFault);
+
+        // disconnect listeners to the HUD.
+        hud.findChild('bttn_pause').events.unlisten(listenPauseClicked);
+        hud.findChild('bttn_paintPrimary').events.unlisten(listenPrimaryClicked);
+        hud.findChild('bttn_paintSecondary').events.unlisten(listenSecondaryClicked);
+
+        puzzle.destroy();
+        hud.destroy();
+
+        puzzle = null;
+        hud = null;
+
+        if (hudResults != null)
+        {
+            hudResults.findChild('bttn_menu').events.unlisten(listenResultsMenu);
+            hudResults.findChild('bttn_restart').events.unlisten(listenResultsRestart);
+
+            hudResults.destroy();
+            hudResults = null;
+        }
     }
 
     private function startPuzzle()
@@ -191,6 +222,25 @@ class GameState extends State
         selector.add(new components.Slider({ name : 'slide', time : 0.25, end : secondary.pos, ease : luxe.tween.easing.Quad.easeOut }));
 
         Effect.select(secondary.transform.world.pos.clone(), secondary.size.clone(), new Vector(12, 12));
+    }
+
+    /**
+     *  When the menu button is pressed switch back to myPuzzles.
+     *  TODO : Makes it return to the last used menu once other menus which use the game state are added.
+     */
+    private function onResultsMenuPressed(_)
+    {
+        machine.set('myPuzzles');
+    }
+
+    /**
+     *  When reset is clicked cleanup all of current game entities.
+     *  Then called the assets_loaded function to create new versions.
+     */
+    private function onResultsRestartPressed(_)
+    {
+        cleanup();
+        assets_loaded(null);
     }
 
     /**
@@ -264,6 +314,11 @@ class GameState extends State
 
             hudResults = ui.creators.Game.createResults();
             hudResults.pos.set_xy(1280, 40);
+
+            // Connect the reset and menu listen events to the buttons.
+            listenResultsMenu    = hudResults.findChild('bttn_menu').events.listen('released', onResultsMenuPressed);
+            listenResultsRestart = hudResults.findChild('bttn_restart').events.listen('released', onResultsRestartPressed);
+
             luxe.tween.Actuate.tween(hudResults.pos, 0.5, { x : 680 });
         });
     }
