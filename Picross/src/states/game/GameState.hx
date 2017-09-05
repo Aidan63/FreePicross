@@ -43,7 +43,14 @@ class GameState extends State
      */
     private var stats : Stats;
 
+    /**
+     *  The sub state machine to hold all of the pause states.
+     */
+    private var pauseState : States;
+
     // event listeners
+    private var listenPause : String;
+
     private var listenPauseClicked : String;
     private var listenPrimaryClicked : String;
     private var listenSecondaryClicked : String;
@@ -111,6 +118,9 @@ class GameState extends State
 
         stats = new Stats();
 
+        pauseState = new States({ name : 'game_pause' });
+        pauseState.add(new PauseMenu({ name : 'menu' }));
+
         puzzle = new Visual({ name : 'puzzle' });
         puzzle.add(new components.Puzzle     ({ name : 'puzzle', completedPuzzle : info.grid }));
         puzzle.add(new components.Rules      ({ name : 'rules'        }));
@@ -131,7 +141,11 @@ class GameState extends State
 
     private function cleanup()
     {
+        pauseState.destroy();
+
         // disconnect listeners to the puzzle.
+        Luxe.events.unlisten(listenPause);
+
         puzzle.events.unlisten(listenCellBrushed);
         puzzle.events.unlisten(listenCellRemoved);
         puzzle.events.unlisten(listenCellFault);
@@ -165,6 +179,8 @@ class GameState extends State
         hud.pos.set_xy(-128, 0);
         luxe.tween.Actuate.tween(hud.pos, 0.25, { x : 0 });
 
+        listenPause = Luxe.events.listen('game.pause', onPaused);
+
         // Connect listeners to the puzzle.
         listenCellBrushed = puzzle.events.listen('cell.brushed', checkCompletedPuzzle);
         listenCellRemoved = puzzle.events.listen('cell.removed', checkCompletedPuzzle);
@@ -188,6 +204,8 @@ class GameState extends State
         var pause : Visual = cast hud.findChild('bttn_pause');
 
         Effect.select(pause.transform.world.pos.clone(), pause.size.clone(), new Vector(12, 12));
+
+        pauseState.set('menu', true);
     }
 
     /**
@@ -272,10 +290,6 @@ class GameState extends State
      */
     private function endPuzzle()
     {
-        hud.findChild('bttn_pause').events.unlisten(listenPauseClicked);
-        hud.findChild('bttn_paintPrimary').events.unlisten(listenPauseClicked);
-        hud.findChild('bttn_paintSecondary').events.unlisten(listenPauseClicked);
-
         puzzle.events.unlisten(listenCellBrushed);
         puzzle.events.unlisten(listenCellRemoved);
         puzzle.events.unlisten(listenCellFault);
@@ -285,6 +299,10 @@ class GameState extends State
         if (puzzle.has('rule_display')) cast(puzzle.get('rule_display'), components.RuleDisplay).fadeOut();
 
         luxe.tween.Actuate.tween(hud.pos, 0.25, { x : -128 });
+
+        hud.findChild('bttn_pause').events.unlisten(listenPauseClicked);
+        hud.findChild('bttn_paintPrimary').events.unlisten(listenPauseClicked);
+        hud.findChild('bttn_paintSecondary').events.unlisten(listenPauseClicked);
     }
 
     /**
@@ -329,5 +347,42 @@ class GameState extends State
     private function puzzleFailed()
     {
         //
+    }
+
+
+    /**
+     *  Pause related events
+     */
+    private function onPaused(_event : { state : Bool })
+    {
+        PuzzleState.cursor.mouse = None;
+
+        if (_event.state)
+        {
+            disableHUD();
+            if (puzzle.has('mouse')) puzzle.remove('mouse');
+            
+        }
+        else
+        {
+            enabledHUD();
+            if (!puzzle.has('mouse')) puzzle.add(new components.MousePress ({ name : 'mouse' }));
+        }
+    }
+
+    private function disableHUD()
+    {
+        for (child in hud.children)
+        {
+            child.active = false;
+        }
+    }
+
+    private function enabledHUD()
+    {
+        for (child in hud.children)
+        {
+            child.active = true;
+        }
     }
 }
