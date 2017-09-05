@@ -39,9 +39,12 @@ class SelectedCell extends Component
                     });
                 }
 
-                var mouseDisplayPos : Vector = mouse.clone().subtract(visual.pos);
-                highlighter.pos.set_xy(visual.pos.x + Math.floor(mouseDisplayPos.x / dimensions.cellSize) * dimensions.cellSize,
-                                       visual.pos.y + Math.floor(mouseDisplayPos.y / dimensions.cellSize) * dimensions.cellSize);
+                var basePuzzlePos   = visual.pos.clone().subtract(visual.origin);
+                var mouseDisplayPos = mouse.clone().subtract(basePuzzlePos);
+
+                var row    = Math.floor(mouseDisplayPos.y / dimensions.cellSize);
+                var column = Math.floor(mouseDisplayPos.x / dimensions.cellSize);
+                highlighter.pos.set_xy(basePuzzlePos.x + column * dimensions.cellSize, basePuzzlePos.y + row * dimensions.cellSize);
             }
             else
             {
