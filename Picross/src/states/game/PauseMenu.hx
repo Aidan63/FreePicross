@@ -36,7 +36,7 @@ class PauseMenu extends State
         // So we fire the game pause event and fade in the black background.
         if (_data != null && cast(_data, Bool))
         {
-            Luxe.events.fire('game.pause', { state : true });
+            Luxe.events.fire('puzzle.pause', { state : true });
             background.color.tween(0.25, { a : 0.5 });
         }
 
@@ -70,7 +70,7 @@ class PauseMenu extends State
     private function onBttnResume(_)
     {
         background.color.tween(0.25, { a : 0 });
-        Luxe.events.fire('game.pause', { state : false });
+        Luxe.events.fire('puzzle.pause', { state : false });
         machine.unset();
     }
 
@@ -81,11 +81,11 @@ class PauseMenu extends State
 
     private function onBttnRestart(_)
     {
-        //
+        Luxe.events.fire('puzzle.restart');
     }
 
     private function onBttnMenu(_)
     {
-        //
+        Luxe.events.fire('puzzle.exit');
     }
 }
