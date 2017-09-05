@@ -289,7 +289,7 @@ class GameState extends State
      */
     private function checkPuzzleFailed(_)
     {
-        //
+        stats.faults ++;
     }
 
     /**
