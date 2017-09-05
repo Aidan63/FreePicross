@@ -50,6 +50,8 @@ class GameState extends State
 
     // event listeners
     private var listenPause : String;
+    private var listenRestart : String;
+    private var listenExit : String;
 
     private var listenPauseClicked : String;
     private var listenPrimaryClicked : String;
@@ -145,6 +147,8 @@ class GameState extends State
 
         // disconnect listeners to the puzzle.
         Luxe.events.unlisten(listenPause);
+        Luxe.events.unlisten(listenRestart);
+        Luxe.events.unlisten(listenExit);
 
         puzzle.events.unlisten(listenCellBrushed);
         puzzle.events.unlisten(listenCellRemoved);
@@ -179,7 +183,9 @@ class GameState extends State
         hud.pos.set_xy(-128, 0);
         luxe.tween.Actuate.tween(hud.pos, 0.25, { x : 0 });
 
-        listenPause = Luxe.events.listen('game.pause', onPaused);
+        listenPause   = Luxe.events.listen('puzzle.pause'  , onPaused);
+        listenRestart = Luxe.events.listen('puzzle.restart', onRestartPuzzle);
+        listenExit    = Luxe.events.listen('puzzle.exit'   , onExitPuzzle);
 
         // Connect listeners to the puzzle.
         listenCellBrushed = puzzle.events.listen('cell.brushed', checkCompletedPuzzle);
@@ -246,7 +252,7 @@ class GameState extends State
      *  When the menu button is pressed switch back to myPuzzles.
      *  TODO : Makes it return to the last used menu once other menus which use the game state are added.
      */
-    private function onResultsMenuPressed(_)
+    private function onExitPuzzle(_)
     {
         machine.set('myPuzzles');
     }
@@ -255,7 +261,7 @@ class GameState extends State
      *  When reset is clicked cleanup all of current game entities.
      *  Then called the assets_loaded function to create new versions.
      */
-    private function onResultsRestartPressed(_)
+    private function onRestartPuzzle(_)
     {
         cleanup();
         assets_loaded(null);
@@ -334,8 +340,8 @@ class GameState extends State
             hudResults.pos.set_xy(1280, 40);
 
             // Connect the reset and menu listen events to the buttons.
-            listenResultsMenu    = hudResults.findChild('bttn_menu').events.listen('released', onResultsMenuPressed);
-            listenResultsRestart = hudResults.findChild('bttn_restart').events.listen('released', onResultsRestartPressed);
+            listenResultsMenu    = hudResults.findChild('bttn_menu').events.listen('released', onExitPuzzle);
+            listenResultsRestart = hudResults.findChild('bttn_restart').events.listen('released', onRestartPuzzle);
 
             luxe.tween.Actuate.tween(hudResults.pos, 0.5, { x : 680 });
         });
