@@ -100,6 +100,17 @@ class Game
         });
         panel.create(new Vector(0, 0), 560, 640);
 
+        new Text({
+            parent : panel,
+            name : 'label_title',
+            text : '',
+            pos : new Vector(40, 80),
+            point_size : 64,
+            depth : 9,
+            align : left,
+            align_vertical : center
+        });
+
         var bttnMenu = new NineSlice({
             parent  : panel,
             name    : 'bttn_menu',
