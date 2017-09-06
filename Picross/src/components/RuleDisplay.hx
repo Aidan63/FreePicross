@@ -185,6 +185,10 @@ class RuleDisplay extends Component
         columnRulesBkgs.drop();
     }
 
+    /**
+     *  Set the alpha of one of the rules colours to 0.5 to indicate that colour is done.
+     *  @param _row - Contains the row number and the rule colour to effect.
+     */
     private function onRowColorCompleted(_row : LineColor)
     {
         var ruleGroup : Map<ColorTypes, TextGeometry> = rowRules[_row.number];
@@ -194,6 +198,10 @@ class RuleDisplay extends Component
         if (quadGroup.exists(_row.color)) rowRulesBkgs.quad_alpha(quadGroup.get(_row.color), 0.5);
     }
 
+    /**
+     *  Set the alpha of one of the rules colours to 0.5 to indicate that colour is done.
+     *  @param _column - Contains the column number and the rule colour to effect.
+     */
     private function onColumnColorCompleted(_column : LineColor)
     {
         var ruleGroup : Map<ColorTypes, TextGeometry> = columnRules[_column.number];
@@ -203,9 +211,13 @@ class RuleDisplay extends Component
         if (quadGroup.exists(_column.color)) columnRulesBkgs.quad_alpha(quadGroup.get(_column.color), 0.5);
     }
 
+    /**
+     *  Called when a row has been completed (breaking blocks included)
+     *  tween the rule numbers and backgrounds alpha for that row to 0.
+     *  @param _row - The row to fade out.
+     */
     private function onRowCompleted(_row : Int)
     {
-        trace('fading out entire row $_row');
         var ruleGroup : Map<ColorTypes, TextGeometry> = rowRules[_row];
         var quadGroup : Map<ColorTypes, Int> = rowRulesIDs[_row];
 
@@ -215,6 +227,7 @@ class RuleDisplay extends Component
         }
         for (quadID in quadGroup)
         {
+            // No way to tween a quads color so we tween each vert colour instead.
             var quad = rowRulesBkgs.quads.get(quadID);
             for (vert in quad.verts)
             {
@@ -223,9 +236,13 @@ class RuleDisplay extends Component
         }
     }
 
+    /**
+     *  Called when a row has been completed (breaking blocks included)
+     *  tween the rule numbers and backgrounds alpha for that row to 0.
+     *  @param _column - The column to fade out.
+     */
     private function onColumnCompleted(_column : Int)
     {
-        trace('fading out entire column $_column');
         var ruleGroup : Map<ColorTypes, TextGeometry> = columnRules[_column];
         var quadGroup : Map<ColorTypes, Int> = columnRulesIDs[_column];
 
@@ -235,6 +252,7 @@ class RuleDisplay extends Component
         }
         for (quadID in quadGroup)
         {
+            // No way to tween a quads color so we tween each vert colour instead.
             var quad = columnRulesBkgs.quads.get(quadID);
             for (vert in quad.verts)
             {
