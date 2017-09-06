@@ -185,6 +185,12 @@ class Rules extends Component
             rowRules[_row][1].completed = true;
             entity.events.fire('row.color.completed', new LineColor(_row, Secondary));
         }
+
+        // If both colours have been complete fire an event so the rule display can fade the row to 0.
+        if (PuzzleHelper.rowCompleted(_row, puzzle))
+        {
+            entity.events.fire('row.completed', _row);
+        }
     }
 
     private function updateColumnRules(_column : Int)
@@ -203,6 +209,12 @@ class Rules extends Component
         {
             columnRules[_column][1].completed = true;
             entity.events.fire('column.color.completed', new LineColor(_column, Secondary));
+        }
+
+        // If both colours have been complete fire an event so the rule display can fade the column to 0.
+        if (PuzzleHelper.columnCompleted(_column, puzzle))
+        {
+            entity.events.fire('column.completed', _column);
         }
     }
 }

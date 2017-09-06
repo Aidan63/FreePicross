@@ -25,11 +25,15 @@ class RuleDisplay extends Component
 
     private var visual : Visual;
 
+    private var listenRowComplete : String;
+    private var listenColComplete : String;
     private var listenRowColorComplete : String;
     private var listenColColorComplete : String;
 
     override public function onadded()
     {
+        listenRowComplete = entity.events.listen('row.completed', onRowCompleted);
+        listenColComplete = entity.events.listen('column.completed', onColumnCompleted);
         listenRowColorComplete = entity.events.listen('row.color.completed'   , onRowColorCompleted);
         listenColColorComplete = entity.events.listen('column.color.completed', onColumnColorCompleted);
 
@@ -157,6 +161,8 @@ class RuleDisplay extends Component
 
     override public function onremoved()
     {
+        entity.events.unlisten(listenRowComplete);
+        entity.events.unlisten(listenColComplete);
         entity.events.unlisten(listenRowColorComplete);
         entity.events.unlisten(listenColColorComplete);
 
@@ -197,39 +203,49 @@ class RuleDisplay extends Component
         if (quadGroup.exists(_column.color)) columnRulesBkgs.quad_alpha(quadGroup.get(_column.color), 0.5);
     }
 
+    private function onRowCompleted(_row : Int)
+    {
+        trace('fading out entire row $_row');
+        var ruleGroup : Map<ColorTypes, TextGeometry> = rowRules[_row];
+        var quadGroup : Map<ColorTypes, Int> = rowRulesIDs[_row];
+
+        for (rule in ruleGroup)
+        {
+            rule.color.tween(0.5, { a : 0 });
+        }
+        for (quadID in quadGroup)
+        {
+            var quad = rowRulesBkgs.quads.get(quadID);
+            for (vert in quad.verts)
+            {
+                vert.color.tween(0.5, { a : 0 });
+            }
+        }
+    }
+
+    private function onColumnCompleted(_column : Int)
+    {
+        trace('fading out entire column $_column');
+        var ruleGroup : Map<ColorTypes, TextGeometry> = columnRules[_column];
+        var quadGroup : Map<ColorTypes, Int> = columnRulesIDs[_column];
+
+        for (rule in ruleGroup)
+        {
+            rule.color.tween(0.5, { a : 0 });
+        }
+        for (quadID in quadGroup)
+        {
+            var quad = columnRulesBkgs.quads.get(quadID);
+            for (vert in quad.verts)
+            {
+                vert.color.tween(0.5, { a : 0 });
+            }
+        }
+    }
+
     public function fadeOut()
     {
-        for (group in rowRules)
-        {
-            for (rule in group)
-            {
-                rule.color.tween(0.25, { a : 0 });
-            }
-        }
-        for (quad in rowRulesBkgs.quads)
-        {
-            for (ver in quad.verts)
-            {
-                ver.color.tween(0.25, { a : 0 });
-            }
-        }
-        
-        for (group in columnRules)
-        {
-            for (rule in group)
-            {
-                rule.color.tween(0.25, { a : 0 });
-            }
-        }
-        for (quad in columnRulesBkgs.quads)
-        {
-            for (ver in quad.verts)
-            {
-                ver.color.tween(0.25, { a : 0 });
-            }
-        }
-
-        Luxe.timer.schedule(0.3, function() {
+        Luxe.timer.schedule(0.5, function() {
             remove(name);
         });
     }
