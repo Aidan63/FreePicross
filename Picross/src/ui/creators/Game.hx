@@ -132,6 +132,27 @@ class Game
             align_vertical : center
         });
 
+        new Text({
+            parent : panel,
+            name : 'label_faultsText',
+            text : 'faults',
+            pos : new Vector(40, 340),
+            point_size : 48,
+            depth : 9,
+            align : left,
+            align_vertical : center
+        });
+        new Text({
+            parent : panel,
+            name : 'label_faults',
+            text : '',
+            pos : new Vector(520, 340),
+            point_size : 48,
+            depth : 9,
+            align : right,
+            align_vertical : center
+        });
+
         var bttnMenu = new NineSlice({
             parent  : panel,
             name    : 'bttn_menu',
