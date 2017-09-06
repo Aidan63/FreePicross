@@ -25,13 +25,13 @@ class RuleDisplay extends Component
 
     private var visual : Visual;
 
-    private var listenRowComplete : String;
-    private var listenColComplete : String;
+    private var listenRowColorComplete : String;
+    private var listenColColorComplete : String;
 
     override public function onadded()
     {
-        listenRowComplete = entity.events.listen('row.color.completed'   , onRowColorCompleted);
-        listenRowComplete = entity.events.listen('column.color.completed', onColumnColorCompleted);
+        listenRowColorComplete = entity.events.listen('row.color.completed'   , onRowColorCompleted);
+        listenColColorComplete = entity.events.listen('column.color.completed', onColumnColorCompleted);
 
         visual = cast entity;
 
@@ -157,8 +157,8 @@ class RuleDisplay extends Component
 
     override public function onremoved()
     {
-        entity.events.unlisten(listenRowComplete);
-        entity.events.unlisten(listenColComplete);
+        entity.events.unlisten(listenRowColorComplete);
+        entity.events.unlisten(listenColColorComplete);
 
         for (group in rowRules)
         {
