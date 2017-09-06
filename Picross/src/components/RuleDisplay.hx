@@ -30,8 +30,8 @@ class RuleDisplay extends Component
 
     override public function onadded()
     {
-        listenRowComplete = entity.events.listen('row.completed'   , onRowCompleted);
-        listenRowComplete = entity.events.listen('column.completed', onColumnCompleted);
+        listenRowComplete = entity.events.listen('row.color.completed'   , onRowColorCompleted);
+        listenRowComplete = entity.events.listen('column.color.completed', onColumnColorCompleted);
 
         visual = cast entity;
 
@@ -179,7 +179,7 @@ class RuleDisplay extends Component
         columnRulesBkgs.drop();
     }
 
-    private function onRowCompleted(_row : LineColor)
+    private function onRowColorCompleted(_row : LineColor)
     {
         var ruleGroup : Map<ColorTypes, TextGeometry> = rowRules[_row.number];
         var quadGroup : Map<ColorTypes, Int> = rowRulesIDs[_row.number];
@@ -188,7 +188,7 @@ class RuleDisplay extends Component
         if (quadGroup.exists(_row.color)) rowRulesBkgs.quad_alpha(quadGroup.get(_row.color), 0.5);
     }
 
-    private function onColumnCompleted(_column : LineColor)
+    private function onColumnColorCompleted(_column : LineColor)
     {
         var ruleGroup : Map<ColorTypes, TextGeometry> = columnRules[_column.number];
         var quadGroup : Map<ColorTypes, Int> = columnRulesIDs[_column.number];

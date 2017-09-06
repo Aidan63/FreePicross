@@ -172,15 +172,18 @@ class Rules extends Component
     {
         var puzzle : Puzzle = cast get('puzzle');
 
-        if (PuzzleHelper.rowCellColorCompleted(puzzle, Primary, _row))
+        var primaryComplete   = PuzzleHelper.rowCellColorCompleted(puzzle, Primary  , _row);
+        var secondaryComplete = PuzzleHelper.rowCellColorCompleted(puzzle, Secondary, _row);
+
+        if (primaryComplete)
         {
             rowRules[_row][0].completed = true;
-            entity.events.fire('row.completed', new LineColor(_row, Primary));
+            entity.events.fire('row.color.completed', new LineColor(_row, Primary));
         }
-        if (PuzzleHelper.rowCellColorCompleted(puzzle, Secondary, _row))
+        if (secondaryComplete)
         {
             rowRules[_row][1].completed = true;
-            entity.events.fire('row.completed', new LineColor(_row, Secondary));
+            entity.events.fire('row.color.completed', new LineColor(_row, Secondary));
         }
     }
 
@@ -188,15 +191,18 @@ class Rules extends Component
     {
         var puzzle : Puzzle = cast get('puzzle');
 
-        if (PuzzleHelper.columnCellColorComplete(puzzle, Primary, _column))
+        var primaryComplete   = PuzzleHelper.columnCellColorComplete(puzzle, Primary  , _column);
+        var secondaryComplete = PuzzleHelper.columnCellColorComplete(puzzle, Secondary, _column);
+
+        if (primaryComplete)
         {
             columnRules[_column][0].completed = true;
-            entity.events.fire('column.completed', new LineColor(_column, Primary));
+            entity.events.fire('column.color.completed', new LineColor(_column, Primary));
         }
-        if (PuzzleHelper.columnCellColorComplete(puzzle, Secondary, _column))
+        if (secondaryComplete)
         {
             columnRules[_column][1].completed = true;
-            entity.events.fire('column.completed', new LineColor(_column, Secondary));
+            entity.events.fire('column.color.completed', new LineColor(_column, Secondary));
         }
     }
 }
