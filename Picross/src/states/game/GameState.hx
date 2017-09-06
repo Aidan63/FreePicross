@@ -340,6 +340,7 @@ class GameState extends State
             hudResults = ui.creators.Game.createResults();
             hudResults.pos.set_xy(1280, 40);
             cast(hudResults.findChild('label_title'), luxe.Text).text = info.name;
+            cast(hudResults.findChild('label_time' ), luxe.Text).text = stats.formattedTime();
 
             // Connect the reset and menu listen events to the buttons.
             listenResultsMenu    = hudResults.findChild('bttn_menu').events.listen('released', onExitPuzzle);

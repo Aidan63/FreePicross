@@ -111,6 +111,27 @@ class Game
             align_vertical : center
         });
 
+        new Text({
+            parent : panel,
+            name : 'label_timeText',
+            text : 'time',
+            pos : new Vector(40, 240),
+            point_size : 48,
+            depth : 9,
+            align : left,
+            align_vertical : center
+        });
+        new Text({
+            parent : panel,
+            name : 'label_time',
+            text : '',
+            pos : new Vector(520, 240),
+            point_size : 48,
+            depth : 9,
+            align : right,
+            align_vertical : center
+        });
+
         var bttnMenu = new NineSlice({
             parent  : panel,
             name    : 'bttn_menu',
