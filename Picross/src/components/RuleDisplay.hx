@@ -4,6 +4,7 @@ import luxe.Component;
 import luxe.Vector;
 import luxe.Visual;
 import luxe.Rectangle;
+import luxe.tween.Actuate;
 import phoenix.geometry.QuadPackGeometry;
 import phoenix.geometry.TextGeometry;
 
@@ -170,19 +171,23 @@ class RuleDisplay extends Component
         {
             for (rule in group)
             {
+                Actuate.stop(rule.color);
                 rule.drop();
             }
         }
         rowRulesBkgs.drop();
+        Actuate.stop(rowRulesBkgs.color);
 
         for (group in columnRules)
         {
             for (rule in group)
             {
+                Actuate.stop(rule.color);
                 rule.drop();
             }
         }
         columnRulesBkgs.drop();
+        Actuate.stop(columnRulesBkgs.color);
     }
 
     /**
