@@ -74,13 +74,15 @@ class RuleDisplay extends Component
                     var rulePos  = displayPos.clone().add_xyz(visual.size.x + (j * size.cellSize), i * size.cellSize);
 
                     // Create the text geometry for this rule.
+                    var textColor = PuzzleState.color.colors.get(thisRule.color).clone();
+                    thisRule.number == 0 ? textColor.a = 0.5 : textColor.a = 1;
                     groupText.set(thisRule.color, Luxe.draw.text({
                         pos   : rulePos.clone().addScalar(size.cellSize / 2),
                         text  : Std.string(thisRule.number),
                         align : center,
                         align_vertical : center,
                         point_size : size.cellSize / 3,
-                        color : PuzzleState.color.colors.get(thisRule.color).clone()
+                        color : textColor
                     }));
 
                     // Create any background.
@@ -110,7 +112,7 @@ class RuleDisplay extends Component
                 rowRulesIDs.push(groupID);
             }
 
-            // Create visuals for row rules.
+            // Create visuals for column rules.
             for (i in 0...rules.columnRules.length)
             {
                 var groupID   = new Map<ColorTypes, Int>();
@@ -122,13 +124,15 @@ class RuleDisplay extends Component
                     var rulePos  = displayPos.clone().add_xyz(i * size.cellSize, -(size.cellSize + j * size.cellSize));
 
                     // Create the text geometry for this rule.
+                    var textColor = PuzzleState.color.colors.get(thisRule.color).clone();
+                    thisRule.number == 0 ? textColor.a = 0.5 : textColor.a = 1;
                     groupText.set(thisRule.color, Luxe.draw.text({
                         pos   : rulePos.clone().addScalar(size.cellSize / 2),
                         text  : Std.string(thisRule.number),
                         align : center,
                         align_vertical : center,
                         point_size : size.cellSize / 3,
-                        color : PuzzleState.color.colors.get(thisRule.color).clone()
+                        color : textColor
                     }));
 
                     // Create any background.
