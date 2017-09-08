@@ -50,6 +50,9 @@ class PuzzleHelper
             var actual   = _puzzle.active   .data[row][_column];
             var expected = _puzzle.completed.data[row][_column];
 
+            // Destroyed cells don't care about colour, so only check if they're destoyed.
+            if (expected.state == Destroyed && actual.state == Destroyed) continue;
+
             if (actual.color != expected.color || actual.state != expected.state)
             {
                 return false;
