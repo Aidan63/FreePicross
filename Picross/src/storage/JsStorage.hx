@@ -18,6 +18,10 @@ class JsStorage implements IStorage
         storage = Browser.getLocalStorage();
     }
 
+    /**
+     *  Returns all puzzles in the browser storage or an empty array.
+     *  @return Array<PuzzleInfo>
+     */
     public function getUGPuzzles() : Array<PuzzleInfo>
     {
         if (storage == null || storage.getItem('ugc_puzzles') == null) return new Array<PuzzleInfo>();
@@ -25,6 +29,14 @@ class JsStorage implements IStorage
         return decompress(storage.getItem('ugc_puzzles'));
     }
 
+    /**
+     *  Save the provided puzzle class.
+     *  Replaces any puzzle with the same ID else pushes it to the end of the array.
+     *  The entire array is then serialized and put in browser storage.
+     *  
+     *  @param _puzzle - The puzzle to save.
+     *  @return Bool
+     */
     public function saveUGPuzzle(_puzzle : PuzzleInfo) : Bool
     {
         var structure = getUGPuzzles();
@@ -44,6 +56,11 @@ class JsStorage implements IStorage
         return true;
     }
 
+    /**
+     *  Returns a puzzle with the provided name or null.
+     *  @param _name - The puzzle to look for.
+     *  @return PuzzleInfo
+     */
     public function loadUGPuzzle(_name : String) : PuzzleInfo
     {
         for (puzzle in getUGPuzzles())
@@ -59,6 +76,11 @@ class JsStorage implements IStorage
         return false;
     }
 
+    /**
+     *  Attempts to unserialize the provided string into an array of puzzles.
+     *  @param _structure - The string to unserialize.
+     *  @return Array<PuzzleInfo>
+     */
     private function decompress(_structure : String) : Array<PuzzleInfo>
     {
         var strm = new serialization.stream.StringInflateStream(_structure);
@@ -68,6 +90,10 @@ class JsStorage implements IStorage
         return structure;
     }
 
+    /**
+     *  Serializes the provided array of puzzles and stores them in the browser storage if possible.
+     *  @param _structure - The puzzles to serialize.
+     */
     private function compress(_structure : Array<PuzzleInfo>)
     {
         var defl = new serialization.Deflater({ compressStrings : true });
