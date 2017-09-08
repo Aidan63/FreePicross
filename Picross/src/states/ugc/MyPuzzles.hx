@@ -152,7 +152,7 @@ class MyPuzzles extends State
                 id : 'puzzleTexture-${puzzle.id}',
                 width : puzzle.grid.data[0].length,
                 height : puzzle.grid.data.length,
-                pixels : puzzle.pixels
+                pixels : snow.api.buffers.Uint8Array.fromBytes(puzzle.pixels)
             });
             tex.filter_min = tex.filter_mag = nearest;
 

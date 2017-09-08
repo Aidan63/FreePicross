@@ -324,7 +324,7 @@ class GameState extends State
         Luxe.timer.schedule(2.5, function() {
             Luxe.camera.add(new components.Flash({ name : 'flash', time : 1 }));
 
-            utils.PuzzleHelper.imageFromPixels(puzzle, info.pixels);
+            utils.PuzzleHelper.imageFromBytes(puzzle, info.pixels);
             utils.Banner.create('Complete!', 1);
         });
 

@@ -1,5 +1,6 @@
 package data;
 
+import haxe.io.Bytes;
 import data.PuzzleGrid;
 
 class PuzzleInfo
@@ -22,7 +23,7 @@ class PuzzleInfo
     /**
      *  Array of ints which form the 
      */
-    public var pixels : snow.api.buffers.Uint8Array;
+    public var pixels : Bytes;
 
     /**
      *  The author of the puzzle.
@@ -34,7 +35,7 @@ class PuzzleInfo
      */
     public var description : String;
 
-    public function new(_id : Int, _name : String, _author : String, _description : String, _grid : PuzzleGrid, _pixels : snow.api.buffers.Uint8Array)
+    public function new(_id : Int, _name : String, _author : String, _description : String, _grid : PuzzleGrid, _pixels : Bytes)
     {
         id          = _id;
         name        = _name;

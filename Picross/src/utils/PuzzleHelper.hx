@@ -1,5 +1,6 @@
 package utils;
 
+import haxe.io.Bytes;
 import luxe.Visual;
 import components.Puzzle;
 import data.PuzzleGrid;
@@ -150,12 +151,12 @@ class PuzzleHelper
      *  
      *  @param _asset - The texture assets path.
      */
-    public static function imageFromPixels(_puzzleEntity : Visual, _pixels : snow.api.buffers.Uint8Array)
+    public static function imageFromBytes(_puzzleEntity : Visual, _bytes : Bytes)
     {
         var puzzle : data.IPuzzle = cast _puzzleEntity.get('puzzle');
         var tex = new phoenix.Texture({
             id     : 'finalImage',
-            pixels : _pixels,
+            pixels : snow.api.buffers.Uint8Array.fromBytes(_bytes),
             width  : puzzle.columns(),
             height : puzzle.rows()
         });

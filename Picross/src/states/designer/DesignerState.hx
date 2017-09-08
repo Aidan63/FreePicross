@@ -357,7 +357,7 @@ class DesignerState extends State
             pixels = snow.api.buffers.Uint8Array.fromArray(buff);
         }
         
-        Picross.storage.saveUGPuzzle(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, pixels));
+        Picross.storage.saveUGPuzzle(new data.PuzzleInfo(Luxe.utils.uniquehash(), _event.name, 'author', _event.description, puzzle.active, pixels.toBytes()));
     }
 
     /**
