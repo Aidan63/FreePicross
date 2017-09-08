@@ -6,6 +6,8 @@ import js.html.Storage;
 import data.PuzzleInfo;
 import storage.IStorage;
 
+using Lambda;
+
 class JsStorage implements IStorage
 {
     /**
@@ -71,9 +73,21 @@ class JsStorage implements IStorage
         return null;
     }
 
+    /**
+     *  Removes the provided puzzle from storage.
+     *  @param _puzzle - The puzzle to remove.
+     *  @return Bool
+     */
     public function deleteUGPuzzle(_puzzle : PuzzleInfo) : Bool
     {
-        return false;
+        // Filter all of the current puzzles. Keep all puzzles where the ID does not match the one provided.
+        var puzzles : Array<PuzzleInfo> = getUGPuzzles().filter(function(_puz : PuzzleInfo) {
+            return (_puz.id != _puzzle.id);
+        }).array();
+
+        compress(puzzles);
+
+        return true;
     }
 
     /**
