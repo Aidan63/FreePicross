@@ -2,7 +2,6 @@ package storage;
 
 import js.Browser;
 import js.html.Storage;
-import haxe.Json;
 
 import data.PuzzleInfo;
 import storage.IStorage;
@@ -62,23 +61,18 @@ class JsStorage implements IStorage
 
     private function decompress(_structure : String) : Array<PuzzleInfo>
     {
-        var structure : Array<PuzzleInfo> = Json.parse(_structure);
-        trace(structure);
+        var strm = new serialization.stream.StringInflateStream(_structure);
+        var infl = new serialization.Inflater(strm);
+        var structure : Array<PuzzleInfo> = infl.unserialize();
+
         return structure;
     }
 
     private function compress(_structure : Array<PuzzleInfo>)
     {
-        /*
-        var serializer = new haxe.Serializer();
-        serializer.serialize(_structure);
+        var defl = new serialization.Deflater({ compressStrings : true });
+        defl.serialize(_structure);
 
-        trace(serializer.toString());
-        */
-
-        if (storage != null)
-        {
-            storage.setItem('ugc_puzzles', Json.stringify(_structure));
-        }
+        if (storage != null) storage.setItem('ugc_puzzles', defl.toString());
     }
 }
