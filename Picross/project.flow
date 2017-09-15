@@ -24,7 +24,8 @@
 
       //Copies over all the assets to the output
     files : {
-      assets : 'assets/'
+      assets : './assets/',
+      config : ''
     }
 
   } //project
