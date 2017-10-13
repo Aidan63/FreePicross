@@ -15,6 +15,9 @@ class Main extends luxe.Game
         _config.window.height = 720;
         _config.window.fullscreen = false;
 
+        _config.preload.textures.push({ id : 'assets/images/ui.png' });
+        _config.preload.jsons.push({ id : 'assets/data/ui.json' });
+
         return _config;
     }
 
