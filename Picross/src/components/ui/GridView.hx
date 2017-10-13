@@ -89,10 +89,12 @@ class GridView extends Component
         batcher.view.viewport = new Rectangle(0, 0, visual.size.x, visual.size.y);
 
         // Add background
+        var frame = Picross.atlas.getFrame('ui', 'roundedPanel');
         background = new NineSlice({
             name : 'listView_background',
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h,
             color : new Color().rgb(0x333333),
             batcher : batcher
         });

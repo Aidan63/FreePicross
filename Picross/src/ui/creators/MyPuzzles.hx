@@ -11,11 +11,13 @@ class MyPuzzles
 {
     public static inline function previewPanel() : Visual
     {
+        var frame = Picross.atlas.getFrame('ui', 'roundedPanel');
         var panel = new NineSlice({
             name : 'preview_panel',
             name_unique : true,
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h,
             color : new Color().rgb(0x333333),
         });
         panel.create(new Vector(660, 40), 580, 640);
@@ -52,7 +54,7 @@ class MyPuzzles
             parent  : panel,
             name    : 'bttn_play',
             depth   : 1,
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             pos     : new Vector(20, 480),
             size    : new Vector(540, 60),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -60,9 +62,9 @@ class MyPuzzles
         bttnCreate.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [
                 new Color(0.86, 0.86, 0.86, 1),
@@ -92,7 +94,7 @@ class MyPuzzles
             parent  : panel,
             name    : 'bttn_delete',
             depth   : 1,
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             pos     : new Vector(20, 560),
             size    : new Vector(540, 60),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -100,9 +102,9 @@ class MyPuzzles
         bttnCreate.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [
                 new Color(0.86, 0.86, 0.86, 1),
@@ -134,12 +136,14 @@ class MyPuzzles
 
     public static inline function newPuzzlePopup() : Visual
     {
+        var frame = Picross.atlas.getFrame('ui', 'roundedPanel');
         var panel = new NineSlice({
             name    : 'panel_main',
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             color   : new Color().rgb(0x333333),
             depth   : 8,
             top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h,
         });
         panel.create(new Vector(0, 0), 680, 500);
 
@@ -179,10 +183,11 @@ class MyPuzzles
             parent : panel,
             name : 'panel_rows',
             size : new Vector(440, 60),
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             color   : new Color().rgb(0x494949),
             depth   : 8,
             top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h
         });
         widthPanel.create(new Vector(200, 120), 440, 60);
         widthPanel.transform.world.auto_decompose = true; 
@@ -191,10 +196,11 @@ class MyPuzzles
             parent : panel,
             name : 'panel_columns',
             size : new Vector(440, 60),
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             color   : new Color().rgb(0x494949),
             depth   : 8,
             top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h,
         });
         heightPanel.create(new Vector(200, 200), 440, 60);
         heightPanel.transform.world.auto_decompose = true; 
@@ -223,7 +229,7 @@ class MyPuzzles
         var bttnCreate = new NineSlice({
             parent  : panel,
             name    : 'bttn_create',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 9,
             pos     : new Vector(20, 300),
             size    : new Vector(640, 80),
@@ -232,9 +238,9 @@ class MyPuzzles
         bttnCreate.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [
                 new Color(0.86, 0.86, 0.86, 1),
@@ -263,7 +269,7 @@ class MyPuzzles
         var bttnCreate = new NineSlice({
             parent  : panel,
             name    : 'bttn_cancel',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 9,
             pos     : new Vector(20, 400),
             size    : new Vector(640, 80),
@@ -272,9 +278,9 @@ class MyPuzzles
         bttnCreate.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [
                 new Color(0.86, 0.86, 0.86, 1),

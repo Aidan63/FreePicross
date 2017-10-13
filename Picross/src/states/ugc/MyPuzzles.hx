@@ -187,7 +187,7 @@ class MyPuzzles extends State
 
         bttnHome = new NineSlice({
             name    : 'bttn_home',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 3,
             pos     : new Vector(40, 600),
             size    : new Vector(80, 80),
@@ -196,9 +196,9 @@ class MyPuzzles extends State
         bttnHome.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [
                 new Color(0.86, 0.86, 0.86, 1),
@@ -209,7 +209,7 @@ class MyPuzzles extends State
 
         bttnCreate = new NineSlice({
             name    : 'bttn_create',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 3,
             pos     : new Vector(140, 600),
             size    : new Vector(480, 80),
@@ -218,9 +218,9 @@ class MyPuzzles extends State
         bttnCreate.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [
                 new Color(0.86, 0.86, 0.86, 1),
