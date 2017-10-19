@@ -3,6 +3,7 @@ package utils;
 import luxe.Sprite;
 import luxe.Vector;
 import luxe.Color;
+import luxe.components.sprite.SpriteAnimation;
 
 class Banner
 {
@@ -11,16 +12,16 @@ class Banner
         var geom : Int = Math.ceil(Luxe.screen.width / 32) + 1;
         for (i in 0...geom)
         {
-            var bubblesUp = new luxe.Sprite({
+            var bubblesUp = new Sprite({
                 depth   : 5,
-                texture : Luxe.resources.texture('assets/images/bubblesUp.png'),
+                texture : Luxe.resources.texture('assets/images/ui.png'),
                 origin  : new Vector(0, 0),
-                pos     : new Vector(32 * i, Luxe.screen.height),
+                pos     : new Vector(32 * i, 720),
                 size    : new Vector(32, 256),
                 color   : new Color().rgb(0x88dfff),
             });
 
-            var anim = bubblesUp.add(new luxe.components.sprite.SpriteAnimation({ name : 'anim' }));
+            var anim = bubblesUp.add(new SpriteAnimation({ name : 'anim' }));
             anim.add_from_json_object(Luxe.resources.json('assets/data/animations/bubbleUp.json').asset.json);
             anim.animation = 'loop';
             anim.play();
@@ -32,14 +33,14 @@ class Banner
 
             var bubblesDown = new luxe.Sprite({
                 depth   : 5,
-                texture : Luxe.resources.texture('assets/images/bubblesDown.png'),
+                texture : Luxe.resources.texture('assets/images/ui.png'),
                 origin  : new Vector(0, 0),
                 pos     : new Vector(32 * i, -256),
                 size    : new Vector(32, 256),
                 color   : new Color().rgb(0x88dfff),
             });
 
-            var anim = bubblesDown.add(new luxe.components.sprite.SpriteAnimation({ name : 'anim' }));
+            var anim = bubblesDown.add(new SpriteAnimation({ name : 'anim' }));
             anim.add_from_json_object(Luxe.resources.json('assets/data/animations/bubbleDown.json').asset.json);
             anim.animation = 'loop';
             anim.play();
