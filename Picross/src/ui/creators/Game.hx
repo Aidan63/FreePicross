@@ -4,7 +4,6 @@ import luxe.Visual;
 import luxe.Text;
 import luxe.NineSlice;
 import luxe.Sprite;
-import luxe.Rectangle;
 import luxe.Vector;
 import luxe.Color;
 import luxe.components.sprite.SpriteAnimation;
@@ -25,14 +24,14 @@ class Game
             color : new Color().rgb(0x363636),
         });
 
-        var pause = new Visual({
+        var pause = new Sprite({
             name     : 'bttn_pause',
+            centered : false,
             parent   : panel,
             pos      : new Vector(0, 0),
             size     : new Vector(128, 128),
-            geometry : Luxe.draw.texture({
-                texture : Luxe.resources.texture('assets/images/ui/buttonPause.png')
-            })
+            texture  : Luxe.resources.texture('assets/images/ui.png'),
+            uv       : Picross.atlas.getFrame('ui', 'bttnPause').uv
         });
         pause.add(new components.ui.Button({ name : 'button' }));
         pause.transform.world.auto_decompose = true;
@@ -42,7 +41,7 @@ class Game
             parent   : panel,
             pos      : new Vector(0, 128),
             size     : new Vector(128, 128),
-            color    : PuzzleState.color.colors.get(Primary)
+            color    : PuzzleState.color.colors.get(Primary),
         });
         paintPrimary.add(new components.ui.Button({ name : 'button' }));
         paintPrimary.transform.world.auto_decompose = true;
@@ -91,12 +90,14 @@ class Game
      */
     public static inline function createResults() : Visual
     {
+        var frame = Picross.atlas.getFrame('ui', 'roundedPanel');
         var panel = new NineSlice({
             name    : 'panel_results',
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             color   : new Color().rgb(0x333333),
             depth   : 8,
-            top : 20, left : 20, bottom : 20, right : 20
+            top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h,
         });
         panel.create(new Vector(0, 0), 560, 640);
 
@@ -156,7 +157,7 @@ class Game
         var bttnMenu = new NineSlice({
             parent  : panel,
             name    : 'bttn_menu',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 9,
             pos     : new Vector(20, 360),
             size    : new Vector(420, 80),
@@ -165,9 +166,9 @@ class Game
         bttnMenu.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -194,7 +195,7 @@ class Game
         var bttnRestart = new NineSlice({
             parent  : panel,
             name    : 'bttn_restart',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 9,
             pos     : new Vector(20, 360),
             size    : new Vector(80, 80),
@@ -203,9 +204,9 @@ class Game
         bttnRestart.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -216,19 +217,21 @@ class Game
 
     public static inline function createPauseRoot() : Visual
     {
+        var frame = Picross.atlas.getFrame('ui', 'roundedPanel');
         var panel = new NineSlice({
             name : 'panel_pauseRoot',
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             color   : new Color().rgb(0x333333),
             depth   : 8.0,
-            top : 20, left : 20, bottom : 20, right : 20
+            top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h
         });
         panel.create(new Vector(0, 0), 640, 560);
 
         var bttnResume = new NineSlice({
             parent : panel,
             name : 'bttn_resume',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 8.1,
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -236,9 +239,9 @@ class Game
         bttnResume.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -265,7 +268,7 @@ class Game
         var bttnOptions = new NineSlice({
             parent : panel,
             name : 'bttn_options',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 8.1,
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -273,9 +276,9 @@ class Game
         bttnOptions.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -302,7 +305,7 @@ class Game
         var bttnRestart = new NineSlice({
             parent : panel,
             name : 'bttn_restart',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 8.1,
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -310,9 +313,9 @@ class Game
         bttnRestart.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -339,7 +342,7 @@ class Game
         var bttnMenu = new NineSlice({
             parent : panel,
             name : 'bttn_menu',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 8.1,
             size    : new Vector(600, 80),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -347,9 +350,9 @@ class Game
         bttnMenu.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -378,12 +381,14 @@ class Game
     
     public static inline function createPauseConfirm() : Visual
     {
+        var frame = Picross.atlas.getFrame('ui', 'roundedPanel');
         var panel = new NineSlice({
             name : 'panel_pauseConfirm',
-            texture : Luxe.resources.texture('assets/images/ui/roundedPanel.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             color   : new Color().rgb(0x333333),
             depth   : 8.0,
-            top : 20, left : 20, bottom : 20, right : 20
+            top : 20, left : 20, bottom : 20, right : 20,
+            source_x : frame.uv.x, source_y : frame.uv.y, source_w : frame.uv.w, source_h : frame.uv.h,
         });
         panel.create(new Vector(0, 0), 640, 240);
 
@@ -402,7 +407,7 @@ class Game
         var bttnConfirm = new NineSlice({
             parent : panel,
             name : 'bttn_confirm',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 8.1,
             size    : new Vector(290, 80),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -410,9 +415,9 @@ class Game
         bttnConfirm.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
@@ -439,7 +444,7 @@ class Game
         var bttnCancel = new NineSlice({
             parent : panel,
             name : 'bttn_cancel',
-            texture : Luxe.resources.texture('assets/images/ui/roundedButton.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             depth   : 8.1,
             size    : new Vector(290, 80),
             top : 30, left : 30, bottom : 30, right : 30,
@@ -447,9 +452,9 @@ class Game
         bttnCancel.add(new components.ui.NineSliceButton({
             name : 'button',
             uvs : [
-                new Rectangle(0  , 0, 80, 80),
-                new Rectangle(80 , 0, 80, 80),
-                new Rectangle(160, 0, 80, 80)
+                Picross.atlas.getFrame('ui', 'roundedButton0').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton1').uv,
+                Picross.atlas.getFrame('ui', 'roundedButton2').uv
             ],
             colors : [ new Color(), new Color().rgb(0xe7e7e7), new Color().rgb(0xe7e7e7) ]
         }));
