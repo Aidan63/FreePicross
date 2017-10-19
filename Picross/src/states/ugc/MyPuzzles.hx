@@ -6,8 +6,6 @@ import luxe.Text;
 import luxe.Color;
 import luxe.Vector;
 import luxe.Rectangle;
-import luxe.Parcel;
-import luxe.ParcelProgress;
 import luxe.NineSlice;
 import components.ui.GridView;
 import data.PuzzleInfo;
@@ -17,11 +15,6 @@ using utils.EntityHelper;
 
 class MyPuzzles extends State
 {
-    /**
-     *  The parcel which will load all required assets for this scene.
-     */
-    private var parcel : Parcel;
-
     /**
      *  The grid which will hold all of the puzzle preview icons.
      */
@@ -83,64 +76,6 @@ class MyPuzzles extends State
     private var listenPanel2Delete : String;
 
     override public function onenter<T>(_data : T)
-    {
-        parcel = new Parcel({
-            textures : [
-                { id : 'assets/images/cells.png' },
-                { id : 'assets/images/cellFragment.png' },
-                { id : 'assets/images/fault.png' },
-                { id : 'assets/images/RuleCircle.png' },
-                { id : 'assets/images/RuleSquare.png' },
-                { id : 'assets/images/ui/paintSelector.png' },
-                { id : 'assets/images/ui/buttonExport.png' },
-                { id : 'assets/images/ui/roundedPanel.png' },
-                { id : 'assets/images/ui/roundedButton.png'}
-            ],
-            jsons : [
-                { id : 'assets/data/animations/paintSelector.json' }
-            ],
-            fonts : [
-                { id : 'assets/fonts/odin.fnt' }
-            ]
-        });
-
-        new ParcelProgress({
-            parcel : parcel,
-            background : new Color(1, 1, 1, 0.85),
-            oncomplete : assets_loaded
-        });
-
-        parcel.load();
-    }
-
-    override public function onleave<T>(_data : T)
-    {
-        subStates.destroy();
-
-        panel1.findChild('bttn_play').events.unlisten(listenPanel1Play);
-        panel2.findChild('bttn_play').events.unlisten(listenPanel2Play);
-        panel1.findChild('bttn_delete').events.unlisten(listenPanel1Delete);
-        panel2.findChild('bttn_delete').events.unlisten(listenPanel2Delete);
-        activePanel = null;
-
-        Luxe.events.unlisten(listenPause);
-        Luxe.events.unlisten(listenCreate);
-        gridView.events.unlisten(listenPuzzleSelected);
-        bttnCreate.events.unlisten(listenCreateClicked);
-
-        gridView.destroy();
-        bttnHome.destroy();
-        bttnCreate.destroy();
-        panel1.destroy();
-        panel2.destroy();
-
-        for (tex in puzzleTextures)
-        {
-            tex.invalidate();
-        }
-    }
-
-    private function assets_loaded(_parcel : Parcel)
     {
         ugPuzzles = Picross.storage.getUGPuzzles();
 
@@ -267,6 +202,33 @@ class MyPuzzles extends State
         listenCreate = Luxe.events.listen('myPuzzles.create', onCreatePuzzle);
         listenPuzzleSelected = gridView.events.listen('item.clicked', onItemSelected);
         listenCreateClicked  = bttnCreate.events.listen('released', onCreateClicked);
+    }
+
+    override public function onleave<T>(_data : T)
+    {
+        subStates.destroy();
+
+        panel1.findChild('bttn_play').events.unlisten(listenPanel1Play);
+        panel2.findChild('bttn_play').events.unlisten(listenPanel2Play);
+        panel1.findChild('bttn_delete').events.unlisten(listenPanel1Delete);
+        panel2.findChild('bttn_delete').events.unlisten(listenPanel2Delete);
+        activePanel = null;
+
+        Luxe.events.unlisten(listenPause);
+        Luxe.events.unlisten(listenCreate);
+        gridView.events.unlisten(listenPuzzleSelected);
+        bttnCreate.events.unlisten(listenCreateClicked);
+
+        gridView.destroy();
+        bttnHome.destroy();
+        bttnCreate.destroy();
+        panel1.destroy();
+        panel2.destroy();
+
+        for (tex in puzzleTextures)
+        {
+            tex.invalidate();
+        }
     }
 
     /**
