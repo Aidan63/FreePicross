@@ -59,7 +59,7 @@ class Game
         var paintSelector = new Sprite({
             name    : 'bttn_paintSelector',
             parent  : panel,
-            texture : Luxe.resources.texture('assets/images/ui/paintSelector.png'),
+            texture : Luxe.resources.texture('assets/images/ui.png'),
             pos     : paintPrimary.pos,
             size    : new Vector(128, 128),
             origin  : new Vector(0, 0),

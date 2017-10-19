@@ -2,6 +2,13 @@
     "idle" : {
         "frame_size" : { "x" : 128, "y" : 128 },
         "frameset" : [ "1 hold 30", "1-5" ],
+        "frame_sources" : [
+            { "frame" : 1, "source" : { "x" : 1068, "y" : 0, "w" : 128, "h" : 128 }, "pos" : { "x" : 0, "y" : 0 }, "size" : { "x" : 128, "y" : 128 } },
+            { "frame" : 2, "source" : { "x" : 940 , "y" : 0, "w" : 128, "h" : 128 }, "pos" : { "x" : 0, "y" : 0 }, "size" : { "x" : 128, "y" : 128 } },
+            { "frame" : 3, "source" : { "x" : 556 , "y" : 0, "w" : 128, "h" : 128 }, "pos" : { "x" : 0, "y" : 0 }, "size" : { "x" : 128, "y" : 128 } },
+            { "frame" : 4, "source" : { "x" : 428 , "y" : 0, "w" : 128, "h" : 128 }, "pos" : { "x" : 0, "y" : 0 }, "size" : { "x" : 128, "y" : 128 } },
+            { "frame" : 5, "source" : { "x" : 300 , "y" : 0, "w" : 128, "h" : 128 }, "pos" : { "x" : 0, "y" : 0 }, "size" : { "x" : 128, "y" : 128 } }
+        ],
         "pingpong"  : true,
         "loop" : true,
         "speed" : 30
