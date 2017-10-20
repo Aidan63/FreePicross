@@ -73,10 +73,7 @@ class GameState extends State
                 { id : 'assets/images/cells.png' },
                 { id : 'assets/images/cellFragment.png' },
                 { id : 'assets/images/fault.png' },
-                { id : 'assets/images/rules.png' },
-                { id : 'assets/images/bubblesUp.png' },
-                { id : 'assets/images/bubblesDown.png' },
-                { id : 'assets/images/ui/paintSelector.png' },
+                { id : 'assets/images/rules.png' }
             ],
             jsons : [
                 { id : 'assets/data/animations/bubbleUp.json' },

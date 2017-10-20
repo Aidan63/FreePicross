@@ -78,10 +78,6 @@ class DesignerState extends State
                 { id : 'assets/images/fault.png' },
                 { id : 'assets/images/RuleCircle.png' },
                 { id : 'assets/images/RuleSquare.png' },
-                { id : 'assets/images/ui/paintSelector.png' },
-                { id : 'assets/images/ui/buttonExport.png' },
-                { id : 'assets/images/ui/roundedPanel.png' },
-                { id : 'assets/images/ui/roundedButton.png'}
             ],
             jsons : [
                 { id : 'assets/data/animations/paintSelector.json' }
